@@ -33,6 +33,8 @@
     min-height: 100vh;
     font-size: 15px;
     line-height: 1.6;
+    display: flex;
+    flex-direction: column;
   }
 
   /* ── Header ── */
@@ -78,7 +80,7 @@
   }
   .tab-btn:hover { color: var(--text); }
   .tab-btn.active { color: #2d7a3e; border-bottom-color: #2d7a3e; font-weight: 500; }
-  .tab-btn.tab-interactive.active { color: #ffffff; background: #185fa5; padding: 6px 14px; border-radius: 4px; border-bottom: none; }
+  .tab-btn.tab-interactive.active { color: #2d7a3e; background: none; border-bottom-color: #2d7a3e; font-weight: 500; }
   .header-inner { position: relative; }
   .hamburger {
     display: none;
@@ -143,17 +145,17 @@
       padding: 14px 24px;
       margin: 0;
       border-radius: 0;
-      background: #185fa5;
-      color: #ffffff;
+      background: var(--surface2);
+      color: #2d7a3e;
     }
     .site-title { padding: 14px 12px 14px 0; }
   }
 
   /* ── Layout ── */
   .tab-content { display: none; }
-  .tab-content.active { display: block; }
-  .page-inner { max-width: 1100px; margin: 0 auto; padding: 28px 24px 60px; }
-  #tab-decision .page-inner { padding: 14px 24px 16px; }
+  .tab-content.active { display: block; flex: 1; }
+  .page-inner { max-width: 1100px; margin: 0 auto; padding: 28px 24px 60px 16px; }
+  #tab-decision .page-inner { padding: 14px 24px 16px 16px; }
   #tab-decision .page-intro { margin-bottom: 12px; padding-bottom: 10px; }
   #tab-decision .page-intro h1 { font-size: 22px; }
   #tab-decision .page-intro p { font-size: 13px; }
@@ -186,7 +188,7 @@
   .ph { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
   .pt { font-size: 15px; font-weight: 600; color: var(--text); line-height: 1.3; }
   .ps { font-size: 12px; color: var(--text2); margin-top: 3px; }
-  .badge { font-size: 11px; padding: 3px 9px; border-radius: 20px; white-space: nowrap; margin-left: 8px; flex-shrink: 0; font-weight: 500; }
+  .badge { font-size: 11px; padding: 3px 9px; border-radius: 4px; white-space: nowrap; margin-left: 0; flex-shrink: 0; font-weight: 600; border: 1px solid rgba(0,0,0,0.06); }
   .b-Positive { background:#eaf3de; color:#3b6d11; }
   .b-Delayed { background:#faeeda; color:#854f0b; }
   .b-Negative { background:#fcebeb; color:#a32d2d; }
@@ -752,11 +754,15 @@
       /* Draft map — all classes prefixed md- to avoid clashing */
       /* Use the global .page-intro h1/p styling — no overrides here. */
 
+      .md-legend { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 12px; }
+      .md-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text2); }
+      .md-legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
       .md-layout {
         display: grid;
         grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
         gap: 14px;
-        align-items: stretch;
+        align-items: start;
       }
       @media (max-width: 880px) {
         .md-layout { grid-template-columns: 1fr; }
@@ -794,8 +800,7 @@
         border-radius: var(--radius-lg);
         padding: 18px 20px;
         overflow-y: auto;
-        max-height: 720px;
-        min-height: 540px;
+        height: 560px;
         display: flex;
         flex-direction: column;
       }
@@ -803,12 +808,14 @@
       .md-placeholder { font-size: 14px; line-height: 1.75; }
       .md-hint { font-size: 12px; color: var(--text3); }
 
-      .md-panel-head { margin-bottom: 14px; }
+      .md-panel-head { margin-bottom: 4px; }
       .md-panel-head-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
       .md-panel-location { font-size: 11px; color: var(--text2); letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; margin-bottom: 4px; }
       .md-panel-name { font-size: 18px; font-weight: 600; color: var(--text); line-height: 1.25; flex: 1; min-width: 0; }
       .md-panel-sub  { font-size: 13px; color: var(--text2); margin-top: 4px; line-height: 1.5; }
-      .md-panel-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+      .md-panel-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 0; margin-bottom: 12px; }
+      .md-panel-badges .badge { margin-left: 0; }
+      .md-tip-row .badge { margin-left: 0; }
       .md-panel-status { font-size: 11px; color: var(--text2); padding: 2px 8px; background: var(--surface2); border-radius: 4px; }
       .md-close { background: none; border: 1px solid var(--border2); color: var(--text2); width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-size: 11px; line-height: 1; padding: 0; font-family: inherit; flex-shrink: 0; }
       .md-close:hover { color: var(--text); border-color: var(--text2); }
@@ -822,14 +829,14 @@
       .md-panel-row-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; }
       .md-panel-row-text  { font-size: 13px; color: var(--text2); line-height: 1.55; }
 
-      .md-panel-cta { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; }
+      .md-panel-cta { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; }
       .md-link { background: none; border: none; color: #185fa5; font-family: inherit; font-size: 13px; cursor: pointer; padding: 4px 0; }
       .md-link:hover { text-decoration: underline; }
 
       /* State project list in sidebar */
       .md-state-proj-list { display: flex; flex-direction: column; gap: 8px; overflow-y: auto; flex: 1; }
       .md-state-proj-card {
-        background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius);
+        background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
         padding: 10px 12px; cursor: pointer; transition: border-color 0.12s, background 0.12s;
       }
       .md-state-proj-card:hover { border-color: #a8c4e0; background: #eef4fb; }
@@ -837,6 +844,16 @@
 
     <div class="page-intro">
       <h1>Data Center Case Map</h1>
+      <p>This map shows proposed data centers across several Mid-Atlantic and Southeast states, colored according to their status. Click a state to zoom in; hover or click a project pin for details.</p>
+    </div>
+
+    <div class="md-legend">
+      <span class="md-legend-item"><span class="md-legend-dot" style="background:#3b6d11"></span>Approved</span>
+      <span class="md-legend-item"><span class="md-legend-dot" style="background:#a32d2d"></span>Denied</span>
+      <span class="md-legend-item"><span class="md-legend-dot" style="background:#854f0b"></span>Delayed / Scaled Back</span>
+      <span class="md-legend-item"><span class="md-legend-dot" style="background:#993556"></span>Cancelled / Withdrawn</span>
+      <span class="md-legend-item"><span class="md-legend-dot" style="background:#185fa5"></span>Planned</span>
+      <span class="md-legend-item"><span class="md-legend-dot" style="background:#5f5e5a"></span>Neutral</span>
     </div>
 
     <div class="md-layout">
@@ -885,27 +902,30 @@
       /* Database explorer — all classes prefixed db- to avoid clashing */
       #tab-database .page-inner { max-width: 1100px; padding: 22px 24px 32px; }
 
-      .db-browse-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
-      .db-browse-title { font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
+      .db-browse-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; }
+      .db-browse-title { font-size: 32px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; }
       .db-browse-count { font-size: 12px; color: var(--text3); }
       .db-browse-sub { font-size: 13px; color: var(--text2); margin-bottom: 16px; }
 
-      .db-filter-bar { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 14px; display: flex; flex-direction: column; gap: 10px; }
-      .db-search-row { display: flex; }
+      .db-filter-bar { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 14px; display: grid; grid-template-columns: 260px 1fr auto; gap: 28px; align-items: start; }
+      .db-search-row { display: flex; flex-direction: column; gap: 4px; }
+      .db-search-meta { display: flex; align-items: center; gap: 8px; }
+      .db-browse-count { font-size: 11px; color: var(--text3); }
+      .db-filter-cols { display: flex; flex-direction: column; gap: 10px; }
       .db-search-input { font-family: inherit; font-size: 13px; padding: 6px 10px; border: 1px solid var(--border2); background: var(--surface); color: var(--text); border-radius: var(--radius); width: 100%; max-width: 340px; outline: none; }
       .db-search-input:focus { border-color: #a8c4e0; box-shadow: 0 0 0 2px rgba(24,95,165,0.1); }
       .db-filter-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
       .db-filter-label { font-size: 11px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.06em; white-space: nowrap; min-width: 46px; }
       .db-chips-row { display: flex; flex-wrap: wrap; gap: 5px; }
-      .db-chip-btn { font-size: 12px; padding: 3px 11px; border: 1px solid var(--border2); border-radius: 20px; background: transparent; color: var(--text2); cursor: pointer; font-family: inherit; transition: all 0.1s; white-space: nowrap; }
+      .db-chip-btn { font-size: 12px; padding: 4px 11px; border: 1px solid var(--border2); border-radius: 5px; background: transparent; color: var(--text2); cursor: pointer; font-family: inherit; transition: all 0.1s; white-space: nowrap; }
       .db-chip-btn:hover { border-color: #6f6e68; color: var(--text); }
       .db-chip-btn.active { background: var(--accent-mid); color: #fff; border-color: var(--accent-mid); }
       .db-reset { align-self: flex-start; background: none; border: 1px solid var(--border2); color: var(--text2); font-family: inherit; font-size: 11px; padding: 4px 11px; border-radius: 4px; cursor: pointer; margin-top: 2px; }
       .db-reset:hover { color: var(--text); border-color: var(--text2); }
 
-      .db-table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+      .db-table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow-y: auto; max-height: 60vh; }
       .db-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-      .db-table thead th { text-align: left; font-weight: 500; color: var(--text2); font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; padding: 10px 12px; border-bottom: 1px solid var(--border); background: var(--surface2); cursor: pointer; user-select: none; white-space: nowrap; transition: background 0.1s, color 0.1s; }
+      .db-table thead th { text-align: left; font-weight: 500; color: var(--text2); font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; padding: 10px 12px; border-bottom: 1px solid var(--border); background: var(--surface2); cursor: pointer; user-select: none; white-space: nowrap; transition: background 0.1s, color 0.1s; position: sticky; top: 0; z-index: 1; }
       .db-table thead th[data-col]:hover { background: #e8e5dd; color: var(--text); }
       .db-table thead th.active { color: var(--text); background: #e2dfd7; }
       .db-sort-ind { font-size: 10px; margin-left: 5px; opacity: 0.35; }
@@ -932,53 +952,83 @@
       .db-disabled { color: var(--border2); cursor: default; }
       .db-arrow { font-size: 12px; }
 
+      .db-detail-card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 26px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+      .db-detail-card-inner { display: grid; grid-template-columns: 1.2fr 1fr; gap: 14px; align-items: stretch; }
+      .db-detail-left { display: flex; flex-direction: column; gap: 12px; }
+      @media (max-width: 760px) { .db-detail-card-inner { grid-template-columns: 1fr; } }
       .db-detail-head { margin-bottom: 16px; }
-      .db-detail-region { font-size: 11px; color: var(--text2); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
       .db-detail-name { font-size: 26px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; margin-bottom: 4px; }
-      .db-detail-company { font-size: 14px; color: var(--text2); }
-      .db-detail-badges { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+      .db-detail-location { font-size: 15px; color: var(--text); margin-top: 4px; }
+      .db-detail-company { font-size: 13px; color: var(--text2); margin-top: 2px; }
+      .db-detail-badges { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; align-items: center; }
+      .db-detail-badges .badge { font-size: 13px; padding: 5px 13px; }
 
       .db-hero { display: grid; grid-template-columns: 1.2fr 1fr; gap: 14px; margin-bottom: 20px; }
       @media (max-width: 760px) { .db-hero { grid-template-columns: 1fr; } }
-      .db-metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+      .db-metrics-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; align-content: start; }
       .db-metric { background: var(--surface); border: 1px solid var(--border); padding: 10px 12px; border-radius: var(--radius); }
-      .db-metric.db-full { grid-column: span 2; }
+      .db-metric.b-Positive  { background: #eaf3de; color: #3b6d11; border-color: #c5e0b4; }
+      .db-metric.b-Negative  { background: #fcebeb; color: #a32d2d; border-color: #f5c6c6; }
+      .db-metric.b-Delayed   { background: #faeeda; color: #854f0b; border-color: #f0d5a8; }
+      .db-metric.b-Cancelled { background: #fbeaf0; color: #993556; border-color: #f0c0d4; }
+      .db-metric.b-Neutral   { background: #f1efe8; color: #5f5e5a; border-color: #dddbd2; }
+      .db-metric-status .db-ml { opacity: 0.7; color: inherit; font-weight: 700; }
+      .db-metric-status .db-mv { color: inherit; font-weight: 700; }
+      .db-metric.db-full { grid-column: span 3; }
       .db-ml { font-size: 11px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; }
       .db-mv { font-size: 17px; font-weight: 500; }
       .db-mv.text { font-size: 13px; font-weight: 400; line-height: 1.5; color: var(--text2); }
       .db-mv.empty { color: var(--text3); font-weight: 400; font-style: italic; font-size: 12px; }
 
-      .db-map-box { background: #e3eaee; height: 100%; min-height: 220px; border-radius: var(--radius); position: relative; overflow: hidden; border: 1px solid var(--border); }
+      .db-map-col { display: flex; flex-direction: column; gap: 8px; height: 100%; }
+      .db-loc-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .db-loc-item { background: var(--surface); border: 1px solid var(--border); padding: 10px 12px; border-radius: var(--radius); }
+      .db-map-box { background: #e3eaee; flex: 1; min-height: 280px; border-radius: var(--radius); position: relative; overflow: hidden; border: 1px solid var(--border); }
       .db-leaflet { position: absolute; inset: 0; z-index: 0; }
       .db-map-meta { position: absolute; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-between; font-size: 10px; color: var(--text2); background: rgba(255,255,255,0.94); padding: 4px 10px; z-index: 1; pointer-events: none; }
       .db-map-pending { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; color: var(--text2); font-size: 12px; line-height: 1.5; text-align: center; }
       /* Override Leaflet attribution to be more subtle and not fight our footer meta. */
       .db-map-box .leaflet-control-attribution { font-size: 9px; background: rgba(255,255,255,0.7); }
 
-      .db-section { border-top: 1px solid var(--border); padding-top: 16px; margin-top: 16px; }
-      .db-section-label { font-size: 11px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; }
+      .db-section { border-top: 1px solid var(--border); padding-top: 20px; margin-top: 20px; }
+      .db-section-label { font-size: 11px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 14px; line-height: 1.1; }
 
       .db-timeline { position: relative; padding-left: 4px; }
-      .db-timeline-rail { position: absolute; left: 101px; top: 10px; bottom: 10px; width: 1px; background: var(--border2); }
-      .db-te { display: grid; grid-template-columns: 90px 22px 1fr; gap: 12px; align-items: start; padding: 8px 0; }
-      .db-te-date { text-align: right; font-size: 12px; color: var(--text2); padding-top: 2px; }
-      .db-te-dot { display: flex; justify-content: center; padding-top: 5px; }
-      .db-te-dot div { width: 11px; height: 11px; border: 2px solid var(--text2); background: var(--surface); border-radius: 50%; }
-      .db-te-dot.filled div { background: var(--text2); }
+      .db-timeline-rail { position: absolute; left: 109px; top: 14px; bottom: 14px; width: 2px; background: var(--border); border-radius: 2px; }
+      .db-te { display: grid; grid-template-columns: 98px 28px 1fr; gap: 12px; align-items: start; padding: 10px 0; }
+      .db-te-date { text-align: right; font-size: 14px; font-weight: 600; color: var(--text); padding-top: 3px; letter-spacing: 0.01em; }
+      .db-te-dot { display: flex; justify-content: center; padding-top: 4px; }
+      .db-te-dot div { width: 14px; height: 14px; border: 2.5px solid var(--border2); background: var(--surface); border-radius: 50%; box-shadow: 0 0 0 3px var(--bg); }
+      .db-te-dot.filled div { background: #1a3a5c; border-color: #1a3a5c; }
       .db-te-body { padding-right: 6px; }
-      .db-te-label { font-size: 14px; font-weight: 500; line-height: 1.4; margin-bottom: 4px; }
+      .db-te-label { font-size: 15px; font-weight: 600; line-height: 1.4; margin-bottom: 4px; color: var(--text); }
       .db-te-meta a { color: var(--accent-mid); text-decoration: none; font-size: 11px; display: inline-flex; align-items: center; gap: 4px; }
       .db-te-meta a:hover { text-decoration: underline; }
       .db-te-proposal-tag { display: inline-block; font-size: 10px; background: var(--accent-light); color: var(--accent-mid); padding: 1px 6px; border-radius: 3px; margin-left: 6px; letter-spacing: 0.04em; text-transform: uppercase; vertical-align: 2px; }
 
-      .db-split { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+      .db-split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
       @media (max-width: 760px) { .db-split { grid-template-columns: 1fr; } }
-      .db-field { margin-bottom: 14px; }
-      .db-field-label { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
-      .db-field-text { font-size: 13px; color: var(--text2); line-height: 1.6; }
-      .db-field-empty { font-size: 12px; color: var(--text3); font-style: italic; }
-      .db-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
-      .db-chip { background: var(--surface2); font-size: 11px; padding: 3px 9px; border-radius: 4px; color: var(--text2); }
+      .db-split > div { padding: 0; }
+      .db-split .db-section-label { margin-top: 0; font-size: 13px; font-weight: 700; color: var(--text); padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+      .db-field { margin-bottom: 16px; }
+      .db-field:last-child { margin-bottom: 0; }
+      .db-field-label { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.03em; }
+      .db-field-text { font-size: 14px; color: var(--text); line-height: 1.65; }
+      .db-ext-icon { display: inline-block; width: 13px; height: 13px; vertical-align: middle; margin-right: 4px; opacity: 0.6; }
+      .db-field-empty { font-size: 13px; color: var(--text3); font-style: italic; }
+      .db-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+      .db-chip { font-size: 12px; padding: 4px 10px; border-radius: 4px; font-weight: 600; }
+      .db-chip-air      { background: #dbeafe; color: #1e40af; }
+      .db-chip-noise    { background: #fef3c7; color: #92400e; }
+      .db-chip-light    { background: #ede9fe; color: #5b21b6; }
+      .db-chip-water    { background: #cffafe; color: #0e7490; }
+      .db-chip-land     { background: #d6efdd; color: #166534; }
+      .db-chip-env      { background: #dcfce7; color: #15803d; }
+      .db-chip-climate  { background: #d1fae5; color: #065f46; }
+      .db-chip-econ     { background: #fef9c3; color: #854d0e; }
+      .db-chip-qol      { background: #fce7f3; color: #9d174d; }
+      .db-chip-culture  { background: #ffedd5; color: #9a3412; }
+      .db-chip-default  { background: #f1f0ed; color: #4b4a47; }
 
       .db-source-list { display: flex; flex-direction: column; gap: 6px; }
       .db-source-list a { color: var(--accent-mid); text-decoration: none; font-size: 12px; display: inline-flex; align-items: center; gap: 6px; word-break: break-all; }
@@ -989,11 +1039,13 @@
       .db-big { font-size: 15px; color: var(--text); margin-bottom: 6px; }
     </style>
 
+    <div class="page-intro">
+      <h1>Project Database</h1>
+      <p>This database contains all tracked proposals. Filter by state, status, or community posture, or search by project name and company. Click any row to see the full record.</p>
+    </div>
+
     <div id="dbApp"></div>
 
-    <div class="next-btn-wrap" style="margin-top:2.5rem;padding-top:1.25rem;border-top:1px solid rgba(0,0,0,0.1);display:flex;justify-content:flex-end;">
-      <button style="background:none;border:none;padding:0;font-family:Georgia,serif;font-size:14px;color:#185fa5;cursor:pointer;" onmouseover="this.style.opacity='0.6'" onmouseout="this.style.opacity='1'" onclick="switchTabById('casestudy')">Continue to Case Studies →</button>
-    </div>
   </div>
 </div>
 
@@ -1813,7 +1865,7 @@
   </div>
 </div>
 
-<footer>Data Center Policy &nbsp;·&nbsp; PUBPOL 255 Capstone &nbsp;·&nbsp; Spring 2026 &nbsp;·&nbsp; Case data current as of April 2026</footer>
+<footer>Data Center Policy &nbsp;·&nbsp; Duke University Tech Policy Lab &nbsp;·&nbsp; Last updated June 2026</footer>
 
 <!-- ════════════════ SCRIPTS ════════════════ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
@@ -1841,6 +1893,7 @@ function switchTab(id, btn) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-' + id).classList.add('active');
   btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'instant' });
   // Close mobile menu after a tab is chosen
   const hi = document.querySelector('.header-inner');
   if (hi) hi.classList.remove('menu-open');
@@ -1850,7 +1903,21 @@ function switchTab(id, btn) {
   if (id === 'map' && typeof m2Init === 'function') {
     setTimeout(m2Init, 0);
   }
+
+  if (id === 'database' && typeof dbGoHome === 'function') {
+    dbGoHome();
+  }
+  localStorage.setItem('activeTab', id);
 }
+
+// Restore last active tab on load
+(function () {
+  const saved = localStorage.getItem('activeTab');
+  if (saved) {
+    const btn = document.querySelector(`.tab-btn[onclick="switchTab('${saved}', this)"]`);
+    if (btn) switchTab(saved, btn);
+  }
+})();
 
 function toggleMenu() {
   const hi = document.querySelector('.header-inner');

@@ -3,7 +3,7 @@
 // Do not edit by hand.
 
 const PROJECTS_META = {
-  "generatedAt": "2026-06-04T02:47:00Z",
+  "generatedAt": "2026-06-04T22:08:26Z",
   "sourceFile": "DATABASE-DataCenter_Backlash.xlsx",
   "sheetsRead": [
     {
@@ -39,6 +39,7 @@ const PROJECTS = [
     "communityIntensity": "None",
     "communityActionDetails": "While local community action has been limited, utility companies filed complaints with FERC to block an expanded plant interconnection plan.",
     "developerAction": "Talen initially built the center to \"invest in opportunities created by the convergence of digital infrastructure and power,\" capitalizing on its rural loaction and control of the local energy market to build a data center with less bureaucratic and community barriers than other facilities.",
+    "monthRecorded": null,
     "lat": 41.0839630042558,
     "lng": -76.1435100426483,
     "sources": {
@@ -110,6 +111,7 @@ const PROJECTS = [
     "communityIntensity": "High",
     "communityActionDetails": "Environmental advocacy organizations have targeted the project after the public became aware of it. The New Jersey state legislature is working on regulation package limiting the size of data centers after backlash from the Vineland project.",
     "developerAction": "Project scaled back from 2.4 million sq feet to 718,000 square feet after Vineland denied $6 million loan",
+    "monthRecorded": null,
     "lat": 39.4277541654666,
     "lng": -75.0166986453401,
     "sources": {
@@ -181,6 +183,7 @@ const PROJECTS = [
     "communityIntensity": "None",
     "communityActionDetails": "Windstream acquired this data center along with D&E telecommunications in 2009.",
     "developerAction": null,
+    "monthRecorded": null,
     "lat": 40.1699008501249,
     "lng": -76.1779137390098,
     "sources": {
@@ -224,6 +227,7 @@ const PROJECTS = [
     "communityIntensity": "Low",
     "communityActionDetails": "Community action group Concerned residents of Western Pennsylvania (CROW) established to protest data center, with specific challenges to the project's air pollution permit.",
     "developerAction": "N/A",
+    "monthRecorded": null,
     "lat": 40.509833556025,
     "lng": -79.2045564741278,
     "sources": {
@@ -277,6 +281,7 @@ const PROJECTS = [
     "communityIntensity": "Low",
     "communityActionDetails": "Statements issues by Appalachian Trail Conservancy and the Coalition to Protect Cumberland County PA from Data Centers",
     "developerAction": "Developer created a Q&A website to address community concerns.",
+    "monthRecorded": null,
     "lat": 40.2560781344692,
     "lng": -77.118686893443,
     "sources": {
@@ -330,6 +335,7 @@ const PROJECTS = [
     "communityIntensity": "Low",
     "communityActionDetails": "N/A",
     "developerAction": "Community benefits agreement created with Town of Lancaster",
+    "monthRecorded": null,
     "lat": 40.0595567106763,
     "lng": -76.3299567894937,
     "sources": {
@@ -377,6 +383,7 @@ const PROJECTS = [
     "communityIntensity": null,
     "communityActionDetails": "County Board of Commissioners amended ordinances to allow construction; sale of public land",
     "developerAction": null,
+    "monthRecorded": null,
     "lat": 35.9243546164901,
     "lng": -77.6583439892765,
     "sources": {
@@ -413,6 +420,7 @@ const PROJECTS = [
     "communityIntensity": null,
     "communityActionDetails": "Town of Tarboro denied special permit",
     "developerAction": "Appeal to Superior County Court",
+    "monthRecorded": null,
     "lat": 35.9052413354529,
     "lng": -77.5787098240266,
     "sources": {
@@ -453,6 +461,7 @@ const PROJECTS = [
     "communityIntensity": null,
     "communityActionDetails": null,
     "developerAction": null,
+    "monthRecorded": null,
     "lat": 35.619096,
     "lng": -81.31578,
     "sources": {
@@ -487,6 +496,7 @@ const PROJECTS = [
     "communityIntensity": null,
     "communityActionDetails": null,
     "developerAction": null,
+    "monthRecorded": null,
     "lat": 35.731135,
     "lng": -81.205389,
     "sources": {
@@ -521,6 +531,7 @@ const PROJECTS = [
     "communityIntensity": null,
     "communityActionDetails": null,
     "developerAction": null,
+    "monthRecorded": null,
     "lat": 35.589794,
     "lng": -81.235323,
     "sources": {
@@ -555,6 +566,7 @@ const PROJECTS = [
     "communityIntensity": null,
     "communityActionDetails": "County Board denied revision",
     "developerAction": "Revised then withdrew proposal, cancelled data center",
+    "monthRecorded": null,
     "lat": 36.7,
     "lng": -79.28,
     "sources": {
@@ -589,6 +601,7 @@ const PROJECTS = [
     "communityIntensity": null,
     "communityActionDetails": "County Board claims it set exacting standards: buffering from communities, noise abatement provisions, screening requirements, and the prohibition of the use of potable water for industrial cooling",
     "developerAction": null,
+    "monthRecorded": null,
     "lat": 37.989718,
     "lng": -77.491225,
     "sources": {

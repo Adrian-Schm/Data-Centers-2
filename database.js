@@ -18,7 +18,9 @@
   function fmtMoney(b) {
     if (b == null) return '—';
     if (typeof b !== 'number') return String(b);
-    return '$' + (b >= 1 ? b.toFixed(1) : b.toFixed(2)) + 'B';
+    if (b >= 1) return '$' + b.toFixed(1) + 'B';
+    const m = Math.round(b * 1000);
+    return '$' + m + 'M';
   }
   function fmtMw(v) {
     if (v == null) return '—';
@@ -100,7 +102,9 @@
       if (typeof av === 'string') { av = av.toLowerCase(); bv = String(bv).toLowerCase(); }
       if (av < bv) return -1 * mul;
       if (av > bv) return  1 * mul;
-      return 0;
+      // secondary: sort by name within same primary value
+      const an = (a.name || '').toLowerCase(), bn = (b.name || '').toLowerCase();
+      return an < bn ? -1 : an > bn ? 1 : 0;
     });
   }
 
@@ -115,9 +119,15 @@
   function render() {
     const mount = document.getElementById(MOUNT_ID);
     if (!mount) return;
-    if (dbState.detailId) renderDetail(mount);
-    else                  renderBrowse(mount);
-    mount.scrollIntoView({ behavior:'instant', block:'start' });
+    if (dbState.detailId) {
+      renderDetail(mount);
+      requestAnimationFrame(() => {
+        const card = mount.querySelector('.db-detail-bar');
+        if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    } else {
+      renderBrowse(mount);
+    }
   }
 
   // ── chip row builder ───────────────────────────────────────────────
@@ -135,39 +145,37 @@
 
     const stateOpts   = uniqueValues('state');
     const statusOpts  = uniqueValues('status');
-    const postureOpts = uniqueValues('communityPosture');
+    const postureOpts = uniqueValues('communityPosture').filter(v => v !== 'Positive/Neutral');
 
     const anyFilter = dbState.filters.states.length || dbState.filters.statuses.length ||
                       dbState.filters.postures.length || dbState.filters.search;
 
     mount.innerHTML = `
-      <div class="db-browse-header">
-        <div class="db-browse-title">Project database</div>
-        <div class="db-browse-count">${list.length} of ${allReal.length} shown</div>
-      </div>
-
       <div class="db-filter-bar">
         <div class="db-search-row">
           <input class="db-search-input" type="search" placeholder="Search project name or company…"
             value="${esc(dbState.filters.search)}" />
+          <div class="db-search-meta">
+            <div class="db-browse-count">${list.length} of ${allReal.length} shown</div>
+            ${anyFilter ? `<button class="db-reset" type="button">Clear</button>` : ''}
+          </div>
         </div>
 
-        <div class="db-filter-row">
-          <span class="db-filter-label">State</span>
-          <div class="db-chips-row">${chipRow('states', stateOpts, dbState.filters.states)}</div>
+        <div class="db-filter-cols">
+          <div class="db-filter-row">
+            <span class="db-filter-label">State</span>
+            <div class="db-chips-row">${chipRow('states', stateOpts, dbState.filters.states)}</div>
+          </div>
+          <div class="db-filter-row">
+            <span class="db-filter-label">Status</span>
+            <div class="db-chips-row">${chipRow('statuses', statusOpts, dbState.filters.statuses)}</div>
+          </div>
+          <div class="db-filter-row">
+            <span class="db-filter-label">Posture</span>
+            <div class="db-chips-row">${chipRow('postures', postureOpts, dbState.filters.postures)}</div>
+          </div>
         </div>
-
-        <div class="db-filter-row">
-          <span class="db-filter-label">Status</span>
-          <div class="db-chips-row">${chipRow('statuses', statusOpts, dbState.filters.statuses)}</div>
-        </div>
-
-        <div class="db-filter-row">
-          <span class="db-filter-label">Posture</span>
-          <div class="db-chips-row">${chipRow('postures', postureOpts, dbState.filters.postures)}</div>
-        </div>
-
-        ${anyFilter ? `<button class="db-reset" type="button">Clear filters</button>` : ''}
+        <div></div>
       </div>
 
       <div class="db-table-wrap">
@@ -284,7 +292,7 @@
 
     const prev = idx > 0 ? realProjects[idx - 1] : null;
     const next = idx < realProjects.length - 1 ? realProjects[idx + 1] : null;
-    const region = [p.county ? p.county + ' County' : null, p.state].filter(Boolean).join(', ').toUpperCase();
+    const { metricsHtml, mapHtml, renderSections } = renderFullDetail(p);
 
     mount.innerHTML = `
       <div class="db-detail-bar">
@@ -299,18 +307,26 @@
         </div>
       </div>
 
-      <div class="db-detail-head">
-        ${region ? `<div class="db-detail-region">${esc(region)}</div>` : ''}
-        <div class="db-detail-name">${p.featured ? '<span class="db-star" style="font-size:20px;margin-right:8px">✶</span>' : ''}${esc(p.name)}</div>
-        ${p.company ? `<div class="db-detail-company">${esc(p.company)}</div>` : ''}
-        <div class="db-detail-badges">
-          ${p.communityPosture ? `<span class="badge ${postureBadgeClass(p.communityPosture)}">${esc(p.communityPosture)} sentiment</span>` : ''}
-          ${p.status ? `<span class="badge ${statusBadgeClass(p.status)}">${esc(p.status)}</span>` : ''}
-          ${p.communityIntensity && p.communityIntensity !== 'None' ? `<span class="badge b-Neutral">${esc(p.communityIntensity)} intensity</span>` : ''}
+      <div class="db-detail-card">
+        <div class="db-detail-head">
+          <div class="db-detail-name">${p.featured ? '<span class="db-star" style="font-size:20px;margin-right:8px">✶</span>' : ''}${esc(p.name)}</div>
+          ${(() => {
+            const place = [p.county ? esc(p.county) + ' County' : '', p.state ? esc(p.state) : ''].filter(Boolean).join(', ');
+            const loc = [place, p.communities ? esc(p.communities) : ''].filter(Boolean).join(' · ');
+            return loc ? `<div class="db-detail-location">${loc}</div>` : '';
+          })()}
+          <div class="db-detail-badges">
+            ${p.communityIntensity && p.communityIntensity !== 'None' ? `<span class="badge b-Neutral">${esc(p.communityIntensity)} intensity</span>` : ''}
+          </div>
         </div>
+        <div class="db-detail-card-inner">
+          <div class="db-detail-left">
+            <div class="db-metrics-grid">${metricsHtml}</div>
+          </div>
+          ${mapHtml}
+        </div>
+        ${renderSections()}
       </div>
-
-      ${renderFullDetail(p)}
     `;
 
     const back = mount.querySelector('[data-action="back"]');
@@ -331,10 +347,7 @@
       const el = document.getElementById('dbLeaflet-' + p.id);
       if (!el) return;
       if (_activeLeaflet) { try { _activeLeaflet.remove(); } catch (e) {} _activeLeaflet = null; }
-      const zoom = p.coordsPrecision === 'parcel' ? 17
-                 : p.coordsPrecision === 'town'   ? 13
-                 : p.coordsPrecision === 'county' ? 10
-                 : 14;
+      const zoom = 10;
       const map = new maplibregl.Map({
         container: el,
         style:     'https://tiles.openfreemap.org/styles/bright',
@@ -368,11 +381,14 @@
 
   function renderFullDetail(p) {
     const metricsHtml = `
+      ${p.company ? `<div class="db-metric"><div class="db-ml">Company</div><div class="db-mv">${esc(p.company)}</div></div>` : ''}
       <div class="db-metric"><div class="db-ml">Investment</div><div class="db-mv">${fmtMoney(p.investmentB)}</div></div>
       <div class="db-metric"><div class="db-ml">Capacity</div><div class="db-mv">${fmtMw(p.capacityMw)}</div></div>
       <div class="db-metric"><div class="db-ml">Acreage</div><div class="db-mv">${fmtAcres(p.acreage)}</div></div>
       <div class="db-metric"><div class="db-ml">Timeline</div><div class="db-mv ${fmtRange(p.timelineStart,p.timelineEnd)?'text':'empty'}">${esc(fmtRange(p.timelineStart,p.timelineEnd)) || 'Not yet set'}</div></div>
+      ${p.status ? `<div class="db-metric db-metric-status ${statusBadgeClass(p.status)}"><div class="db-ml">Status</div><div class="db-mv">${esc(p.status)}</div></div>` : ''}
       ${p.energySources ? `<div class="db-metric db-full"><div class="db-ml">Energy sources</div><div class="db-mv text">${esc(p.energySources)}</div></div>` : ''}
+      ${p.monthRecorded ? `<div class="db-metric"><div class="db-ml">Month recorded</div><div class="db-mv text">${esc(p.monthRecorded)}</div></div>` : ''}
     `;
 
     const hasCoords = p.lat != null && p.lng != null;
@@ -382,15 +398,19 @@
                          : p.coordsPrecision === 'county' ? 'County area'
                          : 'Site location';
     const mapHtml = hasCoords ? `
-      <div class="db-map-box">
-        <div class="db-leaflet" id="${mapId}"></div>
-        <div class="db-map-meta">
-          <span>${precisionLabel}</span>
-          <span>Lat ${p.lat.toFixed(3)}, Lng ${p.lng.toFixed(3)}</span>
+      <div class="db-map-col">
+        <div class="db-map-box">
+          <div class="db-leaflet" id="${mapId}"></div>
+          <div class="db-map-meta">
+            <span>${precisionLabel}</span>
+            <span>Lat ${p.lat.toFixed(3)}, Lng ${p.lng.toFixed(3)}</span>
+          </div>
         </div>
       </div>` : `
-      <div class="db-map-box">
-        <div class="db-map-pending">Coordinates not yet added</div>
+      <div class="db-map-col">
+        <div class="db-map-box">
+          <div class="db-map-pending">Coordinates not yet added</div>
+        </div>
       </div>`;
 
     const timelineHtml = (p.timeline && p.timeline.length)
@@ -405,7 +425,7 @@
                  <div class="db-te-dot ${filled}"><div></div></div>
                  <div class="db-te-body">
                    <div class="db-te-label">${esc(e.label || 'Event')}${e.isProposal ? '<span class="db-te-proposal-tag">proposal</span>':''}</div>
-                   ${src ? `<div class="db-te-meta"><a href="${esc(src)}" target="_blank" rel="noopener">🔗 ${esc(hostOf(src))}</a></div>` : ''}
+                   ${src ? `<div class="db-te-meta"><a href="${esc(src)}" target="_blank" rel="noopener">↗ ${esc(hostOf(src))}</a></div>` : ''}
                  </div>
                </div>`;
            }).join('')}
@@ -416,41 +436,59 @@
       ? p.concernsCategories.split(/[,;]/).map(c => c.trim()).filter(Boolean)
       : [];
 
+    const CHIP_COLORS = {
+      'air quality':          'db-chip-air',
+      'noise pollution':      'db-chip-noise',
+      'noise':                'db-chip-noise',
+      'light pollution':      'db-chip-light',
+      'water demand':         'db-chip-water',
+      'water':                'db-chip-water',
+      'land':                 'db-chip-land',
+      'environmental':        'db-chip-env',
+      'environment':          'db-chip-env',
+      'climate':              'db-chip-climate',
+      'individual economic':  'db-chip-econ',
+      'qol':                  'db-chip-qol',
+    };
+    function chipClass(c) {
+      return CHIP_COLORS[c.toLowerCase().trim()] || 'db-chip-default';
+    }
+
     const devSide = `
-      <div class="db-section-label">DEVELOPER SIDE</div>
+      <div class="db-section-label">— Developer Side</div>
       ${fieldHtml('Resource usage claims', p.resourceClaims)}
       ${fieldHtml('Developer promises', p.developerPromises)}
       ${fieldHtml('Developer action', p.developerAction)}
     `;
     const commSide = `
-      <div class="db-section-label">COMMUNITY SIDE</div>
+      <div class="db-section-label">— Community Side</div>
+      ${p.communityPosture ? `<div class="db-field"><div class="db-field-label">Sentiment</div><div class="db-field-text">${esc(p.communityPosture)}${p.communityIntensity && p.communityIntensity !== 'None' ? ' · ' + esc(p.communityIntensity) + ' intensity' : ''}</div></div>` : ''}
       <div class="db-field">
         <div class="db-field-label">Concern categories</div>
         ${concernsChips.length
-          ? `<div class="db-chips">${concernsChips.map(c=>`<span class="db-chip">${esc(c)}</span>`).join('')}</div>`
+          ? `<div class="db-chips">${concernsChips.map(c=>`<span class="db-chip ${chipClass(c)}">${esc(c)}</span>`).join('')}</div>`
           : `<div class="db-field-empty">None recorded.</div>`}
       </div>
       ${fieldHtml('Articulated concerns', p.articulatedConcerns)}
       ${fieldHtml('Community action', p.communityActionDetails)}
     `;
 
-    return `
-      <div class="db-hero">
-        <div class="db-metrics-grid">${metricsHtml}</div>
-        ${mapHtml}
-      </div>
-      <div class="db-section">
-        <div class="db-section-label">TIMELINE</div>
-        ${timelineHtml}
-      </div>
-      <div class="db-section">
-        <div class="db-split">
-          <div>${devSide}</div>
-          <div>${commSide}</div>
+    return { metricsHtml, mapHtml, renderSections };
+
+    function renderSections() {
+      return `
+        <div class="db-section">
+          <div class="db-split">
+            <div>${commSide}</div>
+            <div>${devSide}</div>
+          </div>
         </div>
-      </div>
-      ${renderSources(p)}
-    `;
+        <div class="db-section">
+          <div class="db-section-label">TIMELINE</div>
+          ${timelineHtml}
+        </div>
+        ${renderSources(p)}`;
+    }
   }
 
   function fieldHtml(label, text) {
@@ -474,12 +512,12 @@
     if (!hasAny) return '';
     const rows = [];
     if (s.projectProposal)
-      rows.push(`<a href="${esc(s.projectProposal)}" target="_blank" rel="noopener"><span class="db-source-tag">PROPOSAL</span>🔗 ${esc(hostOf(s.projectProposal))}</a>`);
+      rows.push(`<a href="${esc(s.projectProposal)}" target="_blank" rel="noopener"><span class="db-source-tag">PROPOSAL</span>↗ ${esc(hostOf(s.projectProposal))}</a>`);
     s.govtRecords.forEach(u =>
-      rows.push(`<a href="${esc(u)}" target="_blank" rel="noopener"><span class="db-source-tag">GOV'T</span>🔗 ${esc(hostOf(u))}</a>`)
+      rows.push(`<a href="${esc(u)}" target="_blank" rel="noopener"><span class="db-source-tag">GOV'T</span>↗ ${esc(hostOf(u))}</a>`)
     );
     s.other.forEach(u =>
-      rows.push(`<a href="${esc(u)}" target="_blank" rel="noopener"><span class="db-source-tag">OTHER</span>🔗 ${esc(hostOf(u))}</a>`)
+      rows.push(`<a href="${esc(u)}" target="_blank" rel="noopener"><span class="db-source-tag">OTHER</span>↗ ${esc(hostOf(u))}</a>`)
     );
     return `
       <div class="db-section">
@@ -488,9 +526,13 @@
       </div>`;
   }
 
-  // External hook
+  // External hooks
   window.dbOpenProject = function (id) {
     dbState.detailId = id;
+    render();
+  };
+  window.dbGoHome = function () {
+    dbState.detailId = null;
     render();
   };
 

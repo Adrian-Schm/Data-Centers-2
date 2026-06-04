@@ -54,11 +54,11 @@ const MD_STATE_FULL   = { DE:'Delaware', NJ:'New Jersey', NC:'North Carolina', P
 
 // NJ and DE use abbreviations + adjusted positions to prevent border overlap
 const MD_STATE_LABELS = [
-  { fips:'42', text:'Pennsylvania',   lat:41.0,  lng:-77.6,  small:false },
-  { fips:'34', text:'NJ',             lat:40.35, lng:-74.2,  small:true  },
-  { fips:'10', text:'DE',             lat:39.1,  lng:-75.42, small:true  },
-  { fips:'51', text:'Virginia',       lat:37.6,  lng:-78.7,  small:false },
-  { fips:'37', text:'North Carolina', lat:35.55, lng:-79.1,  small:false },
+  { fips:'42', text:'Pennsylvania',   lat:41.0,  lng:-77.6,  anchor:'middle', size:18 },
+  { fips:'34', text:'New Jersey',     lat:40.35, lng:-74.2,  anchor:'middle', size:13 },
+  { fips:'10', text:'Delaware',       lat:39.1,  lng:-75.42, anchor:'middle', size:13 },
+  { fips:'51', text:'Virginia',       lat:37.6,  lng:-78.7,  anchor:'middle', size:18 },
+  { fips:'37', text:'North Carolina', lat:35.55, lng:-79.1,  anchor:'middle', size:18 },
 ];
 
 const MD_W = 860, MD_H = 680;
@@ -129,9 +129,9 @@ function mdRenderDetailPanel(id) {
           onclick="mdViewFips ? mdRenderStateProjList(mdViewFips) : mdClearSelection()">✕</button>
       </div>
       ${p.company ? `<div class="md-panel-sub">${p.company}</div>` : ''}
-      <div class="md-panel-badges">
-        <span class="badge b-${sentiment}">${p.status || sentiment}</span>
-      </div>
+    </div>
+    <div class="md-panel-badges">
+      <span class="badge b-${sentiment}">${p.status || sentiment}</span>
     </div>
     <div class="md-panel-metrics">
       <div class="md-metric"><div class="md-ml">Investment</div><div class="md-mv">${mdFmtMoney(p.investmentB)}</div></div>
@@ -380,13 +380,14 @@ function mdRenderMap(crossfade) {
     MD_STATE_LABELS.forEach(s => {
       const xy = proj([s.lng, s.lat]);
       if (!xy) return;
-      const fs  = s.small ? 13 : 18;
-      const fw  = s.small ? 700 : 600;
       root.append('text').attr('class','md-state-label')
         .attr('x', xy[0]).attr('y', xy[1])
-        .attr('text-anchor','middle')
-        .attr('font-size', fs)
-        .attr('font-weight', fw)
+        .attr('text-anchor', s.anchor || 'middle')
+        .attr('font-size', s.size || 18)
+        .attr('font-weight', 600)
+        .attr('stroke', 'rgba(255,255,255,0.7)')
+        .attr('stroke-width', 3)
+        .attr('paint-order', 'stroke')
         .style('cursor','pointer')
         .on('mouseover', () => setHighlight(s.fips))
         .on('mouseout',  () => clearHighlight())
@@ -409,10 +410,11 @@ function mdRenderMap(crossfade) {
   const drilled  = mdViewFips !== null;
   const pinR     = drilled ? 8  : 5;
   const ringR    = drilled ? 12 : 8;
-  const labelFs  = 16;
-  const labelLH  = 20;
-  const labelGap = 5;
-  const labelCharW = labelFs * 0.52;
+  const labelFs  = 14;
+  const labelLH  = 18;
+  const labelPad = 8;  // gap between pin edge and label
+  const labelCharW = labelFs * 0.54;
+  const margin   = 6;  // min distance from SVG edge
 
   // Compute pin screen positions
   const pins = [];
@@ -424,37 +426,62 @@ function mdRenderMap(crossfade) {
 
   const leaderLayer = root.append('g').attr('class','md-leader-layer');
 
-  if (drilled) pins.sort((a, b) => a.y - b.y);
+  if (drilled) {
+    // ── label placement ───────────────────────────────────────────────
+    // Other pins' circles are blocked zones (labels shouldn't land on them)
+    const placed = [];
 
-  // Collision-avoid label positions (drilled view only)
-  const placedLabels = [];
-  pins.forEach(pin => {
-    const baseLabelX = pin.x + pinR + 6;
-    const labelW = Math.min(230, pin.p.name.length * labelCharW + 8);
-    let labelY = pin.y;
-    if (drilled) {
-      let bumped = true;
-      while (bumped) {
-        bumped = false;
-        for (const o of placedLabels) {
-          const hOvlp = !(baseLabelX + labelW < o.left || baseLabelX > o.right);
-          const vOvlp = !(labelY + labelLH / 2 < o.top  || labelY - labelLH / 2 > o.bottom);
-          if (hOvlp && vOvlp) { labelY = o.bottom + labelGap + labelLH / 2; bumped = true; }
-        }
-      }
-      placedLabels.push({ left:baseLabelX, right:baseLabelX+labelW, top:labelY-labelLH/2, bottom:labelY+labelLH/2 });
+    function overlaps(box, others) {
+      return others.some(o =>
+        box.left   < o.right  && box.right  > o.left &&
+        box.top    < o.bottom && box.bottom > o.top
+      );
     }
-    pin.labelX = baseLabelX;
-    pin.labelY = labelY;
-  });
+
+
+    pins.forEach((pin, i) => {
+      // Try both sides at each displacement level, minimising distance from pin
+      // Only avoid already-placed labels (not other pin circles — offset already clears them)
+      let result = null;
+      const candidates = [
+        ['right', 0], ['right', -labelLH], ['right', labelLH], ['right', -labelLH*2], ['right', labelLH*2],
+        ['left',  0], ['left',  -labelLH], ['left',  labelLH], ['left',  -labelLH*2], ['left',  labelLH*2],
+      ];
+      outer: for (const [side, dy] of candidates) {
+          const labelW = Math.min(220, pin.p.name.length * labelCharW + 6);
+          const lx = side === 'right'
+            ? pin.x + pinR + labelPad
+            : pin.x - pinR - labelPad - labelW;
+          if (lx < margin || lx + labelW > MD_W - margin) continue;
+          const ly = pin.y + dy;
+          if (ly - labelLH/2 < margin || ly + labelLH/2 > MD_H - margin) continue;
+          const box = { left:lx, right:lx+labelW, top:ly-labelLH/2, bottom:ly+labelLH/2 };
+          if (!overlaps(box, placed)) {
+            result = { lx, ly, labelW, box };
+            break outer;
+          }
+      }
+      if (!result) {
+        const labelW = Math.min(220, labelText(pin.p.name).length * labelCharW + 6);
+        const lx = Math.min(pin.x + pinR + labelPad, MD_W - labelW - margin);
+        result = { lx, ly: pin.y, labelW, box: { left:lx, right:lx+labelW, top:pin.y-labelLH/2, bottom:pin.y+labelLH/2 } };
+      }
+      placed.push(result.box);
+      pin.labelX  = result.lx;
+      pin.labelY  = result.ly;
+      pin.labelW  = result.labelW;
+      pin.flipped = result.lx < pin.x;
+    });
+  }
 
   pins.forEach(pin => {
-    const { p, x, y, labelX, labelY } = pin;
+    const { p, x, y } = pin;
     const sentiment = mdSentimentOf(p);
 
-    if (drilled && Math.abs(labelY - y) > 4) {
+    if (drilled && Math.abs(pin.labelY - y) > 4) {
+      const leaderLabelX = pin.flipped ? x - pinR - labelPad : pin.labelX;
       leaderLayer.append('path').attr('class','md-leader')
-        .attr('d', `M ${x + pinR} ${y} L ${labelX - 2} ${labelY}`);
+        .attr('d', `M ${x} ${y} L ${leaderLabelX} ${pin.labelY}`);
     }
 
     const g = root.append('g').attr('class','md-pin').attr('id','mdPin-' + p.id)
@@ -485,8 +512,12 @@ function mdRenderMap(crossfade) {
     }
 
     if (drilled) {
+      // For flipped (left-side) labels use text-anchor:end so text grows leftward, never encroaching on the pin
+      const textAnchor = pin.flipped ? 'end' : 'start';
+      const textX = pin.flipped ? pin.x - pinR - labelPad : pin.labelX;
       root.append('text').attr('class','md-pin-label')
-        .attr('x', labelX).attr('y', labelY + 5)
+        .attr('x', textX).attr('y', pin.labelY + 5)
+        .attr('text-anchor', textAnchor)
         .attr('font-size', labelFs).attr('font-weight', 500)
         .attr('font-family','inherit').attr('fill','#1a1a18')
         .attr('stroke','#ffffff').attr('stroke-width', 4)
