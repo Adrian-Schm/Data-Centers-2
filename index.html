@@ -1913,7 +1913,7 @@ window.addEventListener('hashchange', function () {
   let id  = decodeURIComponent(slash === -1 ? raw : raw.slice(0, slash));
   let sub = slash === -1 ? '' : decodeURIComponent(raw.slice(slash + 1));
   if (VALID_TABS.indexOf(id) === -1) {
-    id = localStorage.getItem('activeTab') || 'home';
+    id = 'home';
     sub = '';
   }
   applyTab(id, sub);
