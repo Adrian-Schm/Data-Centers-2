@@ -175,9 +175,8 @@ function mdRenderStateProjList(fips) {
   el.className = 'md-panel md-panel-filled';
   el.innerHTML = `
     <div class="md-panel-head" style="margin-bottom:10px;">
-      <div class="md-panel-location">${stateName}</div>
       <div class="md-panel-head-top">
-        <div class="md-panel-name">${stateProjects.length} project${stateProjects.length === 1 ? '' : 's'}</div>
+        <div class="md-panel-name">${stateName} — ${stateProjects.length} project${stateProjects.length === 1 ? '' : 's'}</div>
         <button class="md-close" type="button" onclick="mdClearSelection()">✕</button>
       </div>
     </div>

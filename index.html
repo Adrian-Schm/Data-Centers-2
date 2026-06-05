@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Data Center Policy Tools</title>
+<title>Duke Data Center Policy Project</title>
 <link href="https://cdn.jsdelivr.net/npm/maplibre-gl@4/dist/maplibre-gl.css" rel="stylesheet" />
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -32,6 +32,7 @@
     min-height: 100vh;
     font-size: 15px;
     line-height: 1.6;
+    overscroll-behavior: none;
     display: flex;
     flex-direction: column;
   }
@@ -41,8 +42,10 @@
     background: var(--surface);
     border-bottom: 1px solid var(--border);
     padding: 0 24px;
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 100;
   }
   .header-inner {
@@ -70,6 +73,7 @@
     border: none;
     padding: 0 18px;
     font-size: 13px;
+    font-weight: 500;
     color: var(--text2);
     cursor: pointer;
     border-bottom: 2px solid transparent;
@@ -78,8 +82,8 @@
     font-family: inherit;
   }
   .tab-btn:hover { color: var(--text); }
-  .tab-btn.active { color: #2d7a3e; border-bottom-color: #2d7a3e; font-weight: 500; }
-  .tab-btn.tab-interactive.active { color: #2d7a3e; background: none; border-bottom-color: #2d7a3e; font-weight: 500; }
+  .tab-btn.active { color: #2d7a3e; border-bottom-color: #2d7a3e; }
+  .tab-btn.tab-interactive.active { color: #2d7a3e; background: none; border-bottom-color: #2d7a3e; }
   .header-inner { position: relative; }
   .hamburger {
     display: none;
@@ -285,9 +289,11 @@
   .df-actions li:first-child { border-top:none; padding-top:0; }
   .df-actions li::before { content:'→'; color:var(--text3); flex-shrink:0; }
 
-  .df-reset-row { display:flex; justify-content:flex-end; margin-top:10px; }
+  .df-reset-row { display:flex; justify-content:flex-end; gap:8px; margin-top:10px; }
   .df-reset { font-size:12px; padding:6px 12px; border:1px solid var(--border2); border-radius:var(--radius); background:transparent; color:var(--text2); cursor:pointer; font-family:inherit; }
   .df-reset:hover { background:var(--surface2); color:var(--text); }
+  .df-export { font-size:12px; padding:6px 12px; border:1px solid var(--border2); border-radius:var(--radius); background:transparent; color:var(--text2); cursor:pointer; font-family:inherit; }
+  .df-export:hover { background:var(--surface2); color:var(--text); }
 
   /* ── Context + Case Study Tabs ── */
   .prose-section { max-width: 780px; }
@@ -373,13 +379,14 @@
   .primary-source p { font-size: 13px; color: var(--text2); line-height: 1.65; margin: 0; font-style: italic; }
   .quote-attr { font-size: 11px; color: var(--text3); margin-top: 6px; font-style: normal; }
   footer { text-align:center; padding:24px; font-size:12px; color:var(--text3); border-top:1px solid var(--border); background:var(--surface); margin-top:0; }
+  body { padding-top: 53px; }
 </style>
 </head>
 <body>
 
 <header>
   <div class="header-inner">
-    <div class="site-title">Data Center Policy</div>
+    <div class="site-title">Duke Data Center Policy Project</div>
     <nav>
       <button class="tab-btn active" onclick="switchTab('home', this)">Home</button>
       <button class="tab-btn" onclick="switchTab('context', this)">Background &amp; Policy</button>
@@ -731,9 +738,6 @@
 
       </ol>
     </div>
-    <div class="next-btn-wrap" style="margin-top:2.5rem;padding-top:1.25rem;border-top:1px solid rgba(0,0,0,0.1);display:flex;justify-content:flex-end;">
-      <button style="background:none;border:none;padding:0;font-family:Georgia,serif;font-size:14px;color:#185fa5;cursor:pointer;" onmouseover="this.style.opacity='0.6'" onmouseout="this.style.opacity='1'" onclick="switchTabById('map')">Continue to Project Map →</button>
-    </div>
     </div>
   </div>
 </div>
@@ -887,9 +891,33 @@
       .db-chip-btn.active { background: var(--accent-mid); color: #fff; border-color: var(--accent-mid); }
       .db-reset { align-self: flex-start; background: none; border: 1px solid var(--border2); color: var(--text2); font-family: inherit; font-size: 11px; padding: 4px 11px; border-radius: 4px; cursor: pointer; margin-top: 2px; }
       .db-reset:hover { color: var(--text); border-color: var(--text2); }
+      .db-download-btn { align-self: flex-start; background: none; border: 1px solid var(--border2); color: var(--text2); font-family: inherit; font-size: 11px; padding: 4px 11px; border-radius: 4px; cursor: pointer; margin-top: 2px; }
+      .db-download-btn:hover { color: var(--text); border-color: var(--text2); }
 
-      .db-table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow-y: auto; max-height: 60vh; }
-      .db-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+      .db-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 100; display: flex; align-items: center; justify-content: center; }
+      .db-modal { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px 24px; width: 400px; max-width: 92vw; }
+      .db-modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+      .db-modal-title { font-size: 15px; font-weight: 600; color: var(--text); }
+      .db-modal-close { background: none; border: none; cursor: pointer; font-size: 14px; color: var(--text2); padding: 0 2px; }
+      .db-modal-sub { font-size: 12px; color: var(--text3); margin-bottom: 14px; }
+      .db-modal-filename { font-family: monospace; color: var(--text2); }
+      .db-modal-section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text); margin-bottom: 8px; }
+      .db-modal-fields { display: grid; grid-template-columns: 1fr 1fr; grid-auto-flow: column; grid-template-rows: repeat(10, auto); gap: 6px 12px; margin-bottom: 18px; }
+      .db-modal-footer { font-size: 11px; color: var(--text3); margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border); }
+      .db-modal-footer a { color: var(--text2); }
+      .db-modal-field { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text2); cursor: pointer; }
+      .db-modal-field.on { color: var(--text); }
+      .db-modal-actions { display: flex; justify-content: flex-end; gap: 8px; }
+      .db-modal-cancel { background: none; border: 1px solid var(--border2); color: var(--text2); font-family: inherit; font-size: 13px; padding: 6px 16px; border-radius: 4px; cursor: pointer; }
+      .db-modal-dl { background: var(--accent-mid); border: none; color: #fff; font-family: inherit; font-size: 13px; padding: 6px 16px; border-radius: 4px; cursor: pointer; font-weight: 500; }
+      .db-modal-dl:hover { opacity: 0.9; }
+
+      .db-table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+      .db-table-scroll { overflow-y: auto; max-height: 60vh; overscroll-behavior: contain; }
+      .db-table-header { border-bottom: 1px solid var(--border); }
+      .db-table-header thead th { position: static; }
+      .db-table-body thead { display: none; }
+      .db-table { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
       .db-table thead th { text-align: left; font-weight: 500; color: var(--text2); font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; padding: 10px 12px; border-bottom: 1px solid var(--border); background: var(--surface2); cursor: pointer; user-select: none; white-space: nowrap; transition: background 0.1s, color 0.1s; position: sticky; top: 0; z-index: 1; }
       .db-table thead th[data-col]:hover { background: #e8e5dd; color: var(--text); }
       .db-table thead th.active { color: var(--text); background: #e2dfd7; }
@@ -1361,9 +1389,6 @@
 
       </ol>
     </div>
-    <div class="next-btn-wrap" style="margin-top:2.5rem;padding-top:1.25rem;border-top:1px solid rgba(0,0,0,0.1);display:flex;justify-content:flex-end;">
-      <button style="background:none;border:none;padding:0;font-family:Georgia,serif;font-size:14px;color:#185fa5;cursor:pointer;" onmouseover="this.style.opacity='0.6'" onmouseout="this.style.opacity='1'" onclick="switchTabById('decision')">Continue to Decision Framework →</button>
-    </div>
   </div>
 </div>
 
@@ -1413,7 +1438,10 @@
             </div>
           </div>
 
-          <div class="df-reset-row"><button class="df-reset" onclick="dfReset()">Reset sliders to middle</button></div>
+          <div class="df-reset-row">
+            <button class="df-export" onclick="dfExportPDF()">↓ Export PDF</button>
+            <button class="df-reset" onclick="dfReset()">Reset sliders to middle</button>
+          </div>
           <div id="dfPending" style="font-size:11px;color:var(--text3);text-align:right;margin-top:6px;">Move all 5 sliders to reveal results</div>
         </div>
 
@@ -1421,9 +1449,6 @@
           <div id="dfFactors"></div>
         </div>
       </div>
-    </div>
-    <div class="next-btn-wrap" style="margin-top:1rem;padding-top:0.75rem;border-top:1px solid rgba(0,0,0,0.1);display:flex;justify-content:flex-end;">
-      <button style="background:none;border:none;padding:0;font-family:Georgia,serif;font-size:14px;color:#185fa5;cursor:pointer;" onmouseover="this.style.opacity='0.6'" onmouseout="this.style.opacity='1'" onclick="switchTabById('context')">← Back to the beginning</button>
     </div>
   </div>
 </div>
@@ -1838,13 +1863,10 @@
       <p>The path forward is not faster federal permitting. It is smarter governance: state-level siting authority that coordinates with federal requirements, operational standards that are clear and enforceable, and multilevel coordination that shares information and builds capacity. The path forward starts with policymaking that includes all stakeholders from the start.</p>
     </div>
  
-    <div class="next-btn-wrap" style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid rgba(0,0,0,0.1);display:flex;justify-content:flex-end;">
-      <button style="background:none;border:none;padding:0;font-family:Georgia,serif;font-size:14px;color:#185fa5;cursor:pointer;" onmouseover="this.style.opacity='0.6'" onmouseout="this.style.opacity='1'" onclick="switchTabById('context')">← Back to the beginning</button>
-    </div>
   </div>
 </div>
 
-<footer>Data Center Policy &nbsp;·&nbsp; Duke University Tech Policy Lab &nbsp;·&nbsp; Last updated June 2026</footer>
+<footer>Duke Data Center Policy Project &nbsp;·&nbsp; Duke University Tech Policy Lab &nbsp;·&nbsp; Last updated June 2026 &nbsp;·&nbsp; <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener" style="color:inherit;">CC BY 4.0</a></footer>
 
 <!-- ════════════════ SCRIPTS ════════════════ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
@@ -1875,8 +1897,11 @@ function applyTab(id, sub) {
   const hb = document.querySelector('.hamburger');
   if (hb) hb.setAttribute('aria-expanded', 'false');
   if (id === 'database') {
-    if (sub && typeof dbApplySubHash === 'function') dbApplySubHash(sub);
-    else if (typeof dbGoHome === 'function') dbGoHome();
+    const qIdx = sub.indexOf('?');
+    const projId = qIdx === -1 ? sub : sub.slice(0, qIdx);
+    const query  = qIdx === -1 ? '' : sub.slice(qIdx);
+    if (projId && typeof dbApplySubHash === 'function') dbApplySubHash(projId, query);
+    else if (typeof dbGoHome === 'function') dbGoHome(query);
   }
   localStorage.setItem('activeTab', id);
 }
@@ -1901,8 +1926,12 @@ window.addEventListener('hashchange', function () {
   const raw = location.hash.slice(1);
   if (!raw) return;
   const slash = raw.indexOf('/');
-  const id  = decodeURIComponent(slash === -1 ? raw : raw.slice(0, slash));
-  const sub = slash === -1 ? '' : decodeURIComponent(raw.slice(slash + 1));
+  const qMark = raw.indexOf('?');
+  const idEnd = slash === -1 ? (qMark === -1 ? raw.length : qMark) : slash;
+  const id  = decodeURIComponent(raw.slice(0, idEnd));
+  const sub = slash === -1
+    ? (qMark === -1 ? '' : raw.slice(qMark))
+    : raw.slice(slash + 1);
   applyTab(id, sub);
 });
 
@@ -1910,8 +1939,12 @@ window.addEventListener('hashchange', function () {
 (function () {
   const raw = location.hash.slice(1);
   const slash = raw.indexOf('/');
-  let id  = decodeURIComponent(slash === -1 ? raw : raw.slice(0, slash));
-  let sub = slash === -1 ? '' : decodeURIComponent(raw.slice(slash + 1));
+  const qMark = raw.indexOf('?');
+  const idEnd = slash === -1 ? (qMark === -1 ? raw.length : qMark) : slash;
+  let id  = decodeURIComponent(raw.slice(0, idEnd));
+  let sub = slash === -1
+    ? (qMark === -1 ? '' : raw.slice(qMark))
+    : raw.slice(slash + 1);
   if (VALID_TABS.indexOf(id) === -1) {
     id = 'home';
     sub = '';

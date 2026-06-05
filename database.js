@@ -122,7 +122,7 @@
     const arr = dbState.filters[key];
     const idx = arr.indexOf(value);
     if (idx >= 0) arr.splice(idx, 1); else arr.push(value);
-    render();
+    dbNavTo(null);
   }
 
   // ── render dispatcher ──────────────────────────────────────────────
@@ -168,6 +168,7 @@
           <div class="db-search-meta">
             <div class="db-browse-count">${list.length} of ${allReal.length} shown</div>
             ${anyFilter ? `<button class="db-reset" type="button">Clear</button>` : ''}
+            <button class="db-download-btn" type="button">↓ Download CSV</button>
           </div>
         </div>
 
@@ -189,7 +190,12 @@
       </div>
 
       <div class="db-table-wrap">
-        <table class="db-table">
+        <table class="db-table db-table-header">
+          <colgroup>
+            <col style="width:22%"><col style="width:18%"><col style="width:6%">
+            <col style="width:10%"><col style="width:9%"><col style="width:10%">
+            <col style="width:13%"><col style="width:12%">
+          </colgroup>
           <thead>
             <tr>
               ${headerCell('name',             'Project')}
@@ -202,12 +208,21 @@
               ${headerCell('communityPosture', 'Posture')}
             </tr>
           </thead>
-          <tbody>
-            ${list.length === 0
-              ? `<tr><td colspan="8" class="db-empty-state">No projects match these filters.</td></tr>`
-              : list.map(rowHtml).join('')}
-          </tbody>
         </table>
+        <div class="db-table-scroll">
+          <table class="db-table db-table-body">
+            <colgroup>
+              <col style="width:22%"><col style="width:18%"><col style="width:6%">
+              <col style="width:10%"><col style="width:9%"><col style="width:10%">
+              <col style="width:13%"><col style="width:12%">
+            </colgroup>
+            <tbody>
+              ${list.length === 0
+                ? `<tr><td colspan="8" class="db-empty-state">No projects match these filters.</td></tr>`
+                : list.map(rowHtml).join('')}
+            </tbody>
+          </table>
+        </div>
       </div>
     `;
 
@@ -216,7 +231,7 @@
     if (searchInput) {
       searchInput.addEventListener('input', e => {
         dbState.filters.search = e.target.value;
-        render();
+        dbNavTo(null);
       });
       // Keep cursor at end after re-render
       if (dbState.filters.search) {
@@ -238,7 +253,7 @@
     if (resetBtn) resetBtn.addEventListener('click', () => {
       dbState.filters = { states:[], statuses:[], postures:[], search:'' };
       dbState.sort    = { col:'name', dir:'asc' };
-      render();
+      dbNavTo(null);
     });
 
     // Column sort
@@ -247,7 +262,7 @@
         const col = th.dataset.col;
         if (dbState.sort.col === col) dbState.sort.dir = dbState.sort.dir === 'asc' ? 'desc' : 'asc';
         else { dbState.sort.col = col; dbState.sort.dir = 'asc'; }
-        render();
+        dbNavTo(null);
       });
     });
 
@@ -257,6 +272,10 @@
         dbNavTo(tr.dataset.id);
       });
     });
+
+    // Download CSV
+    const dlBtn = mount.querySelector('.db-download-btn');
+    if (dlBtn) dlBtn.addEventListener('click', () => showDownloadModal(list));
   }
 
   function headerCell(col, label) {
@@ -285,8 +304,8 @@
 
   // ── detail view ────────────────────────────────────────────────────
   function renderDetail(mount) {
-    // Only navigate among non-stub projects
-    const realProjects = PROJECTS.filter(p => !p.stub).slice().sort((a, b) => (a.name || '').toLowerCase().localeCompare((b.name || '').toLowerCase()));
+    // Navigate within the current filtered+sorted set, falling back to all projects
+    const realProjects = applySort(applyFilters(PROJECTS)).filter(p => !p.stub);
     const idx = realProjects.findIndex(p => p.id === dbState.detailId);
     const p   = idx >= 0 ? realProjects[idx] : null;
 
@@ -547,23 +566,162 @@
       </div>`;
   }
 
+  // ── hash serialization ─────────────────────────────────────────────
+  function filtersToQuery() {
+    const p = new URLSearchParams();
+    if (dbState.filters.states.length)   p.set('state',   dbState.filters.states.join(','));
+    if (dbState.filters.statuses.length) p.set('status', dbState.filters.statuses.join(','));
+    if (dbState.filters.postures.length) p.set('posture', dbState.filters.postures.join(','));
+    if (dbState.filters.search)          p.set('search',   dbState.filters.search);
+    if (dbState.sort.col !== 'name' || dbState.sort.dir !== 'asc')
+      p.set('sort', dbState.sort.col + ':' + dbState.sort.dir);
+    const s = p.toString();
+    return s ? '?' + s : '';
+  }
+
+  function applyQueryToState(query) {
+    if (!query) return;
+    const p = new URLSearchParams(query.startsWith('?') ? query.slice(1) : query);
+    if (p.has('state'))   dbState.filters.states   = p.get('state').split(',').filter(Boolean);
+    if (p.has('status')) dbState.filters.statuses = p.get('status').split(',').filter(Boolean);
+    if (p.has('posture')) dbState.filters.postures = p.get('posture').split(',').filter(Boolean);
+    if (p.has('search'))   dbState.filters.search   = p.get('search');
+    if (p.has('sort')) {
+      const [col, dir] = p.get('sort').split(':');
+      if (col) dbState.sort.col = col;
+      if (dir === 'asc' || dir === 'desc') dbState.sort.dir = dir;
+    }
+  }
+
   // Navigate the database tab by writing the URL hash; the page-level
   // router reads it back and calls dbApplySubHash / dbGoHome to render.
   // id = project id to open, or null/'' to return to the list.
   function dbNavTo(id) {
-    location.hash = id ? 'database/' + encodeURIComponent(id) : 'database';
+    const q = filtersToQuery();
+    location.hash = id ? 'database/' + encodeURIComponent(id) : 'database' + q;
+  }
+
+  // ── CSV download ───────────────────────────────────────────────────
+  const CSV_FIELDS = [
+    { key: 'name',                  label: 'Project Name',         default: true  },
+    { key: 'company',               label: 'Company',              default: true  },
+    { key: 'state',                 label: 'State',                default: true  },
+    { key: 'county',                label: 'County',               default: true  },
+    { key: 'status',                label: 'Status',               default: true  },
+    { key: 'capacityMw',            label: 'Capacity (MW)',        default: true  },
+    { key: 'investmentB',           label: 'Investment ($B)',      default: true  },
+    { key: 'acreage',               label: 'Acreage',              default: false },
+    { key: 'communityPosture',      label: 'Community Posture',    default: true  },
+    { key: 'communityIntensity',    label: 'Community Intensity',  default: false },
+    { key: 'energySources',         label: 'Energy Sources',       default: false },
+    { key: 'communities',           label: 'Nearby Communities',   default: false },
+    { key: 'timelineStart',         label: 'Timeline Start',       default: false },
+    { key: 'timelineEnd',           label: 'Timeline End',         default: false },
+    { key: 'articulatedConcerns',   label: 'Articulated Concerns', default: false },
+    { key: 'developerPromises',     label: 'Developer Promises',   default: false },
+    { key: 'resourceClaims',        label: 'Resource Claims',      default: false },
+    { key: 'communityActionDetails',label: 'Community Action',     default: false },
+    { key: 'developerAction',       label: 'Developer Action',     default: false },
+  ];
+
+  function buildFilename() {
+    const parts = ['projects'];
+    if (dbState.filters.states.length)   parts.push(dbState.filters.states.join('-'));
+    if (dbState.filters.statuses.length) parts.push(dbState.filters.statuses.map(s => s.replace(/\s+/g,'-').replace(/\//g,'')).join('-'));
+    if (dbState.filters.postures.length) parts.push(dbState.filters.postures.join('-'));
+    if (dbState.filters.search)          parts.push(dbState.filters.search.trim().replace(/\s+/g,'-').toLowerCase());
+    return parts.join('_').replace(/[^a-zA-Z0-9_\-]/g, '') + '.csv';
+  }
+
+  function csvEscape(v) {
+    if (v == null) return '';
+    const s = String(v);
+    return s.includes(',') || s.includes('"') || s.includes('\n') ? '"' + s.replace(/"/g, '""') + '"' : s;
+  }
+
+  function exportCsv(rows, selectedKeys) {
+    const headers = CSV_FIELDS.filter(f => selectedKeys.includes(f.key)).map(f => f.label);
+    const lines = [
+      '# Duke Data Center Policy Project · CC BY 4.0 · Please credit if reused or republished.',
+      headers.map(csvEscape).join(','),
+    ];
+    rows.forEach(p => {
+      lines.push(selectedKeys.map(k => csvEscape(p[k])).join(','));
+    });
+    const blob = new Blob([lines.join('\n')], { type: 'text/csv' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = buildFilename();
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  function showDownloadModal(rows) {
+    const existing = document.getElementById('db-dl-modal');
+    if (existing) existing.remove();
+
+    const saved = JSON.parse(localStorage.getItem('dbCsvFields') || 'null');
+    const checked = new Set(saved || CSV_FIELDS.filter(f => f.default).map(f => f.key));
+
+    const overlay = document.createElement('div');
+    overlay.id = 'db-dl-modal';
+    overlay.className = 'db-modal-overlay';
+    overlay.innerHTML = `
+      <div class="db-modal">
+        <div class="db-modal-head">
+          <div class="db-modal-title">Download CSV</div>
+          <button class="db-modal-close" type="button">✕</button>
+        </div>
+        <div class="db-modal-sub">${rows.length} project${rows.length === 1 ? '' : 's'} · <span class="db-modal-filename">${buildFilename()}</span></div>
+        <div class="db-modal-section-label">Choose columns</div>
+        <div class="db-modal-fields">
+          ${CSV_FIELDS.map(f => `
+            <label class="db-modal-field${checked.has(f.key) ? ' on' : ''}">
+              <input type="checkbox" value="${f.key}"${checked.has(f.key) ? ' checked' : ''}> ${f.label}
+            </label>`).join('')}
+        </div>
+        <div class="db-modal-actions">
+          <button class="db-modal-cancel" type="button">Cancel</button>
+          <button class="db-modal-dl" type="button">Download</button>
+        </div>
+        <div class="db-modal-footer">
+          Data shared under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>. Please credit Duke Data Center Policy Project if reused or republished.
+        </div>
+      </div>`;
+
+    overlay.querySelector('.db-modal-close').addEventListener('click', () => overlay.remove());
+    overlay.querySelector('.db-modal-cancel').addEventListener('click', () => overlay.remove());
+    overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+
+    overlay.querySelectorAll('.db-modal-field input').forEach(cb => {
+      cb.addEventListener('change', () => {
+        cb.closest('label').classList.toggle('on', cb.checked);
+      });
+    });
+
+    overlay.querySelector('.db-modal-dl').addEventListener('click', () => {
+      const selected = [...overlay.querySelectorAll('.db-modal-field input:checked')].map(cb => cb.value);
+      if (!selected.length) return;
+      localStorage.setItem('dbCsvFields', JSON.stringify(selected));
+      exportCsv(rows, selected);
+      overlay.remove();
+    });
+
+    document.body.appendChild(overlay);
   }
 
   // External hooks
   window.dbOpenProject = function (id) {
     dbNavTo(id);
   };
-  window.dbGoHome = function () {
+  window.dbGoHome = function (query) {
+    applyQueryToState(query);
     dbState.detailId = null;
     render();
   };
-  // Called by the page router when the hash is #database/<id>
-  window.dbApplySubHash = function (id) {
+  // Called by the page router when the hash is #database/<id>[?query]
+  window.dbApplySubHash = function (id, query) {
+    applyQueryToState(query);
     const exists = PROJECTS.some(p => p.id === id && !p.stub);
     dbState.detailId = exists ? id : null;
     render();

@@ -204,4 +204,13 @@ function dfReset() {
   dfRecalc();
 }
 
+function dfExportPDF() {
+  const btn = document.querySelector('.df-export');
+  if (!btn) return;
+  const orig = btn.textContent;
+  btn.textContent = 'Coming soon!';
+  btn.disabled = true;
+  setTimeout(() => { btn.textContent = orig; btn.disabled = false; }, 2000);
+}
+
 dfRender();
