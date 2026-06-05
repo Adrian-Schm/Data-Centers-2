@@ -244,8 +244,7 @@
     // Row click → detail
     mount.querySelectorAll('tbody tr[data-id]').forEach(tr => {
       tr.addEventListener('click', () => {
-        dbState.detailId = tr.dataset.id;
-        render();
+        dbNavTo(tr.dataset.id);
       });
     });
   }
@@ -286,7 +285,7 @@
         <a class="db-back-link" data-action="back">← All projects</a>
         <div class="db-stub-state"><div class="db-big">Project not found</div></div>
       `;
-      mount.querySelector('[data-action="back"]').addEventListener('click', () => { dbState.detailId = null; render(); });
+      mount.querySelector('[data-action="back"]').addEventListener('click', () => { dbNavTo(null); });
       return;
     }
 
@@ -327,11 +326,11 @@
     `;
 
     const back = mount.querySelector('[data-action="back"]');
-    if (back) back.addEventListener('click', () => { dbState.detailId = null; render(); });
+    if (back) back.addEventListener('click', () => { dbNavTo(null); });
     const pv = mount.querySelector('[data-action="prev"]');
-    if (pv && prev) pv.addEventListener('click', () => { dbState.detailId = prev.id; render(); });
+    if (pv && prev) pv.addEventListener('click', () => { dbNavTo(prev.id); });
     const nx = mount.querySelector('[data-action="next"]');
-    if (nx && next) nx.addEventListener('click', () => { dbState.detailId = next.id; render(); });
+    if (nx && next) nx.addEventListener('click', () => { dbNavTo(next.id); });
 
     if (p.lat != null && p.lng != null) initLeaflet(p);
   }
@@ -534,13 +533,25 @@
       </div>`;
   }
 
+  // Navigate the database tab by writing the URL hash; the page-level
+  // router reads it back and calls dbApplySubHash / dbGoHome to render.
+  // id = project id to open, or null/'' to return to the list.
+  function dbNavTo(id) {
+    location.hash = id ? 'database/' + encodeURIComponent(id) : 'database';
+  }
+
   // External hooks
   window.dbOpenProject = function (id) {
-    dbState.detailId = id;
-    render();
+    dbNavTo(id);
   };
   window.dbGoHome = function () {
     dbState.detailId = null;
+    render();
+  };
+  // Called by the page router when the hash is #database/<id>
+  window.dbApplySubHash = function (id) {
+    const exists = PROJECTS.some(p => p.id === id && !p.stub);
+    dbState.detailId = exists ? id : null;
     render();
   };
 

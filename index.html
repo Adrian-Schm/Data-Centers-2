@@ -1890,19 +1890,17 @@
 <script>
 
 /* ─── TAB SWITCHING ─── */
-function switchTabById(id) {
-  // 'map' is an alias for 'map' (the MapLibre map)
-  if (id === 'map') id = 'map';
-  const btn = document.querySelector(`.tab-btn[onclick="switchTab('${id}', this)"]`);
-  if (btn) switchTab(id, btn);
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+var VALID_TABS = ['home','context','map','database','casestudy','decision','pathforward'];
 
-function switchTab(id, btn) {
+// Visually activate a tab (no hash changes here)
+function applyTab(id, sub) {
+  if (VALID_TABS.indexOf(id) === -1) id = 'home';
+  const btn = document.querySelector(`.tab-btn[onclick="switchTab('${id}', this)"]`);
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-' + id).classList.add('active');
-  btn.classList.add('active');
+  const el = document.getElementById('tab-' + id);
+  if (el) el.classList.add('active');
+  if (btn) btn.classList.add('active');
   window.scrollTo({ top: 0, behavior: 'instant' });
   // Close mobile menu after a tab is chosen
   const hi = document.querySelector('.header-inner');
@@ -1913,20 +1911,51 @@ function switchTab(id, btn) {
   if (id === 'map' && typeof m2Init === 'function') {
     setTimeout(m2Init, 0);
   }
-
-  if (id === 'database' && typeof dbGoHome === 'function') {
-    dbGoHome();
+  if (id === 'database') {
+    if (sub && typeof dbApplySubHash === 'function') dbApplySubHash(sub);
+    else if (typeof dbGoHome === 'function') dbGoHome();
   }
   localStorage.setItem('activeTab', id);
 }
 
-// Restore last active tab on load
-(function () {
-  const saved = localStorage.getItem('activeTab');
-  if (saved) {
-    const btn = document.querySelector(`.tab-btn[onclick="switchTab('${saved}', this)"]`);
-    if (btn) switchTab(saved, btn);
+// Public entry point: drive everything through the URL hash so tabs are
+// shareable, bookmarkable, and work with the browser back/forward buttons.
+function switchTab(id, btn) {
+  if (location.hash !== '#' + id) {
+    location.hash = id;     // fires hashchange -> applyTab
+  } else {
+    applyTab(id);           // hash already set; apply directly
   }
+}
+
+function switchTabById(id) {
+  switchTab(id);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// React to hash changes (clicks, back/forward, pasted links)
+window.addEventListener('hashchange', function () {
+  const raw = location.hash.slice(1);
+  if (!raw) return;
+  const slash = raw.indexOf('/');
+  const id  = decodeURIComponent(slash === -1 ? raw : raw.slice(0, slash));
+  const sub = slash === -1 ? '' : decodeURIComponent(raw.slice(slash + 1));
+  applyTab(id, sub);
+});
+
+// On load: hash wins, then last-used tab, then home
+(function () {
+  const raw = location.hash.slice(1);
+  const slash = raw.indexOf('/');
+  let id  = decodeURIComponent(slash === -1 ? raw : raw.slice(0, slash));
+  let sub = slash === -1 ? '' : decodeURIComponent(raw.slice(slash + 1));
+  if (VALID_TABS.indexOf(id) === -1) {
+    id = localStorage.getItem('activeTab') || 'home';
+    sub = '';
+  }
+  applyTab(id, sub);
+  const target = '#' + id + (sub ? '/' + encodeURIComponent(sub) : '');
+  if (location.hash !== target) history.replaceState(null, '', target);
 })();
 
 function toggleMenu() {
