@@ -499,7 +499,7 @@
       </div>
 
       <div class="home-nav-tools-section">
-        <h3>Interactive Tools</h3>
+        <h3>Interactive Tools</h3>w3
         <div class="home-nav-tools-grid">
           <div class="home-nav-box-interactive" onclick="switchTabById('map')">
             <div class="hnb-title">Project Map</div>
@@ -1045,6 +1045,23 @@
 
       .db-stub-state { background: var(--surface); border: 1px dashed var(--border2); border-radius: var(--radius); padding: 28px 22px; text-align: center; color: var(--text2); font-size: 13px; margin-top: 14px; }
       .db-big { font-size: 15px; color: var(--text); margin-bottom: 6px; }
+
+      @media (max-width: 800px) {
+        .db-filter-bar { grid-template-columns: 1fr; gap: 12px; }
+        .db-search-input { max-width: 100%; }
+        .db-table-header, .db-table-body { font-size: 12px; }
+        .db-table thead th, .db-table tbody td { padding: 8px 8px; }
+      }
+
+      @media (max-width: 600px) {
+        #tab-database .page-inner { padding: 14px 12px 24px; }
+        .db-table-wrap { overflow-x: auto; }
+        .db-table-header, .db-table-body { min-width: 560px; }
+        .db-table-scroll { overflow-x: auto; }
+        .db-nav-arrows { display: none; }
+        .db-detail-card { padding: 14px; }
+        .db-metrics-grid { grid-template-columns: 1fr 1fr; }
+      }
     </style>
 
     <div class="page-intro">
@@ -1951,7 +1968,7 @@ window.addEventListener('hashchange', function () {
     sub = '';
   }
   applyTab(id, sub);
-  const target = '#' + id + (sub ? '/' + encodeURIComponent(sub) : '');
+  const target = '#' + id + (sub ? (sub.startsWith('?') ? sub : '/' + encodeURIComponent(sub)) : '');
   if (location.hash !== target) history.replaceState(null, '', target);
 })();
 
