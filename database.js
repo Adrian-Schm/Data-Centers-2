@@ -39,6 +39,16 @@
     if (isNaN(d)) return s;
     return d.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
   }
+  function fmtDateParts(s) {
+    if (!s) return { month: '', year: '—' };
+    if (/^\d{4}$/.test(s)) return { month: '', year: s };
+    const d = new Date(s + 'T00:00:00');
+    if (isNaN(d)) return { month: '', year: s };
+    return {
+      month: d.toLocaleDateString('en-US', { month: 'short' }),
+      year:  d.toLocaleDateString('en-US', { year: 'numeric' }),
+    };
+  }
   function fmtRange(a, b) {
     const af = fmtDate(a), bf = fmtDate(b);
     if (!af && !bf) return null;
@@ -411,16 +421,20 @@
 
     const timelineHtml = (p.timeline && p.timeline.length)
       ? `<div class="db-timeline">
-           <div class="db-timeline-rail"></div>
            ${p.timeline.map((e, i) => {
-             const filled = i === p.timeline.length - 1 ? 'filled' : '';
+             const last = i === p.timeline.length - 1 ? 'last' : '';
              const src = resolveSourceUrl(e.source, p);
+             const { month, year } = fmtDateParts(e.date);
+             const prevYear = i > 0 ? fmtDateParts(p.timeline[i-1].date).year : null;
+             const yearBreak = (i > 0 && prevYear !== year) ? 'year-break' : '';
              return `
-               <div class="db-te">
-                 <div class="db-te-date">${fmtDate(e.date) || '—'}</div>
-                 <div class="db-te-dot ${filled}"><div></div></div>
+               <div class="db-te ${last} ${yearBreak}">
+                 <div class="db-te-date">
+                   <div class="db-te-month">${esc(month)}</div>
+                   <div class="db-te-year">${esc(year)}</div>
+                 </div>
                  <div class="db-te-body">
-                   <div class="db-te-label">${esc(e.label || 'Event')}${e.isProposal ? '<span class="db-te-proposal-tag">proposal</span>':''}</div>
+                   <div class="db-te-label">${esc(e.label || 'Event')}${e.isProposal ? '<span class="db-te-proposal-tag">proposal</span>' : ''}</div>
                    ${src ? `<div class="db-te-meta"><a href="${esc(src)}" target="_blank" rel="noopener">↗ ${esc(hostOf(src))}</a></div>` : ''}
                  </div>
                </div>`;
@@ -491,7 +505,7 @@
           </div>
         </div>
         <div class="db-section">
-          <div class="db-section-label">TIMELINE</div>
+          <div class="db-section-label">Timeline</div>
           ${timelineHtml}
         </div>
         ${renderSources(p)}`;

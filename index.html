@@ -968,18 +968,22 @@
       .db-section { border-top: 1px solid var(--border); padding-top: 20px; margin-top: 20px; }
       .db-section-label { font-size: 11px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 14px; line-height: 1.1; }
 
-      .db-timeline { position: relative; padding-left: 4px; }
-      .db-timeline-rail { position: absolute; left: 109px; top: 14px; bottom: 14px; width: 2px; background: var(--border); border-radius: 2px; }
-      .db-te { display: grid; grid-template-columns: 98px 28px 1fr; gap: 12px; align-items: start; padding: 10px 0; }
-      .db-te-date { text-align: right; font-size: 14px; font-weight: 600; color: var(--text); padding-top: 3px; letter-spacing: 0.01em; }
-      .db-te-dot { display: flex; justify-content: center; padding-top: 4px; }
-      .db-te-dot div { width: 14px; height: 14px; border: 2.5px solid var(--border2); background: var(--surface); border-radius: 50%; box-shadow: 0 0 0 3px var(--bg); }
-      .db-te-dot.filled div { background: #1a3a5c; border-color: #1a3a5c; }
-      .db-te-body { padding-right: 6px; }
-      .db-te-label { font-size: 15px; font-weight: 600; line-height: 1.4; margin-bottom: 4px; color: var(--text); }
-      .db-te-meta a { color: var(--accent-mid); text-decoration: none; font-size: 11px; display: inline-flex; align-items: center; gap: 4px; }
+      .db-timeline { display: flex; flex-direction: column; gap: 0; position: relative; padding-left: 14px; }
+      .db-timeline::before { content: ''; position: absolute; left: 49px; top: 18px; bottom: 18px; width: 1px; background: var(--border); z-index: 0; }
+      .db-te { display: flex; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 6px; position: relative; z-index: 1; }
+      .db-te.year-break { margin-top: 10px; }
+      .db-te-date { background: var(--surface2); border-right: 1px solid var(--border); padding: 10px 14px; min-width: 72px; flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; }
+      .db-te-month { font-size: 11px; color: var(--text2); }
+      .db-te-year { font-size: 14px; font-weight: 600; color: var(--text); }
+      .db-te-body { padding: 10px 14px; display: flex; flex-direction: column; justify-content: center; flex: 1; min-width: 0; }
+      .db-te-label { font-size: 14px; color: var(--text); line-height: 1.4; }
+      .db-te-meta a { color: var(--accent-mid); text-decoration: none; font-size: 11px; display: inline-flex; align-items: center; gap: 4px; margin-top: 4px; }
       .db-te-meta a:hover { text-decoration: underline; }
       .db-te-proposal-tag { display: inline-block; font-size: 10px; background: var(--accent-light); color: var(--accent-mid); padding: 1px 6px; border-radius: 3px; margin-left: 6px; letter-spacing: 0.04em; text-transform: uppercase; vertical-align: 2px; }
+      .db-te.last { border-color: #b5d4f4; }
+      .db-te.last .db-te-date { background: #e6f1fb; border-right-color: #b5d4f4; }
+      .db-te.last .db-te-month { color: #185fa5; }
+      .db-te.last .db-te-year { color: #0c447c; }
 
       .db-split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
       @media (max-width: 760px) { .db-split { grid-template-columns: 1fr; } }
