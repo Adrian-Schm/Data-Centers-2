@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Data Center Policy Tools</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
 <link href="https://cdn.jsdelivr.net/npm/maplibre-gl@4/dist/maplibre-gl.css" rel="stylesheet" />
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -475,14 +474,7 @@
     </div>
 
     <div class="home-section">
-      <h2>Why North Carolina and Virginia?</h2>
-      <p>North Carolina and Virginia sit at the epicenter of this conflict. Virginia is an established data center hub, with Northern Virginia hosting some of the world's largest facilities. North Carolina is an emerging frontier, with companies seeking abundant land, water, and electricity at lower costs than Virginia. Both states have experienced the full spectrum of outcomes: approvals, delays, cancellations, and intense community pushback.</p>
-      <p>In 2025 alone, over 25 planned data center projects in North Carolina and Virginia were cancelled or indefinitely delayed following community opposition. At the same time, electricity costs in parts of Virginia are projected to rise 25% or more by 2030 due to data center growth. The case studies chosen from each state, Tarboro and Balico, show what happens when national urgency collides with local concerns.</p>
-      <p>Cases and policies in these two states could be extrapolated nationwide to build better policies around data center development.</p>
-    </div>
-
-    <div class="home-section">
-      <h2>How to Use</h2>
+      <h2>Site Overview</h2>
       <div class="home-nav-grid">
         <div class="home-nav-box" onclick="switchTabById('context')">
           <div class="hnb-title">Background & Policy</div>
@@ -505,16 +497,16 @@
             <div class="hnb-title">Project Map</div>
             <div class="hnb-desc">Explore current data center proposals across NC and VA</div>
           </div>
+          <div class="home-nav-box-interactive" onclick="switchTabById('database')">
+            <div class="hnb-title">Project Database</div>
+            <div class="hnb-desc">Filter and search all projects by status, state, and more</div>
+          </div>
           <div class="home-nav-box-interactive" onclick="switchTabById('decision')">
             <div class="hnb-title">Decision Framework</div>
             <div class="hnb-desc">Evaluate a data center proposal from a local perspective</div>
           </div>
         </div>
       </div>
-    </div>
-    <div style="margin-top:48px;padding:24px 32px;background:#ffffff;border:1px solid var(--border);border-radius:var(--radius-lg);text-align:center;">
-      <div style="font-size:14px;font-weight:700;color:var(--text);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;">AI Use Disclaimer</div>
-      <p style="font-size:13px;color:var(--text2);margin:0;line-height:1.55;">AI tools (primarily Claude) were used to help code the interactive tools and design the site's layout and styling.</p>
     </div>
   </div>
 </div>
@@ -810,7 +802,7 @@
 
       .md-panel-head { margin-bottom: 4px; }
       .md-panel-head-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
-      .md-panel-location { font-size: 11px; color: var(--text2); letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; margin-bottom: 4px; }
+      .md-panel-location { font-size: 13px; color: var(--text2); margin-bottom: 4px; }
       .md-panel-name { font-size: 18px; font-weight: 600; color: var(--text); line-height: 1.25; flex: 1; min-width: 0; }
       .md-panel-sub  { font-size: 13px; color: var(--text2); margin-top: 4px; line-height: 1.5; }
       .md-panel-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 0; margin-bottom: 12px; }
@@ -848,11 +840,11 @@
     </div>
 
     <div class="md-legend">
+      <span class="md-legend-item"><span class="md-legend-dot" style="background:#185fa5"></span>Planned</span>
       <span class="md-legend-item"><span class="md-legend-dot" style="background:#3b6d11"></span>Approved</span>
-      <span class="md-legend-item"><span class="md-legend-dot" style="background:#a32d2d"></span>Denied</span>
       <span class="md-legend-item"><span class="md-legend-dot" style="background:#854f0b"></span>Delayed / Scaled Back</span>
       <span class="md-legend-item"><span class="md-legend-dot" style="background:#993556"></span>Cancelled / Withdrawn</span>
-      <span class="md-legend-item"><span class="md-legend-dot" style="background:#185fa5"></span>Planned</span>
+      <span class="md-legend-item"><span class="md-legend-dot" style="background:#a32d2d"></span>Denied</span>
       <span class="md-legend-item"><span class="md-legend-dot" style="background:#5f5e5a"></span>Neutral</span>
     </div>
 
@@ -866,33 +858,6 @@
   </div>
 </div>
 
-
-<!-- ════════════════════════════════ MAP v2 TAB ════════════════════════════════ -->
-<div id="tab-map" class="tab-content">
-  <div class="page-inner">
-    <div class="page-intro">
-      <h1>Data Center Case Map <span style="font-size:13px;font-weight:400;color:var(--text3);margin-left:10px;">MapLibre · OpenFreeMap · draft</span></h1>
-      <p>Same project data as the Project Map tab, rendered with MapLibre GL JS on OpenFreeMap vector tiles. Click a state to zoom in and see its projects; hover or click a pin for details.</p>
-    </div>
-
-    <div id="m2Legend" style="display:flex;flex-wrap:wrap;margin-bottom:12px;font-size:12px;color:var(--text2);"></div>
-
-    <div class="md-layout">
-      <div class="md-map-wrap" id="m2MapWrap" style="height:680px;min-height:500px;position:relative;">
-        <div id="m2MapContainer" style="width:100%;height:100%;border-radius:var(--radius-lg);overflow:hidden;"></div>
-        <button id="m2BackBtn" type="button"
-          style="display:none;position:absolute;top:10px;left:12px;z-index:2;
-                 background:var(--surface);color:var(--text);border:1px solid var(--border);
-                 border-radius:6px;padding:5px 11px;font-size:12px;font-family:inherit;
-                 cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,0.08);"
-          onclick="m2GoToOverview()">← All states</button>
-      </div>
-      <div class="md-panel md-panel-empty" id="m2DetailPanel">
-        <div class="md-placeholder">Click a state to see its projects<br><span class="md-hint">Hover a pin for details</span></div>
-      </div>
-    </div>
-  </div>
-</div>
 
 
 <!-- ════════════════════════════ DATABASE TAB ════════════════════════════ -->
@@ -994,11 +959,11 @@
       .db-loc-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
       .db-loc-item { background: var(--surface); border: 1px solid var(--border); padding: 10px 12px; border-radius: var(--radius); }
       .db-map-box { background: #e3eaee; flex: 1; min-height: 280px; border-radius: var(--radius); position: relative; overflow: hidden; border: 1px solid var(--border); }
-      .db-leaflet { position: absolute; inset: 0; z-index: 0; }
+      .db-map { position: absolute; inset: 0; z-index: 0; }
       .db-map-meta { position: absolute; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-between; font-size: 10px; color: var(--text2); background: rgba(255,255,255,0.94); padding: 4px 10px; z-index: 1; pointer-events: none; }
       .db-map-pending { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; color: var(--text2); font-size: 12px; line-height: 1.5; text-align: center; }
-      /* Override Leaflet attribution to be more subtle and not fight our footer meta. */
-      .db-map-box .leaflet-control-attribution { font-size: 9px; background: rgba(255,255,255,0.7); }
+      /* Override MapLibre attribution to be more subtle and not fight our footer meta. */
+      .db-map-box .maplibregl-ctrl-attrib { font-size: 9px; background: rgba(255,255,255,0.7); }
 
       .db-section { border-top: 1px solid var(--border); padding-top: 20px; margin-top: 20px; }
       .db-section-label { font-size: 11px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 14px; line-height: 1.1; }
@@ -1880,10 +1845,8 @@
 <!-- ════════════════ SCRIPTS ════════════════ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4/dist/maplibre-gl.js"></script>
 <script src="projects-data.js"></script>
-<script src="map.js"></script>
 <script src="map.js"></script>
 <script src="database.js"></script>
 <script src="decision-framework.js"></script>
@@ -1907,10 +1870,6 @@ function applyTab(id, sub) {
   if (hi) hi.classList.remove('menu-open');
   const hb = document.querySelector('.hamburger');
   if (hb) hb.setAttribute('aria-expanded', 'false');
-  // Lazy-init MapLibre map on first open; resize on subsequent opens
-  if (id === 'map' && typeof m2Init === 'function') {
-    setTimeout(m2Init, 0);
-  }
   if (id === 'database') {
     if (sub && typeof dbApplySubHash === 'function') dbApplySubHash(sub);
     else if (typeof dbGoHome === 'function') dbGoHome();

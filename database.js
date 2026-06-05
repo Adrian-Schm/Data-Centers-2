@@ -144,7 +144,7 @@
     const list    = applySort(applyFilters(PROJECTS));
 
     const stateOpts   = uniqueValues('state');
-    const statusOpts  = uniqueValues('status');
+    const statusOpts  = ['Planned', 'In Progress', 'Completed', 'Delayed/Scaled Back', 'Canceled'].filter(s => PROJECTS.some(p => p.status === s));
     const postureOpts = uniqueValues('communityPosture').filter(v => v !== 'Positive/Neutral');
 
     const anyFilter = dbState.filters.states.length || dbState.filters.statuses.length ||
@@ -253,7 +253,7 @@
     const active = dbState.sort.col === col;
     const dir    = dbState.sort.dir;
     const ind = active
-      ? `<span class="db-sort-ind active">${dir === 'asc' ? '↑' : '↓'}</span>`
+      ? `<span class="db-sort-ind active">${dir === 'asc' ? '↓' : '↑'}</span>`
       : `<span class="db-sort-ind">↕</span>`;
     return `<th data-col="${col}" class="${active ? 'active' : ''}" title="Sort by ${label}">${label}${ind}</th>`;
   }
@@ -276,7 +276,7 @@
   // ── detail view ────────────────────────────────────────────────────
   function renderDetail(mount) {
     // Only navigate among non-stub projects
-    const realProjects = PROJECTS.filter(p => !p.stub);
+    const realProjects = PROJECTS.filter(p => !p.stub).slice().sort((a, b) => (a.name || '').toLowerCase().localeCompare((b.name || '').toLowerCase()));
     const idx = realProjects.findIndex(p => p.id === dbState.detailId);
     const p   = idx >= 0 ? realProjects[idx] : null;
 
@@ -311,7 +311,7 @@
           <div class="db-detail-name">${p.featured ? '<span class="db-star" style="font-size:20px;margin-right:8px">✶</span>' : ''}${esc(p.name)}</div>
           ${(() => {
             const place = [p.county ? esc(p.county) + ' County' : '', p.state ? esc(p.state) : ''].filter(Boolean).join(', ');
-            const loc = [place, p.communities ? esc(p.communities) : ''].filter(Boolean).join(' · ');
+            const loc = [place, p.communities ? 'Near: ' + esc(p.communities) : ''].filter(Boolean).join(' — ');
             return loc ? `<div class="db-detail-location">${loc}</div>` : '';
           })()}
         </div>
@@ -332,17 +332,17 @@
     const nx = mount.querySelector('[data-action="next"]');
     if (nx && next) nx.addEventListener('click', () => { dbNavTo(next.id); });
 
-    if (p.lat != null && p.lng != null) initLeaflet(p);
+    if (p.lat != null && p.lng != null) initDetailMap(p);
   }
 
   // ── MapLibre detail map (OpenFreeMap tiles) ───────────────────────
-  let _activeLeaflet = null;
-  function initLeaflet(p) {
+  let _activeDetailMap = null;
+  function initDetailMap(p) {
     if (typeof maplibregl === 'undefined') return;
     requestAnimationFrame(() => {
-      const el = document.getElementById('dbLeaflet-' + p.id);
+      const el = document.getElementById('dbMap-' + p.id);
       if (!el) return;
-      if (_activeLeaflet) { try { _activeLeaflet.remove(); } catch (e) {} _activeLeaflet = null; }
+      if (_activeDetailMap) { try { _activeDetailMap.remove(); } catch (e) {} _activeDetailMap = null; }
       const zoom = 10;
       const map = new maplibregl.Map({
         container: el,
@@ -371,7 +371,7 @@
           },
         });
       });
-      _activeLeaflet = map;
+      _activeDetailMap = map;
     });
   }
 
@@ -388,7 +388,7 @@
     `;
 
     const hasCoords = p.lat != null && p.lng != null;
-    const mapId = 'dbLeaflet-' + p.id;
+    const mapId = 'dbMap-' + p.id;
     const precisionLabel = p.coordsPrecision === 'parcel' ? 'Approx. parcel'
                          : p.coordsPrecision === 'town'   ? 'Town vicinity'
                          : p.coordsPrecision === 'county' ? 'County area'
@@ -396,7 +396,7 @@
     const mapHtml = hasCoords ? `
       <div class="db-map-col">
         <div class="db-map-box">
-          <div class="db-leaflet" id="${mapId}"></div>
+          <div class="db-map" id="${mapId}"></div>
           <div class="db-map-meta">
             <span>${precisionLabel}</span>
             <span>Lat ${p.lat.toFixed(3)}, Lng ${p.lng.toFixed(3)}</span>

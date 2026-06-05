@@ -8,6 +8,10 @@ Duke University Tech Policy Lab, 2026.
 
 Open `website.html` in a browser. No build step required.
 
+## AI Use
+
+AI tools (primarily Claude) were used to help code the interactive tools and design the site's layout and styling.
+
 ## Credits
 
 - [D3.js](https://d3js.org/) — ISC License

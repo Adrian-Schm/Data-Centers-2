@@ -33,7 +33,9 @@ function mdSentimentOf(p) {
 function mdFmtMoney(b) {
   if (b == null) return '—';
   if (typeof b !== 'number') return String(b);
-  return '$' + (b >= 1 ? b.toFixed(1) : b.toFixed(2)) + 'B';
+  if (b >= 1) return '$' + b.toFixed(1) + 'B';
+  const m = Math.round(b * 1000);
+  return '$' + m + 'M';
 }
 function mdFmtMw(v) {
   if (v == null) return '—';
@@ -116,18 +118,17 @@ function mdRenderDetailPanel(id) {
   const p = list.find(x => x.id === id);
   if (!p) { mdRenderEmptyPanel(); return; }
   const sentiment = mdSentimentOf(p);
-  const stateFull = MD_STATE_FULL[p.state] || p.state || '';
-  const location = [p.county ? p.county + ' County' : null, stateFull]
-    .filter(Boolean).join(', ').toUpperCase();
+  const location = [p.county ? p.county + ' County' : null, p.state || null]
+    .filter(Boolean).join(', ');
   el.className = 'md-panel md-panel-filled';
   el.innerHTML = `
     <div class="md-panel-head">
-      <div class="md-panel-location">${location}</div>
       <div class="md-panel-head-top">
         <div class="md-panel-name">${p.featured ? '✶ ' : ''}${p.name}</div>
         <button class="md-close" type="button" aria-label="Close"
           onclick="mdViewFips ? mdRenderStateProjList(mdViewFips) : mdClearSelection()">✕</button>
       </div>
+      <div class="md-panel-location">${location}</div>
       ${p.company ? `<div class="md-panel-sub">${p.company}</div>` : ''}
     </div>
     <div class="md-panel-badges">
@@ -174,7 +175,7 @@ function mdRenderStateProjList(fips) {
   el.className = 'md-panel md-panel-filled';
   el.innerHTML = `
     <div class="md-panel-head" style="margin-bottom:10px;">
-      <div class="md-panel-location">${stateName.toUpperCase()}</div>
+      <div class="md-panel-location">${stateName}</div>
       <div class="md-panel-head-top">
         <div class="md-panel-name">${stateProjects.length} project${stateProjects.length === 1 ? '' : 's'}</div>
         <button class="md-close" type="button" onclick="mdClearSelection()">✕</button>
@@ -186,7 +187,8 @@ function mdRenderStateProjList(fips) {
         return `
           <div class="md-state-proj-card" onclick="mdSelectPin('${p.id.replace(/'/g,"\\'")}')">
             <div class="md-tip-name">${p.name}</div>
-            <div class="md-tip-sub">${p.company || ''}${p.county ? ' · ' + p.county + ' Co.' : ''}</div>
+            ${p.county ? `<div class="md-tip-sub">${p.county} County, ${abbr}</div>` : ''}
+            ${p.company ? `<div class="md-tip-sub">${p.company}</div>` : ''}
             <div class="md-tip-row">
               <span class="badge b-${s}">${p.status || s}</span>
               <span class="md-tip-stat">${mdFmtMw(p.capacityMw)}</span>
@@ -522,7 +524,18 @@ function mdRenderMap(crossfade) {
         .attr('font-family','inherit').attr('fill','#1a1a18')
         .attr('stroke','#ffffff').attr('stroke-width', 4)
         .attr('paint-order','stroke')
-        .attr('pointer-events','none')
+        .style('cursor','pointer')
+        .on('mouseenter', () => mdRenderDetailPanel(p.id))
+        .on('mouseleave', () => {
+          if (mdSelectedId) {
+            mdRenderDetailPanel(mdSelectedId);
+          } else if (mdViewFips) {
+            mdRenderStateProjList(mdViewFips);
+          } else {
+            mdRenderEmptyPanel();
+          }
+        })
+        .on('click', e => { e.stopPropagation(); mdSelectPin(p.id); })
         .text(p.name);
     }
   });
