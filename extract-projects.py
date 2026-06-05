@@ -77,6 +77,21 @@ def slugify(name):
     return s
 
 
+def normalize_intensity(v):
+    if v is None:
+        return None
+    s = str(v).strip().lower()
+    if s in ('none', ''):
+        return 'None'
+    if s in ('low',):
+        return 'Low'
+    if s in ('mod', 'moderate', 'medium', 'med'):
+        return 'Moderate'
+    if s in ('high',):
+        return 'High'
+    return str(v).strip()
+
+
 def parse_date(v):
     if isinstance(v, datetime.datetime):
         return v.date().isoformat()
@@ -153,6 +168,8 @@ def extract_pair(main_ws, timelines_ws):
             val = cell(r, spec, header_index)
             if target in ("timelineStart", "timelineEnd"):
                 val = parse_date(val) if val is not None else None
+            elif target == "communityIntensity":
+                val = normalize_intensity(val)
             elif target in ("lat", "lng"):
                 if val is None:
                     pass

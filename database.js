@@ -315,9 +315,6 @@
             const loc = [place, p.communities ? esc(p.communities) : ''].filter(Boolean).join(' · ');
             return loc ? `<div class="db-detail-location">${loc}</div>` : '';
           })()}
-          <div class="db-detail-badges">
-            ${p.communityIntensity && p.communityIntensity !== 'None' ? `<span class="badge b-Neutral">${esc(p.communityIntensity)} intensity</span>` : ''}
-          </div>
         </div>
         <div class="db-detail-card-inner">
           <div class="db-detail-left">
@@ -455,14 +452,25 @@
     }
 
     const devSide = `
-      <div class="db-section-label">— Developer Side</div>
+      <div class="db-section-label">Developer-Side</div>
       ${fieldHtml('Resource usage claims', p.resourceClaims)}
       ${fieldHtml('Developer promises', p.developerPromises)}
       ${fieldHtml('Developer action', p.developerAction)}
     `;
     const commSide = `
-      <div class="db-section-label">— Community Side</div>
-      ${p.communityPosture ? `<div class="db-field"><div class="db-field-label">Sentiment</div><div class="db-field-text">${esc(p.communityPosture)}${p.communityIntensity && p.communityIntensity !== 'None' ? ' · ' + esc(p.communityIntensity) + ' intensity' : ''}</div></div>` : ''}
+      <div class="db-section-label">Community-Side</div>
+      <div class="db-sentiment-row">
+        ${p.communityPosture ? `
+          <div class="db-sentiment-item">
+            <div class="db-field-label">Sentiment</div>
+            <span class="db-sentiment-badge ${postureBadgeClass(p.communityPosture)}">${esc(p.communityPosture)}</span>
+          </div>` : ''}
+        ${p.communityIntensity ? `
+          <div class="db-sentiment-item">
+            <div class="db-field-label">Intensity</div>
+            <span class="db-sentiment-badge db-intensity-${esc(p.communityIntensity).toLowerCase()}">${esc(p.communityIntensity)}</span>
+          </div>` : ''}
+      </div>
       <div class="db-field">
         <div class="db-field-label">Concern categories</div>
         ${concernsChips.length
