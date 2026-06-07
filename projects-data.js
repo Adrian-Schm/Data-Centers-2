@@ -3,14 +3,14 @@
 // Do not edit by hand.
 
 const PROJECTS_META = {
-  "generatedAt": "2026-06-04T22:08:26Z",
+  "generatedAt": "2026-06-07T22:39:51Z",
   "sourceFile": "DATABASE-DataCenter_Backlash.xlsx",
   "sheetsRead": [
     {
-      "mainSheet": "Cases",
-      "timelinesSheet": "Timelines",
-      "projectCount": 13,
-      "fullCount": 13
+      "mainSheet": "Philadelphia Fed Region",
+      "timelinesSheet": "PF Timelines",
+      "projectCount": 18,
+      "fullCount": 18
     }
   ]
 };
@@ -19,7 +19,6 @@ const PROJECTS = [
   {
     "id": "cumulus-hyperscale-data-center-campus",
     "name": "Cumulus Hyperscale Data Center Campus",
-    "featured": false,
     "company": "Talen (developer) and Amazon Web Services (purchased 2024)",
     "investmentB": 0.65,
     "state": "PA",
@@ -91,7 +90,6 @@ const PROJECTS = [
   {
     "id": "dataone-vineland",
     "name": "DataOne Vineland",
-    "featured": false,
     "company": "DataOne and the Nebius Group",
     "investmentB": 17.4,
     "state": "NJ",
@@ -163,9 +161,8 @@ const PROJECTS = [
   {
     "id": "windstream-ephrata-data-center",
     "name": "Windstream Ephrata Data Center",
-    "featured": false,
     "company": "Windstream Holdings, Inc.",
-    "investmentB": "N/A",
+    "investmentB": "Not Available",
     "state": "PA",
     "county": "Lancaster",
     "communities": "Ephrata",
@@ -207,7 +204,6 @@ const PROJECTS = [
   {
     "id": "homer-city-energy-ai-campus",
     "name": "Homer City Energy + AI Campus",
-    "featured": false,
     "company": "Homer City Redevelopment",
     "investmentB": 10,
     "state": "PA",
@@ -261,7 +257,6 @@ const PROJECTS = [
   {
     "id": "pax-pennsylvania-digital-i",
     "name": "PAX – Pennsylvania Digital I",
-    "featured": false,
     "company": "Pennsylvania Data Center Partners",
     "investmentB": 15,
     "state": "PA",
@@ -315,7 +310,6 @@ const PROJECTS = [
   {
     "id": "coreweave-lancaster-ai-campuses",
     "name": "CoreWeave Lancaster AI Campuses",
-    "featured": false,
     "company": "CoreWeave",
     "investmentB": 6,
     "state": "PA",
@@ -361,9 +355,260 @@ const PROJECTS = [
     ]
   },
   {
+    "id": "project-hazelnut",
+    "name": "Project Hazelnut",
+    "company": "NorthPoint",
+    "investmentB": "Not Available",
+    "state": "PA",
+    "county": "Luzerne",
+    "communities": "Hazle",
+    "capacityMw": 1980,
+    "acreage": 1306,
+    "timelineStart": "2026",
+    "timelineEnd": "2029",
+    "status": "Planned",
+    "resourceClaims": "Developer claims 2.8 million gallons water usage and limited impact of local energy supply.",
+    "energySources": "Grid",
+    "developerPromises": "$30 million community benefit package, job creation",
+    "concernsCategories": "Water, Electricity, Individual economic, QOL",
+    "articulatedConcerns": "Community: concern about massive scale of data center harming property values, local water treatment, noise, and pollution.",
+    "communityPosture": "Negative",
+    "communityIntensity": "High",
+    "communityActionDetails": "The township voted 3-0 to deny the project's land development plans, leading to litigation that resulted in a Luzerne County judge ruling in favor of the township. In addition, the Pennsylvania Department of Environmental Protection held a hearing on the project in February 2026. Grassroots environmental organizations have also objected to the project.",
+    "developerAction": "Developer has offered $30 million community benefits package to “help offset potential short-term localized utility rate increases.”",
+    "monthRecorded": null,
+    "lat": 40.9573187814357,
+    "lng": -76.0348230780108,
+    "sources": {
+      "projectProposal": "https://www.luzernecounty.org/AgendaCenter/ViewFile/Agenda/_01212025-4075",
+      "govtRecords": [],
+      "other": []
+    },
+    "stub": false,
+    "coordsPrecision": null,
+    "timeline": [
+      {
+        "date": "2024-09-17",
+        "label": "Project Announced",
+        "isProposal": true,
+        "source": "https://www.luzernecounty.org/AgendaCenter/ViewFile/Agenda/_01212025-4075"
+      },
+      {
+        "date": "2024-09-17",
+        "label": "Project Announced",
+        "isProposal": false,
+        "source": "https://www.luzernecounty.org/AgendaCenter/ViewFile/Agenda/_01212025-4075"
+      },
+      {
+        "date": "2025-11",
+        "label": "Hazle Township votes against NorthPoint's development plans",
+        "isProposal": false,
+        "source": "https://www.wvia.org/news/local/2026-02-18/residents-raise-questions-as-developer-describes-hazle-twp-data-center-plans-at-dep-hearing"
+      },
+      {
+        "date": "2026-02-18",
+        "label": "Pennsylvania Department of Environmental Protection holds hearing about project impact",
+        "isProposal": false,
+        "source": "https://www.wvia.org/news/local/2026-02-18/residents-raise-questions-as-developer-describes-hazle-twp-data-center-plans-at-dep-hearing"
+      },
+      {
+        "date": "2026-05-28",
+        "label": "Judge rules in favor of Hazle's rejection of NorthPoint's plans",
+        "isProposal": false,
+        "source": "https://www.standardspeaker.com/2026/05/28/judge-rules-against-project-hazelnut-data-center/"
+      }
+    ]
+  },
+  {
+    "id": "klondike-data-center-project",
+    "name": "Klondike Data Center Project",
+    "company": "KDI Wyalusing Power LLC",
+    "investmentB": "Not Available",
+    "state": "PA",
+    "county": "Bradford",
+    "communities": "Wyalusing",
+    "capacityMw": 248,
+    "acreage": 14,
+    "timelineStart": null,
+    "timelineEnd": null,
+    "status": "Cancelled/Withdrawn",
+    "resourceClaims": null,
+    "energySources": "Natural gas",
+    "developerPromises": null,
+    "concernsCategories": null,
+    "articulatedConcerns": null,
+    "communityPosture": null,
+    "communityIntensity": null,
+    "communityActionDetails": null,
+    "developerAction": null,
+    "monthRecorded": null,
+    "lat": 41.6542555106668,
+    "lng": -76.2332393906146,
+    "sources": {
+      "projectProposal": "https://files.dep.state.pa.us/RegionalResources/NCRO/NCROPortalFiles/CommunityInformation/Wyalusing%20Energy%20Center%20PAA%2012-26-2024%20(Rev.%202-12-2025).pdf",
+      "govtRecords": [],
+      "other": []
+    },
+    "stub": false,
+    "coordsPrecision": null,
+    "timeline": []
+  },
+  {
+    "id": "east-greenwich-township-data-center",
+    "name": "East Greenwich Township Data Center",
+    "company": "American Tower Corporation",
+    "investmentB": "Not Available",
+    "state": "NJ",
+    "county": "Gloucester",
+    "communities": "East Greenwich",
+    "capacityMw": 4,
+    "acreage": 6,
+    "timelineStart": "N/A",
+    "timelineEnd": "N/A",
+    "status": "Planned",
+    "resourceClaims": "The developer claims that the impact on the surrounding community will be limited due to the small size and unmanned nature of the data center.",
+    "energySources": "Grid",
+    "developerPromises": "None found",
+    "concernsCategories": "QOL",
+    "articulatedConcerns": "Community: The center's residential location has created concerns about declining home values.",
+    "communityPosture": "Negative",
+    "communityIntensity": "High",
+    "communityActionDetails": "East Greenwich Township passed a ban on data centers. Permits to rezone the residential lot for data center usage are pending and will be addressed during a special meeting on June 30, 2026.",
+    "developerAction": "The developer has described the project as a unmanned cell tower IT building.\"",
+    "monthRecorded": "2026-02-01",
+    "lat": 39.8010866724944,
+    "lng": -75.1993622580656,
+    "sources": {
+      "projectProposal": "https://protectegnj.web.app/files/ATC-Major_Site_Plan-10Feb2026.pdf",
+      "govtRecords": [],
+      "other": []
+    },
+    "stub": false,
+    "coordsPrecision": null,
+    "timeline": [
+      {
+        "date": "2025-06-03",
+        "label": "American Tower Corporation meets with East Greenwich Township to review project",
+        "isProposal": false,
+        "source": "https://woodburywarbler.com/what-the-documents-show-following-the-paper-trail-on-the-american-tower-data-center/"
+      },
+      {
+        "date": "2026-02-10",
+        "label": "Project Proposal",
+        "isProposal": true,
+        "source": "https://protectegnj.web.app/files/ATC-Major_Site_Plan-10Feb2026.pdf"
+      },
+      {
+        "date": "2026-02-10",
+        "label": "American Tower Corporation files site plan",
+        "isProposal": false,
+        "source": "https://protectegnj.web.app/files/ATC-Major_Site_Plan-10Feb2026.pdf"
+      },
+      {
+        "date": "2026-05-26",
+        "label": "East Greenwich Township Committee approves ban on data centers",
+        "isProposal": false,
+        "source": "https://whyy.org/articles/cherry-hill-data-center-new-jersey-fleisher-sherrill/"
+      }
+    ]
+  },
+  {
+    "id": "st-georges-business-park-data-center-development-frightland-project",
+    "name": "St. Georges Business Park Data Center Development / \"Frightland Project\"",
+    "company": "Greggaro & Ferrera",
+    "investmentB": "Not available",
+    "state": "DE",
+    "county": "New Castle",
+    "communities": "Middletown",
+    "capacityMw": "600 to 1000",
+    "acreage": 1500,
+    "timelineStart": "N/A",
+    "timelineEnd": "N/A",
+    "status": "Proposed",
+    "resourceClaims": null,
+    "energySources": null,
+    "developerPromises": null,
+    "concernsCategories": null,
+    "articulatedConcerns": null,
+    "communityPosture": "Negative",
+    "communityIntensity": "Low",
+    "communityActionDetails": "New Castle County Council is considering regulations including buffer zones.",
+    "developerAction": "Developer promises more houses and residential development alongside industrial development.",
+    "monthRecorded": null,
+    "lat": 39.527994229682,
+    "lng": -75.6474439876628,
+    "sources": {
+      "projectProposal": null,
+      "govtRecords": [],
+      "other": []
+    },
+    "stub": false,
+    "coordsPrecision": null,
+    "timeline": [
+      {
+        "date": "2025-12-16",
+        "label": "Industrial project on former Frightland lot proposed",
+        "isProposal": false,
+        "source": "https://www.idcnova.com/html/1/59/153/4605.html"
+      }
+    ]
+  },
+  {
+    "id": "white-clay-creek-business-park-data-center-redevelopment",
+    "name": "White Clay Creek Business Park Data Center Redevelopment",
+    "company": "Verdantas",
+    "investmentB": "Not available",
+    "state": "DE",
+    "county": "New Castle",
+    "communities": "Newark",
+    "capacityMw": "Not available",
+    "acreage": 44,
+    "timelineStart": "N/A",
+    "timelineEnd": "N/A",
+    "status": "Proposed",
+    "resourceClaims": "No developer statements on resource use.",
+    "energySources": "Grid",
+    "developerPromises": "Tax revenue",
+    "concernsCategories": "Land, Water, Electricity, Climate",
+    "articulatedConcerns": "Community: Concerns about noise, traffic, and environmental impact. Constituents also voiced concern about cumulative impacts of multiple data centers being constructed in New Castle county.",
+    "communityPosture": "Negative",
+    "communityIntensity": "Moderate",
+    "communityActionDetails": "Public comments against the project have been submitted to New Castle County and posted on social media. The New Castle County Council is in the process of deciding whether newly-passed data center regulations should be applied to the Verdantas project.",
+    "developerAction": "The developer has addressed concerns by submitting the required parking, traffic, and environmental impact assessments to satisfy the conditions for previously withheld permits.",
+    "monthRecorded": "2025-11-01",
+    "lat": 39.6826257357234,
+    "lng": -75.7232983691438,
+    "sources": {
+      "projectProposal": "https://assets.delawarebusinesstimes.com/wp-content/uploads/2025/12/White-Clay-Corporate-Center-Letter-November.pdf",
+      "govtRecords": [],
+      "other": []
+    },
+    "stub": false,
+    "coordsPrecision": null,
+    "timeline": [
+      {
+        "date": "2025-11-18",
+        "label": "Verdantas proposes data center in New Castle",
+        "isProposal": true,
+        "source": "https://assets.delawarebusinesstimes.com/wp-content/uploads/2025/12/White-Clay-Corporate-Center-Letter-November.pdf"
+      },
+      {
+        "date": "2025-12-02",
+        "label": "Verdantas submits exploratory plan for White Clay Creek Redevelopment",
+        "isProposal": false,
+        "source": "https://www3.newcastlede.gov/PDFDocument/default.aspx?DocumentID=80:FC40FF5826FBF7107D10260598B6C0724428DD1196872F86C5E68CE881F951C2BD306193DE6BA01D86AE058FFE85550A&x=temp.pdf"
+      },
+      {
+        "date": "2026-03-18",
+        "label": "New Castle County passes ordinance to establish data center zoning",
+        "isProposal": false,
+        "source": "https://www.newcastlede.gov/m/newsflash/home/detail/2615"
+      }
+    ]
+  },
+  {
     "id": "kingsboro-data-center-campus",
     "name": "Kingsboro Data Center Campus",
-    "featured": false,
     "company": "Energy Storage Solutions, LLC",
     "investmentB": 19.2,
     "state": "NC",
@@ -400,7 +645,6 @@ const PROJECTS = [
   {
     "id": "tarboro-data-center-campus",
     "name": "Tarboro Data Center Campus",
-    "featured": false,
     "company": "Energy Storage Solutions, LLC",
     "investmentB": 6.4,
     "state": "NC",
@@ -410,7 +654,7 @@ const PROJECTS = [
     "acreage": 52,
     "timelineStart": "2028",
     "timelineEnd": null,
-    "status": "Delayed/Scaled Back",
+    "status": "Planned/Delayed",
     "resourceClaims": "Net zero; natgas lines, substation and solar; build own substation; EMP hardened",
     "energySources": "Natural gas, Solar",
     "developerPromises": "500 Employees, 11m/yr in revenue",
@@ -441,7 +685,6 @@ const PROJECTS = [
   {
     "id": "microsoft-stover-north-data-center",
     "name": "Microsoft Stover North Data Center",
-    "featured": false,
     "company": "Microsoft",
     "investmentB": "1B Joint",
     "state": "NC",
@@ -451,7 +694,7 @@ const PROJECTS = [
     "acreage": 158,
     "timelineStart": "2028",
     "timelineEnd": null,
-    "status": "In Progress",
+    "status": "Planned, Restarted",
     "resourceClaims": "Duke Energy dedicated substation, deal for 4.5 GW",
     "energySources": null,
     "developerPromises": "Part of $1b investment in Catawba over 10 years",
@@ -476,7 +719,6 @@ const PROJECTS = [
   {
     "id": "microsoft-lyle-creek-data-center",
     "name": "Microsoft Lyle Creek Data Center",
-    "featured": false,
     "company": "Microsoft",
     "investmentB": "1B Joint",
     "state": "NC",
@@ -486,7 +728,7 @@ const PROJECTS = [
     "acreage": 220,
     "timelineStart": "2028",
     "timelineEnd": null,
-    "status": "In Progress",
+    "status": "Planned, Restarted",
     "resourceClaims": "Two nearby substations",
     "energySources": null,
     "developerPromises": "Part of $1b investment in Catawba over 10 years",
@@ -511,7 +753,6 @@ const PROJECTS = [
   {
     "id": "microsoft-boyd-farm-data-center",
     "name": "Microsoft Boyd Farm Data Center",
-    "featured": false,
     "company": "Microsoft",
     "investmentB": "1B Joint",
     "state": "NC",
@@ -521,7 +762,7 @@ const PROJECTS = [
     "acreage": 292,
     "timelineStart": "2028",
     "timelineEnd": null,
-    "status": "In Progress",
+    "status": "Planned, Restarted",
     "resourceClaims": null,
     "energySources": null,
     "developerPromises": "Part of $1b investment in Catawba over 10 years",
@@ -546,7 +787,6 @@ const PROJECTS = [
   {
     "id": "balico-data-center-megacampus",
     "name": "Balico Data Center Megacampus",
-    "featured": false,
     "company": "Balico",
     "investmentB": 3.7,
     "state": "VA",
@@ -581,14 +821,13 @@ const PROJECTS = [
   {
     "id": "cleanarc-campus",
     "name": "CleanArc Campus",
-    "featured": false,
     "company": "CleanArc",
     "investmentB": 3,
     "state": "VA",
     "county": "Caroline",
     "communities": null,
     "capacityMw": 900,
-    "acreage": 650,
+    "acreage": null,
     "timelineStart": "2030+",
     "timelineEnd": null,
     "status": "Planned",

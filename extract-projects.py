@@ -48,7 +48,7 @@ FIELD_MAP = {
     "communityIntensity": "Comm. Action - Intensity",
     "communityActionDetails": "Comm. Action - Details",
     "developerAction": "Developer Action",
-    "monthRecorded": "Month of Recording",
+    "monthRecorded": "Month Recorded",
     "lat": "Latitude",
     "lng": "Longitude",
 }
@@ -154,19 +154,17 @@ def extract_pair(main_ws, timelines_ws):
         name = cell(r, field_map["name"], header_index)
         if not name:
             continue
-        featured = name.startswith("✶") or name.startswith("*")
         clean_name = name.lstrip("✶* ").strip()
 
         proj = {
             "id": slugify(clean_name),
             "name": clean_name,
-            "featured": featured,
         }
         for target, spec in field_map.items():
             if target == "name":
                 continue
             val = cell(r, spec, header_index)
-            if target in ("timelineStart", "timelineEnd"):
+            if target in ("timelineStart", "timelineEnd", "monthRecorded"):
                 val = parse_date(val) if val is not None else None
             elif target == "communityIntensity":
                 val = normalize_intensity(val)
