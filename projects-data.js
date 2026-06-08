@@ -3,16 +3,23 @@
 // Do not edit by hand.
 
 const PROJECTS_META = {
-  "generatedAt": "2026-06-07T22:39:51Z",
+  "generatedAt": "2026-06-08T15:58:20Z",
   "sourceFile": "DATABASE-DataCenter_Backlash.xlsx",
   "sheetsRead": [
     {
       "mainSheet": "Philadelphia Fed Region",
       "timelinesSheet": "PF Timelines",
-      "projectCount": 18,
-      "fullCount": 18
+      "projectCount": 12,
+      "fullCount": 12
+    },
+    {
+      "mainSheet": "NC VA",
+      "timelinesSheet": "NC VA Timelines",
+      "projectCount": 13,
+      "fullCount": 9
     }
-  ]
+  ],
+  "droppedNoCoords": 6
 };
 
 const PROJECTS = [
@@ -38,7 +45,7 @@ const PROJECTS = [
     "communityIntensity": "None",
     "communityActionDetails": "While local community action has been limited, utility companies filed complaints with FERC to block an expanded plant interconnection plan.",
     "developerAction": "Talen initially built the center to \"invest in opportunities created by the convergence of digital infrastructure and power,\" capitalizing on its rural loaction and control of the local energy market to build a data center with less bureaucratic and community barriers than other facilities.",
-    "monthRecorded": null,
+    "monthRecorded": "2026-05-01",
     "lat": 41.0839630042558,
     "lng": -76.1435100426483,
     "sources": {
@@ -103,13 +110,13 @@ const PROJECTS = [
     "resourceClaims": "Developer claims energy usage impact on comunity will be limited.",
     "energySources": "85% on-site using existing natural gas pipeline; 15% from Vineland Municipal Utilities and Atlantic City Electric",
     "developerPromises": "Data center will not spike electricty bills",
-    "concernsCategories": "Land, water, QOL, Individual Economic, Environmental",
+    "concernsCategories": "Land, Water, QOL, Individual Economic, Environmental",
     "articulatedConcerns": "Residents are concerned about the lack of transparency in the project, specifically given that it wasn't public information until DataOne requested a loan from Vineland. Additionally, residents are worry how noise and rising electricity costs could impact quality of life.",
     "communityPosture": "Negative",
     "communityIntensity": "High",
     "communityActionDetails": "Environmental advocacy organizations have targeted the project after the public became aware of it. The New Jersey state legislature is working on regulation package limiting the size of data centers after backlash from the Vineland project.",
     "developerAction": "Project scaled back from 2.4 million sq feet to 718,000 square feet after Vineland denied $6 million loan",
-    "monthRecorded": null,
+    "monthRecorded": "2026-05-01",
     "lat": 39.4277541654666,
     "lng": -75.0166986453401,
     "sources": {
@@ -180,7 +187,7 @@ const PROJECTS = [
     "communityIntensity": "None",
     "communityActionDetails": "Windstream acquired this data center along with D&E telecommunications in 2009.",
     "developerAction": null,
-    "monthRecorded": null,
+    "monthRecorded": "2026-06-01",
     "lat": 40.1699008501249,
     "lng": -76.1779137390098,
     "sources": {
@@ -223,7 +230,7 @@ const PROJECTS = [
     "communityIntensity": "Low",
     "communityActionDetails": "Community action group Concerned residents of Western Pennsylvania (CROW) established to protest data center, with specific challenges to the project's air pollution permit.",
     "developerAction": "N/A",
-    "monthRecorded": null,
+    "monthRecorded": "2026-06-01",
     "lat": 40.509833556025,
     "lng": -79.2045564741278,
     "sources": {
@@ -276,7 +283,7 @@ const PROJECTS = [
     "communityIntensity": "Low",
     "communityActionDetails": "Statements issues by Appalachian Trail Conservancy and the Coalition to Protect Cumberland County PA from Data Centers",
     "developerAction": "Developer created a Q&A website to address community concerns.",
-    "monthRecorded": null,
+    "monthRecorded": "2026-06-01",
     "lat": 40.2560781344692,
     "lng": -77.118686893443,
     "sources": {
@@ -329,7 +336,7 @@ const PROJECTS = [
     "communityIntensity": "Low",
     "communityActionDetails": "N/A",
     "developerAction": "Community benefits agreement created with Town of Lancaster",
-    "monthRecorded": null,
+    "monthRecorded": "2026-06-01",
     "lat": 40.0595567106763,
     "lng": -76.3299567894937,
     "sources": {
@@ -376,7 +383,7 @@ const PROJECTS = [
     "communityIntensity": "High",
     "communityActionDetails": "The township voted 3-0 to deny the project's land development plans, leading to litigation that resulted in a Luzerne County judge ruling in favor of the township. In addition, the Pennsylvania Department of Environmental Protection held a hearing on the project in February 2026. Grassroots environmental organizations have also objected to the project.",
     "developerAction": "Developer has offered $30 million community benefits package to “help offset potential short-term localized utility rate increases.”",
-    "monthRecorded": null,
+    "monthRecorded": "2026-06-01",
     "lat": 40.9573187814357,
     "lng": -76.0348230780108,
     "sources": {
@@ -429,19 +436,19 @@ const PROJECTS = [
     "communities": "Wyalusing",
     "capacityMw": 248,
     "acreage": 14,
-    "timelineStart": null,
-    "timelineEnd": null,
-    "status": "Cancelled/Withdrawn",
-    "resourceClaims": null,
+    "timelineStart": "Not available, must begin before April 2027 air permits expire",
+    "timelineEnd": "Not available",
+    "status": "Planned",
+    "resourceClaims": "Developer claimed facility would generate its own power and include a demineralized water treatment system to control emissions.",
     "energySources": "Natural gas",
-    "developerPromises": null,
-    "concernsCategories": null,
-    "articulatedConcerns": null,
-    "communityPosture": null,
-    "communityIntensity": null,
-    "communityActionDetails": null,
-    "developerAction": null,
-    "monthRecorded": null,
+    "developerPromises": "Developer promised center would be a minor emitter of pollutants; Only source of admissions outside of turbines would be from a firewater pump.",
+    "concernsCategories": "Climate",
+    "articulatedConcerns": "Community: Concerns about environmental impact of air pollutants.",
+    "communityPosture": "Negative",
+    "communityIntensity": "Moderate",
+    "communityActionDetails": "Community submitted 122 comments follow PA DEP hearing",
+    "developerAction": "Developer issued a joint comment-response document with PA DEP.",
+    "monthRecorded": "2026-06-01",
     "lat": 41.6542555106668,
     "lng": -76.2332393906146,
     "sources": {
@@ -451,7 +458,26 @@ const PROJECTS = [
     },
     "stub": false,
     "coordsPrecision": null,
-    "timeline": []
+    "timeline": [
+      {
+        "date": "2024-12",
+        "label": "Klondike submits proposal to the Pennsylvania Department of Environmental Protection",
+        "isProposal": true,
+        "source": "https://files.dep.state.pa.us/RegionalResources/NCRO/NCROPortalFiles/CommunityInformation/Wyalusing_Energy_Center_PAApp_Redacted.pdf"
+      },
+      {
+        "date": "2025-10-09",
+        "label": "Developer issues joint comment-response document with PA DEP addressing environmental concerns",
+        "isProposal": false,
+        "source": "https://files.dep.state.pa.us/RegionalResources/NCRO/NCROPortalFiles/CommunityInformation/KDI%20Comment%20Response%20Document.pdf"
+      },
+      {
+        "date": "2027-04",
+        "label": "Latest construction may commence per air quality permits",
+        "isProposal": false,
+        "source": "https://paenvironmentdaily.blogspot.com/2025/10/pa-oil-gas-industrial-facilities-permit_24.html"
+      }
+    ]
   },
   {
     "id": "east-greenwich-township-data-center",
@@ -463,8 +489,8 @@ const PROJECTS = [
     "communities": "East Greenwich",
     "capacityMw": 4,
     "acreage": 6,
-    "timelineStart": "N/A",
-    "timelineEnd": "N/A",
+    "timelineStart": "Not available",
+    "timelineEnd": "Not available",
     "status": "Planned",
     "resourceClaims": "The developer claims that the impact on the surrounding community will be limited due to the small size and unmanned nature of the data center.",
     "energySources": "Grid",
@@ -475,7 +501,7 @@ const PROJECTS = [
     "communityIntensity": "High",
     "communityActionDetails": "East Greenwich Township passed a ban on data centers. Permits to rezone the residential lot for data center usage are pending and will be addressed during a special meeting on June 30, 2026.",
     "developerAction": "The developer has described the project as a unmanned cell tower IT building.\"",
-    "monthRecorded": "2026-02-01",
+    "monthRecorded": "2026-06-01",
     "lat": 39.8010866724944,
     "lng": -75.1993622580656,
     "sources": {
@@ -519,26 +545,26 @@ const PROJECTS = [
     "investmentB": "Not available",
     "state": "DE",
     "county": "New Castle",
-    "communities": "Middletown",
+    "communities": "St. Georges",
     "capacityMw": "600 to 1000",
     "acreage": 1500,
-    "timelineStart": "N/A",
-    "timelineEnd": "N/A",
+    "timelineStart": "Not available",
+    "timelineEnd": "Not available",
     "status": "Proposed",
-    "resourceClaims": null,
-    "energySources": null,
-    "developerPromises": null,
-    "concernsCategories": null,
-    "articulatedConcerns": null,
+    "resourceClaims": "No developer statements on resource use.",
+    "energySources": "Grid",
+    "developerPromises": "Developer promises to build 366 homes alongside industrial development",
+    "concernsCategories": "QOL",
+    "articulatedConcerns": "Community: Concerns about building homes next to a data center",
     "communityPosture": "Negative",
     "communityIntensity": "Low",
     "communityActionDetails": "New Castle County Council is considering regulations including buffer zones.",
-    "developerAction": "Developer promises more houses and residential development alongside industrial development.",
-    "monthRecorded": null,
+    "developerAction": "No developer action found",
+    "monthRecorded": "2026-06-01",
     "lat": 39.527994229682,
     "lng": -75.6474439876628,
     "sources": {
-      "projectProposal": null,
+      "projectProposal": "https://www3.newcastlede.gov/PDFDocument/default.aspx?DocumentID=80:FC40FF5826FBF7107D10260598B6C0724428DD1196872F86C5E68CE881F951C2D2BD769594D78C69354C344D0EE0A185&x=temp.pdf",
       "govtRecords": [],
       "other": []
     },
@@ -546,10 +572,16 @@ const PROJECTS = [
     "coordsPrecision": null,
     "timeline": [
       {
-        "date": "2025-12-16",
-        "label": "Industrial project on former Frightland lot proposed",
+        "date": "2024-04-10",
+        "label": "Developer submits exploratory plan to New Castle County",
+        "isProposal": true,
+        "source": "https://www3.newcastlede.gov/project/details/default.aspx?ProjectKey=793134"
+      },
+      {
+        "date": "2025-12-02",
+        "label": "Developer posts permitting signs on property",
         "isProposal": false,
-        "source": "https://www.idcnova.com/html/1/59/153/4605.html"
+        "source": "https://www3.newcastlede.gov/PDFDocument/default.aspx?DocumentID=80:FC40FF5826FBF7107D10260598B6C0724428DD1196872F86C5E68CE881F951C21D41AA30574486CF07826A32D4B743AA&x=temp.pdf"
       }
     ]
   },
@@ -563,8 +595,8 @@ const PROJECTS = [
     "communities": "Newark",
     "capacityMw": "Not available",
     "acreage": 44,
-    "timelineStart": "N/A",
-    "timelineEnd": "N/A",
+    "timelineStart": "Not available",
+    "timelineEnd": "Not available",
     "status": "Proposed",
     "resourceClaims": "No developer statements on resource use.",
     "energySources": "Grid",
@@ -575,7 +607,7 @@ const PROJECTS = [
     "communityIntensity": "Moderate",
     "communityActionDetails": "Public comments against the project have been submitted to New Castle County and posted on social media. The New Castle County Council is in the process of deciding whether newly-passed data center regulations should be applied to the Verdantas project.",
     "developerAction": "The developer has addressed concerns by submitting the required parking, traffic, and environmental impact assessments to satisfy the conditions for previously withheld permits.",
-    "monthRecorded": "2025-11-01",
+    "monthRecorded": "2026-06-01",
     "lat": 39.6826257357234,
     "lng": -75.7232983691438,
     "sources": {
@@ -607,6 +639,47 @@ const PROJECTS = [
     ]
   },
   {
+    "id": "storage-data-center-project",
+    "name": "Storage Data Center Project",
+    "company": "N/A (County ordinance in anticipation of future data centers)",
+    "investmentB": "N/A",
+    "state": "PA",
+    "county": "Tioga",
+    "communities": "N/A",
+    "capacityMw": "N/A",
+    "acreage": "N/A",
+    "timelineStart": "N/A",
+    "timelineEnd": "N/A",
+    "status": null,
+    "resourceClaims": "N/A",
+    "energySources": "N/A",
+    "developerPromises": "N/A",
+    "concernsCategories": "Land, Water, Electricity, Climate",
+    "articulatedConcerns": "Community: Concerns regarding the absence of county-wide zoning and the rapid pace of data center development in neighboring areas have led Tioga County to implement an ordinance aimed at protecting environmental resources.",
+    "communityPosture": "Neutral",
+    "communityIntensity": "Moderate",
+    "communityActionDetails": "In response to potential data center growth, Tioga County has enacted an ordinance establishing zoning restrictions to limit development near residential areas and scenic landscapes.",
+    "developerAction": "N/A",
+    "monthRecorded": "2026-02-01",
+    "lat": 41.7691415727586,
+    "lng": -77.2443751321176,
+    "sources": {
+      "projectProposal": "https://www.tiogacountypa.us/getmedia/8f770a00-d107-488f-8a49-6a15b03a141a/Tioga-County-Data-Centers-Ordinance-Final-12-15-25.pdf",
+      "govtRecords": [],
+      "other": []
+    },
+    "stub": false,
+    "coordsPrecision": null,
+    "timeline": [
+      {
+        "date": "2026-02-10",
+        "label": "Tioga County passes data center ordinance",
+        "isProposal": true,
+        "source": "https://www.tiogacountypa.us/getmedia/8f770a00-d107-488f-8a49-6a15b03a141a/Tioga-County-Data-Centers-Ordinance-Final-12-15-25.pdf"
+      }
+    ]
+  },
+  {
     "id": "kingsboro-data-center-campus",
     "name": "Kingsboro Data Center Campus",
     "company": "Energy Storage Solutions, LLC",
@@ -618,7 +691,7 @@ const PROJECTS = [
     "acreage": 155,
     "timelineStart": "2028",
     "timelineEnd": null,
-    "status": "Planned",
+    "status": "Proposed",
     "resourceClaims": "Net zero; natgas lines; EMP Hardened",
     "energySources": "Natural gas",
     "developerPromises": "500 employees",
@@ -628,7 +701,7 @@ const PROJECTS = [
     "communityIntensity": null,
     "communityActionDetails": "County Board of Commissioners amended ordinances to allow construction; sale of public land",
     "developerAction": null,
-    "monthRecorded": null,
+    "monthRecorded": "2026-04-01",
     "lat": 35.9243546164901,
     "lng": -77.6583439892765,
     "sources": {
@@ -654,17 +727,17 @@ const PROJECTS = [
     "acreage": 52,
     "timelineStart": "2028",
     "timelineEnd": null,
-    "status": "Planned/Delayed",
+    "status": "Delayed/Scaled Back",
     "resourceClaims": "Net zero; natgas lines, substation and solar; build own substation; EMP hardened",
     "energySources": "Natural gas, Solar",
     "developerPromises": "500 Employees, 11m/yr in revenue",
-    "concernsCategories": "Air quality, noise pollution, light pollution, water demand",
+    "concernsCategories": "Water, Climate, QOL",
     "articulatedConcerns": null,
     "communityPosture": "Negative",
     "communityIntensity": null,
     "communityActionDetails": "Town of Tarboro denied special permit",
     "developerAction": "Appeal to Superior County Court",
-    "monthRecorded": null,
+    "monthRecorded": "2026-04-01",
     "lat": 35.9052413354529,
     "lng": -77.5787098240266,
     "sources": {
@@ -694,17 +767,17 @@ const PROJECTS = [
     "acreage": 158,
     "timelineStart": "2028",
     "timelineEnd": null,
-    "status": "Planned, Restarted",
+    "status": "Delayed/Scaled Back",
     "resourceClaims": "Duke Energy dedicated substation, deal for 4.5 GW",
     "energySources": null,
     "developerPromises": "Part of $1b investment in Catawba over 10 years",
     "concernsCategories": null,
     "articulatedConcerns": null,
-    "communityPosture": "Positive/Neutral",
+    "communityPosture": "Positive",
     "communityIntensity": null,
     "communityActionDetails": null,
     "developerAction": null,
-    "monthRecorded": null,
+    "monthRecorded": "2026-04-01",
     "lat": 35.619096,
     "lng": -81.31578,
     "sources": {
@@ -728,17 +801,17 @@ const PROJECTS = [
     "acreage": 220,
     "timelineStart": "2028",
     "timelineEnd": null,
-    "status": "Planned, Restarted",
+    "status": "Delayed/Scaled Back",
     "resourceClaims": "Two nearby substations",
     "energySources": null,
     "developerPromises": "Part of $1b investment in Catawba over 10 years",
     "concernsCategories": null,
     "articulatedConcerns": null,
-    "communityPosture": "Positive/Neutral",
+    "communityPosture": "Positive",
     "communityIntensity": null,
     "communityActionDetails": null,
     "developerAction": null,
-    "monthRecorded": null,
+    "monthRecorded": "2026-04-01",
     "lat": 35.731135,
     "lng": -81.205389,
     "sources": {
@@ -762,17 +835,17 @@ const PROJECTS = [
     "acreage": 292,
     "timelineStart": "2028",
     "timelineEnd": null,
-    "status": "Planned, Restarted",
+    "status": "Delayed/Scaled Back",
     "resourceClaims": null,
     "energySources": null,
     "developerPromises": "Part of $1b investment in Catawba over 10 years",
     "concernsCategories": null,
     "articulatedConcerns": null,
-    "communityPosture": "Positive/Neutral",
+    "communityPosture": "Positive",
     "communityIntensity": null,
     "communityActionDetails": null,
     "developerAction": null,
-    "monthRecorded": null,
+    "monthRecorded": "2026-04-01",
     "lat": 35.589794,
     "lng": -81.235323,
     "sources": {
@@ -787,7 +860,7 @@ const PROJECTS = [
   {
     "id": "balico-data-center-megacampus",
     "name": "Balico Data Center Megacampus",
-    "company": "Balico",
+    "company": "Balico, LLC",
     "investmentB": 3.7,
     "state": "VA",
     "county": "Pittsylvania",
@@ -796,19 +869,19 @@ const PROJECTS = [
     "acreage": 2200,
     "timelineStart": null,
     "timelineEnd": null,
-    "status": "Canceled",
+    "status": "Cancelled - Withdrawn",
     "resourceClaims": "On-site gas powerplant included in construction",
     "energySources": null,
     "developerPromises": "390 jobs between dc and plant, +$50-184m in annual taxes",
-    "concernsCategories": "Grassroots opposition: rural lifestyle/culture, environment, questioned economic promises",
+    "concernsCategories": "QOL, Climate, Governmental Economic",
     "articulatedConcerns": null,
     "communityPosture": "Negative",
     "communityIntensity": null,
     "communityActionDetails": "County Board denied revision",
     "developerAction": "Revised then withdrew proposal, cancelled data center",
-    "monthRecorded": null,
-    "lat": 36.7,
-    "lng": -79.28,
+    "monthRecorded": "2026-04-01",
+    "lat": 36.804,
+    "lng": -79.39,
     "sources": {
       "projectProposal": "https://cardinalnews.org/2025/04/14/balico-withdraws-data-center-proposal-for-pittsylvania-after-months-of-resident-pushback-and-vote-postponements/",
       "govtRecords": [],
@@ -830,7 +903,7 @@ const PROJECTS = [
     "acreage": null,
     "timelineStart": "2030+",
     "timelineEnd": null,
-    "status": "Planned",
+    "status": "Proposed",
     "resourceClaims": null,
     "energySources": null,
     "developerPromises": "50 jobs, revenue, quality of life; largest investment ever in the county",
@@ -840,7 +913,7 @@ const PROJECTS = [
     "communityIntensity": null,
     "communityActionDetails": "County Board claims it set exacting standards: buffering from communities, noise abatement provisions, screening requirements, and the prohibition of the use of potable water for industrial cooling",
     "developerAction": null,
-    "monthRecorded": null,
+    "monthRecorded": "2026-04-01",
     "lat": 37.989718,
     "lng": -77.491225,
     "sources": {

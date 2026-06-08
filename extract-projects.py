@@ -2,12 +2,18 @@
 Extracts project data from DATABASE-DataCenter_Backlash.xlsx
 and writes projects-data.js with PROJECTS and PROJECTS_META constants.
 
-The xlsx is read by SHEET POSITION, not by sheet name. Exactly two sheets
-are expected: the first is the main project-data sheet, the second is its
-timelines sheet. Any additional sheets in the workbook are ignored.
+The xlsx is read by SHEET POSITION, not by sheet name. Sheets are taken in
+consecutive (main, timelines) pairs — currently 4 sheets / 2 pairs:
+  1. Philadelphia Fed Region  + PF Timelines
+  2. NC VA                    + NC VA Timelines
+Any trailing unpaired sheet is ignored with a warning.
 
-The main sheet is read through the Philly-Fed-shaped FIELD_MAP via
-header-name lookup.
+Both main sheets share the same Philly-Fed-shaped column layout and are read
+through the single FIELD_MAP via header-name lookup (header whitespace is
+stripped, so ' Company' and 'Company' both resolve).
+
+Only projects with both a parsable Latitude and Longitude are kept — anything
+missing coordinates is dropped from the output (and reported in the summary).
 
 Run: python3 extract-projects.py
 """
@@ -264,23 +270,34 @@ def attach_timelines(ws, projects):
 def main():
     wb = openpyxl.load_workbook(XLSX, data_only=True)
     sheets = wb.worksheets
-    if not sheets:
-        raise SystemExit("Workbook has no sheets.")
-    main_ws = sheets[0]
-    timelines_ws = sheets[1] if len(sheets) > 1 else None
+    if len(sheets) < 2:
+        raise SystemExit("Workbook needs at least one (main, timelines) sheet pair.")
 
-    all_projects = extract_pair(main_ws, timelines_ws)
-    pair_stats = [{
-        "mainSheet": main_ws.title,
-        "timelinesSheet": timelines_ws.title if timelines_ws is not None else None,
-        "projectCount": len(all_projects),
-        "fullCount": sum(1 for p in all_projects if not p["stub"]),
-    }]
-    if len(sheets) > 2:
-        ignored = [s.title for s in sheets[2:]]
-        print(f"  ⚠ Ignoring {len(ignored)} extra sheet(s): {', '.join(ignored)}")
+    # Walk consecutive (main, timelines) pairs: (0,1), (2,3), ...
+    pairs = [(sheets[i], sheets[i + 1]) for i in range(0, len(sheets) - 1, 2)]
+    if len(sheets) % 2 != 0:
+        print(f"  ⚠ Ignoring trailing unpaired sheet: '{sheets[-1].title}'")
 
-    # Detect id collisions across pairs (currently none, but warn future-us)
+    all_projects = []
+    pair_stats = []
+    for main_ws, timelines_ws in pairs:
+        projects = extract_pair(main_ws, timelines_ws)
+        all_projects.extend(projects)
+        pair_stats.append({
+            "mainSheet": main_ws.title,
+            "timelinesSheet": timelines_ws.title,
+            "projectCount": len(projects),
+            "fullCount": sum(1 for p in projects if not p["stub"]),
+        })
+
+    # Keep only projects with parsable coordinates on both axes
+    before = len(all_projects)
+    all_projects = [p for p in all_projects if p.get("lat") is not None and p.get("lng") is not None]
+    dropped = before - len(all_projects)
+    if dropped:
+        print(f"  ⚠ Dropped {dropped} project(s) without coordinates")
+
+    # Detect id collisions across pairs
     seen = {}
     for p in all_projects:
         if p["id"] in seen:
@@ -292,6 +309,7 @@ def main():
         "generatedAt": datetime.datetime.utcnow().isoformat(timespec="seconds") + "Z",
         "sourceFile": XLSX.name,
         "sheetsRead": pair_stats,
+        "droppedNoCoords": dropped,
     }
 
     js = (
@@ -304,12 +322,12 @@ def main():
     OUT_JS.write_text(js, encoding="utf-8")
 
     total_events = sum(len(p["timeline"]) for p in all_projects)
-    s = pair_stats[0]
-    stubs = s["projectCount"] - s["fullCount"]
+    total_full = sum(s["fullCount"] for s in pair_stats)
     print(f"Wrote {OUT_JS.name}")
-    print(f"  main sheet:      {s['mainSheet']}")
-    print(f"  timelines sheet: {s['timelinesSheet']}")
-    print(f"  {len(all_projects)} projects ({s['fullCount']} full, {stubs} stub), {total_events} timeline events")
+    for s in pair_stats:
+        stubs = s["projectCount"] - s["fullCount"]
+        print(f"  {s['mainSheet']!r} + {s['timelinesSheet']!r}: {s['projectCount']} projects ({s['fullCount']} full, {stubs} stub)")
+    print(f"  {len(all_projects)} projects with coordinates kept ({total_full} full), {total_events} timeline events")
 
 
 if __name__ == "__main__":
