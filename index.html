@@ -826,8 +826,9 @@
       .md-panel-row-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; }
       .md-panel-row-text  { font-size: 13px; color: var(--text2); line-height: 1.55; }
 
-      .md-panel-cta { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; }
-      .md-link { background: none; border: none; color: #185fa5; font-family: inherit; font-size: 13px; cursor: pointer; padding: 4px 0; }
+      .md-recorded-note { font-size: 13px; color: var(--text3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .md-panel-cta { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: nowrap; }
+      .md-link { background: none; border: none; color: #185fa5; font-family: inherit; font-size: 13px; cursor: pointer; padding: 4px 0; white-space: nowrap; flex-shrink: 0; }
       .md-link:hover { text-decoration: underline; }
 
       /* State project list in sidebar */
@@ -953,6 +954,7 @@
       .db-detail-head { margin-bottom: 16px; }
       .db-detail-name { font-size: 26px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; margin-bottom: 4px; }
       .db-detail-location { font-size: 15px; color: var(--text); margin-top: 4px; }
+      .db-detail-recorded { font-size: 13px; color: var(--text2); margin-top: 6px; }
       .db-detail-company { font-size: 13px; color: var(--text2); margin-top: 2px; }
       .db-detail-badges { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; align-items: center; }
       .db-detail-badges .badge { font-size: 13px; padding: 5px 13px; }

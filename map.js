@@ -47,6 +47,13 @@ function mdFmtAcres(v) {
   if (typeof v !== 'number') return String(v);
   return v.toLocaleString() + ' ac';
 }
+function mdFmtMonth(s) {
+  if (!s) return null;
+  if (/^\d{4}$/.test(s)) return s;
+  const d = new Date(s + 'T00:00:00');
+  if (isNaN(d)) return s;
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+}
 
 // ── state constants ───────────────────────────────────────────────────
 const MD_FOCUS_FIPS   = new Set(['10','34','37','42','51']);
@@ -150,8 +157,9 @@ function mdRenderDetailPanel(id) {
         <div class="md-panel-row-text">${p.developerAction}</div>
       </div>` : ''}
     <div class="md-panel-cta">
+      ${p.monthRecorded ? `<div class="md-recorded-note"><em>Recorded ${mdFmtMonth(p.monthRecorded)}</em></div>` : ''}
       <button type="button" class="md-link" onclick="mdOpenFullRecord('${p.id.replace(/'/g, "\\'")}')">
-        View full record in database →
+        View record in database →
       </button>
     </div>
   `;

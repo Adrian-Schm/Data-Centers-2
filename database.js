@@ -39,6 +39,13 @@
     if (isNaN(d)) return s;
     return d.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
   }
+  function fmtMonth(s) {
+    if (!s) return null;
+    if (/^\d{4}$/.test(s)) return s;
+    const d = new Date(s + 'T00:00:00');
+    if (isNaN(d)) return s;
+    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+  }
   function fmtDateParts(s) {
     if (!s) return { month: '', year: '—' };
     if (/^\d{4}$/.test(s)) return { month: '', year: s };
@@ -340,9 +347,10 @@
           <div class="db-detail-name">${p.featured ? '<span class="db-star" style="font-size:20px;margin-right:8px">✶</span>' : ''}${esc(p.name)}</div>
           ${(() => {
             const place = [p.county ? esc(p.county) + ' County' : '', p.state ? esc(p.state) : ''].filter(Boolean).join(', ');
-            const loc = [place, p.communities ? 'Near: ' + esc(p.communities) : ''].filter(Boolean).join(' — ');
+            const loc = [place, p.communities ? 'Nearby Communities: ' + esc(p.communities) : ''].filter(Boolean).join(' — ');
             return loc ? `<div class="db-detail-location">${loc}</div>` : '';
           })()}
+          ${p.monthRecorded ? `<div class="db-detail-recorded"><em>Data recorded ${esc(fmtMonth(p.monthRecorded))}</em></div>` : ''}
         </div>
         <div class="db-detail-card-inner">
           <div class="db-detail-left">
@@ -413,7 +421,6 @@
       <div class="db-metric"><div class="db-ml">Timeline</div><div class="db-mv ${fmtRange(p.timelineStart,p.timelineEnd)?'text':'empty'}">${esc(fmtRange(p.timelineStart,p.timelineEnd)) || 'Not yet set'}</div></div>
       ${p.status ? `<div class="db-metric db-metric-status ${statusBadgeClass(p.status)}"><div class="db-ml">Status</div><div class="db-mv">${esc(p.status)}</div></div>` : ''}
       ${p.energySources ? `<div class="db-metric db-full"><div class="db-ml">Energy sources</div><div class="db-mv text">${esc(p.energySources)}</div></div>` : ''}
-      ${p.monthRecorded ? `<div class="db-metric"><div class="db-ml">Month recorded</div><div class="db-mv text">${esc(p.monthRecorded)}</div></div>` : ''}
     `;
 
     const hasCoords = p.lat != null && p.lng != null;
