@@ -157,6 +157,12 @@ def extract_pair(main_ws, timelines_ws):
 
     projects = []
     for r in rows[1:]:
+        # A fully-blank row marks the end of the table — stop reading here.
+        # (Anything below is treated as a deliberate separator/scratch area,
+        # even if a later row happens to have content.)
+        if all(clean(v) is None for v in r):
+            break
+
         name = cell(r, field_map["name"], header_index)
         if not name:
             continue

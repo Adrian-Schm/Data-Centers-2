@@ -10,24 +10,32 @@
    - Smaller pins, larger project name labels
 ══════════════════════════════════════════ */
 
-const MD_PIN_COLORS = {
-  Positive: '#3b6d11',
-  Negative: '#a32d2d',
-  Neutral:  '#5f5e5a',
-  Delayed:  '#854f0b',
-  Planned:  '#185fa5',
-  Cancelled:'#993556',
+// Pin / badge color keyed strictly by the project's status — not sentiment.
+// Reuses the same palette (and badge classes) already defined for the database
+// view, so the map and the database describe statuses identically.
+const MD_STATUS_COLORS = {
+  'Proposed':              '#5f5e5a',
+  'Planned':               '#3a96e8',
+  'In Progress':           '#0a2f54',
+  'Completed':             '#3b6d11',
+  'Delayed/Scaled Back':   '#854f0b',
+  'Canceled / Withdrawn':  '#d11f1f',
 };
+const MD_STATUS_BADGE_CLASS = {
+  'Proposed':              'b-Neutral',
+  'Planned':               'b-Planned',
+  'In Progress':           'b-Progress',
+  'Completed':             'b-Positive',
+  'Delayed/Scaled Back':   'b-Delayed',
+  'Canceled / Withdrawn':  'b-Cancelled',
+};
+const MD_DEFAULT_PIN_COLOR = '#5f5e5a';
 
-function mdSentimentOf(p) {
-  const s = (p.status || '').toLowerCase();
-  if (/cancel|withdraw/.test(s)) return 'Cancelled';
-  if (/complete/.test(s))         return 'Positive';
-  if (/delay|scaled/.test(s))     return 'Delayed';
-  if (p.communityPosture === 'Positive') return 'Positive';
-  if (p.communityPosture === 'Negative') return 'Negative';
-  if (p.communityPosture === 'Neutral')  return 'Neutral';
-  return 'Planned';
+function mdPinColor(p) {
+  return (p.status && MD_STATUS_COLORS[p.status]) || MD_DEFAULT_PIN_COLOR;
+}
+function mdStatusBadgeClass(p) {
+  return (p.status && MD_STATUS_BADGE_CLASS[p.status]) || 'b-Neutral';
 }
 
 function mdFmtMoney(b) {
@@ -54,7 +62,6 @@ function mdFmtMonth(s) {
   if (isNaN(d)) return s;
   return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
 }
-
 // ── state constants ───────────────────────────────────────────────────
 const MD_FOCUS_FIPS   = new Set(['10','34','37','42','51']);
 const MD_FIPS_TO_ABBR = { '10':'DE','34':'NJ','37':'NC','42':'PA','51':'VA' };
@@ -124,7 +131,6 @@ function mdRenderDetailPanel(id) {
   const list = (typeof PROJECTS !== 'undefined' && Array.isArray(PROJECTS)) ? PROJECTS : [];
   const p = list.find(x => x.id === id);
   if (!p) { mdRenderEmptyPanel(); return; }
-  const sentiment = mdSentimentOf(p);
   const location = [p.county ? p.county + ' County' : null, p.state || null]
     .filter(Boolean).join(', ');
   el.className = 'md-panel md-panel-filled';
@@ -139,7 +145,7 @@ function mdRenderDetailPanel(id) {
       ${p.company ? `<div class="md-panel-sub">${p.company}</div>` : ''}
     </div>
     <div class="md-panel-badges">
-      <span class="badge b-${sentiment}">${p.status || sentiment}</span>
+      <span class="badge ${mdStatusBadgeClass(p)}">${p.status || 'Status unknown'}</span>
     </div>
     <div class="md-panel-metrics">
       <div class="md-metric"><div class="md-ml">Investment</div><div class="md-mv">${mdFmtMoney(p.investmentB)}</div></div>
@@ -190,14 +196,13 @@ function mdRenderStateProjList(fips) {
     </div>
     <div class="md-state-proj-list">
       ${stateProjects.map(p => {
-        const s = mdSentimentOf(p);
         return `
           <div class="md-state-proj-card" onclick="mdSelectPin('${p.id.replace(/'/g,"\\'")}')">
             <div class="md-tip-name">${p.name}</div>
             ${p.county ? `<div class="md-tip-sub">${p.county} County, ${abbr}</div>` : ''}
             ${p.company ? `<div class="md-tip-sub">${p.company}</div>` : ''}
             <div class="md-tip-row">
-              <span class="badge b-${s}">${p.status || s}</span>
+              <span class="badge ${mdStatusBadgeClass(p)}">${p.status || 'Status unknown'}</span>
               <span class="md-tip-stat">${mdFmtMw(p.capacityMw)}</span>
               <span class="md-tip-stat">${mdFmtMoney(p.investmentB)}</span>
             </div>
@@ -334,7 +339,15 @@ function mdRenderMap(crossfade) {
     );
     root.selectAll('path.county').data(stateCounties).join('path')
       .attr('class','county').attr('d', path)
-      .attr('fill', '#f3efe4').attr('stroke', '#a5a39a').attr('stroke-width', 0.4);
+      .attr('fill', '#f3efe4').attr('stroke', '#a5a39a').attr('stroke-width', 0.4)
+      .style('cursor', 'default')
+      .on('click', () => {
+        if (!mdSelectedId) return;
+        mdSelectedId = null;
+        mdClearPinRings();
+        if (mdViewFips) mdRenderStateProjList(mdViewFips);
+        else mdRenderEmptyPanel();
+      });
 
     const stateFeature = allStates.find(s => String(s.id).padStart(2,'0') === mdViewFips);
     if (stateFeature) {
@@ -485,7 +498,6 @@ function mdRenderMap(crossfade) {
 
   pins.forEach(pin => {
     const { p, x, y } = pin;
-    const sentiment = mdSentimentOf(p);
 
     if (drilled && Math.abs(pin.labelY - y) > 4) {
       const leaderLabelX = pin.flipped ? x - pinR - labelPad : pin.labelX;
@@ -511,7 +523,7 @@ function mdRenderMap(crossfade) {
     g.append('circle').attr('id','mdRing-' + p.id)
       .attr('r', ringR).attr('fill','none').attr('stroke','none');
     g.append('circle').attr('r', pinR)
-      .attr('fill', MD_PIN_COLORS[sentiment] || '#5f5e5a')
+      .attr('fill', mdPinColor(p))
       .attr('stroke','#fff').attr('stroke-width', drilled ? 2 : 1.5);
 
     // Restore ring if this pin was selected before re-render

@@ -69,12 +69,19 @@
     if (p === 'Neutral')  return 'b-Neutral';
     return 'b-Delayed';
   }
+  // Exact-match lookup so the database badge color always agrees with the
+  // map's pin color for the same literal status string.
+  const STATUS_BADGE_CLASS = {
+    'Proposed':              'b-Neutral',
+    'Planned':               'b-Planned',
+    'In Progress':           'b-Progress',
+    'Completed':             'b-Positive',
+    'Delayed/Scaled Back':   'b-Delayed',
+    'Canceled / Withdrawn': 'b-Cancelled',
+  };
   function statusBadgeClass(s) {
     if (!s) return 'b-Empty';
-    if (/complete/i.test(s))               return 'b-Positive';
-    if (/cancel|withdraw|denied/i.test(s)) return 'b-Cancelled';
-    if (/delay|scaled/i.test(s))           return 'b-Delayed';
-    return 'b-Neutral';
+    return STATUS_BADGE_CLASS[s] || 'b-Neutral';
   }
   function hostOf(url) {
     try { return new URL(url).hostname.replace(/^www\./, ''); }
@@ -148,10 +155,11 @@
   }
 
   // ── chip row builder ───────────────────────────────────────────────
-  function chipRow(key, values, activeArr) {
+  function chipRow(key, values, activeArr, labelFn) {
     return values.map(v => {
       const on = activeArr.includes(v);
-      return `<button class="db-chip-btn${on?' active':''}" data-filter="${key}" data-value="${esc(v)}">${esc(v)}</button>`;
+      const label = labelFn ? labelFn(v) : v;
+      return `<button class="db-chip-btn${on?' active':''}" data-filter="${key}" data-value="${esc(v)}">${esc(label)}</button>`;
     }).join('');
   }
 
@@ -161,7 +169,7 @@
     const list    = applySort(applyFilters(PROJECTS));
 
     const stateOpts   = uniqueValues('state');
-    const statusOpts  = ['Planned', 'In Progress', 'Completed', 'Delayed/Scaled Back', 'Canceled'].filter(s => PROJECTS.some(p => p.status === s));
+    const statusOpts  = ['Proposed', 'Planned', 'In Progress', 'Completed', 'Delayed/Scaled Back', 'Canceled / Withdrawn'].filter(s => PROJECTS.some(p => p.status === s));
     const postureOpts = uniqueValues('communityPosture').filter(v => v !== 'Positive/Neutral');
 
     const anyFilter = dbState.filters.states.length || dbState.filters.statuses.length ||
@@ -199,9 +207,9 @@
       <div class="db-table-wrap">
         <table class="db-table db-table-header">
           <colgroup>
-            <col style="width:22%"><col style="width:18%"><col style="width:6%">
+            <col style="width:21%"><col style="width:18%"><col style="width:6%">
             <col style="width:10%"><col style="width:9%"><col style="width:10%">
-            <col style="width:13%"><col style="width:12%">
+            <col style="width:14%"><col style="width:12%">
           </colgroup>
           <thead>
             <tr>
@@ -219,9 +227,9 @@
         <div class="db-table-scroll">
           <table class="db-table db-table-body">
             <colgroup>
-              <col style="width:22%"><col style="width:18%"><col style="width:6%">
+              <col style="width:21%"><col style="width:18%"><col style="width:6%">
               <col style="width:10%"><col style="width:9%"><col style="width:10%">
-              <col style="width:13%"><col style="width:12%">
+              <col style="width:14%"><col style="width:12%">
             </colgroup>
             <tbody>
               ${list.length === 0

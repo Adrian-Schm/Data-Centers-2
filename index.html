@@ -197,8 +197,9 @@
   .b-Delayed { background:#faeeda; color:#854f0b; }
   .b-Negative { background:#fcebeb; color:#a32d2d; }
   .b-Neutral { background:#f1efe8; color:#5f5e5a; }
-  .b-Planned { background:#e6f1fb; color:#185fa5; }
-  .b-Cancelled { background:#fbeaf0; color:#993556; }
+  .b-Planned { background:#e3f1fd; color:#1c6bb3; }
+  .b-Progress { background:#dde6ee; color:#0a2f54; }
+  .b-Cancelled { background:#fbe2e2; color:#d11f1f; }
   .metrics { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin: 12px 0; }
   .metric { background: var(--surface2); border-radius: var(--radius); padding: 8px 10px; }
   .ml { font-size: 11px; color: var(--text3); }
@@ -366,7 +367,7 @@
   .cs-metric-value { font-size: 13px; font-weight: 600; color: var(--text); margin-top: 1px; }
   .verdict { display: inline-block; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; margin-bottom: 8px; }
   .verdict.denied { background: #fcebeb; color: #a32d2d; }
-  .verdict.cancelled { background: #fbeaf0; color: #993556; }
+  .verdict.cancelled { background: #fbe2e2; color: #d11f1f; }
   .compare-table-section { margin: 2rem 0; }
   .compare-table-section h2 { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 14px; }
   .ct2 { width: 100%; border-collapse: collapse; font-size: 13px; }
@@ -846,12 +847,12 @@
     </div>
 
     <div class="md-legend">
-      <span class="md-legend-item"><span class="md-legend-dot" style="background:#185fa5"></span>Planned</span>
-      <span class="md-legend-item"><span class="md-legend-dot" style="background:#3b6d11"></span>Approved</span>
+      <span class="md-legend-item"><span class="md-legend-dot" style="background:#5f5e5a"></span>Proposed</span>
+      <span class="md-legend-item"><span class="md-legend-dot" style="background:#3a96e8"></span>Planned</span>
+      <span class="md-legend-item"><span class="md-legend-dot" style="background:#0a2f54"></span>In Progress</span>
       <span class="md-legend-item"><span class="md-legend-dot" style="background:#854f0b"></span>Delayed / Scaled Back</span>
-      <span class="md-legend-item"><span class="md-legend-dot" style="background:#993556"></span>Cancelled / Withdrawn</span>
-      <span class="md-legend-item"><span class="md-legend-dot" style="background:#a32d2d"></span>Denied</span>
-      <span class="md-legend-item"><span class="md-legend-dot" style="background:#5f5e5a"></span>Neutral</span>
+      <span class="md-legend-item"><span class="md-legend-dot" style="background:#3b6d11"></span>Completed</span>
+      <span class="md-legend-item"><span class="md-legend-dot" style="background:#d11f1f"></span>Canceled / Withdrawn</span>
     </div>
 
     <div class="md-layout">
@@ -966,8 +967,10 @@
       .db-metric.b-Positive  { background: #eaf3de; color: #3b6d11; border-color: #c5e0b4; }
       .db-metric.b-Negative  { background: #fcebeb; color: #a32d2d; border-color: #f5c6c6; }
       .db-metric.b-Delayed   { background: #faeeda; color: #854f0b; border-color: #f0d5a8; }
-      .db-metric.b-Cancelled { background: #fbeaf0; color: #993556; border-color: #f0c0d4; }
+      .db-metric.b-Cancelled { background: #fbe2e2; color: #d11f1f; border-color: #f0b3b3; }
       .db-metric.b-Neutral   { background: #f1efe8; color: #5f5e5a; border-color: #dddbd2; }
+      .db-metric.b-Planned   { background: #e3f1fd; color: #1c6bb3; border-color: #b9ddf7; }
+      .db-metric.b-Progress  { background: #dde6ee; color: #0a2f54; border-color: #b6c5d4; }
       .db-metric-status .db-ml { opacity: 0.7; color: inherit; font-weight: 700; }
       .db-metric-status .db-mv { color: inherit; font-weight: 700; }
       .db-sentiment-row { display: flex; gap: 28px; margin-bottom: 14px; flex-wrap: wrap; align-items: flex-end; }
@@ -1384,7 +1387,7 @@
               </tbody>
             </table>
 
-            <div style="margin-top:12px;padding:10px 12px;background:var(--surface2);border-radius:var(--radius);border-left:3px solid #993556;font-size:12px;color:var(--text2);line-height:1.6;">
+            <div style="margin-top:12px;padding:10px 12px;background:var(--surface2);border-radius:var(--radius);border-left:3px solid #d11f1f;font-size:12px;color:var(--text2);line-height:1.6;">
               <strong style="color:var(--text);">Framework verdict:</strong> Pause and organize first. At 83, Balico scores deep in the "pause" zone — the worst score across all five factors. Every dimension was working against the project simultaneously: severe resource demands, a gas plant, weak economic credibility, rural land mismatch, and no binding developer commitments. No realistic set of conditions could have rescued the proposal as designed.
             </div>
           </div>

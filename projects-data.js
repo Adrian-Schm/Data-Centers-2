@@ -3,23 +3,23 @@
 // Do not edit by hand.
 
 const PROJECTS_META = {
-  "generatedAt": "2026-06-08T15:58:20Z",
+  "generatedAt": "2026-06-08T16:40:55Z",
   "sourceFile": "DATABASE-DataCenter_Backlash.xlsx",
   "sheetsRead": [
     {
       "mainSheet": "Philadelphia Fed Region",
       "timelinesSheet": "PF Timelines",
-      "projectCount": 12,
-      "fullCount": 12
+      "projectCount": 11,
+      "fullCount": 11
     },
     {
       "mainSheet": "NC VA",
       "timelinesSheet": "NC VA Timelines",
-      "projectCount": 13,
+      "projectCount": 12,
       "fullCount": 9
     }
   ],
-  "droppedNoCoords": 6
+  "droppedNoCoords": 5
 };
 
 const PROJECTS = [
@@ -639,47 +639,6 @@ const PROJECTS = [
     ]
   },
   {
-    "id": "storage-data-center-project",
-    "name": "Storage Data Center Project",
-    "company": "N/A (County ordinance in anticipation of future data centers)",
-    "investmentB": "N/A",
-    "state": "PA",
-    "county": "Tioga",
-    "communities": "N/A",
-    "capacityMw": "N/A",
-    "acreage": "N/A",
-    "timelineStart": "N/A",
-    "timelineEnd": "N/A",
-    "status": null,
-    "resourceClaims": "N/A",
-    "energySources": "N/A",
-    "developerPromises": "N/A",
-    "concernsCategories": "Land, Water, Electricity, Climate",
-    "articulatedConcerns": "Community: Concerns regarding the absence of county-wide zoning and the rapid pace of data center development in neighboring areas have led Tioga County to implement an ordinance aimed at protecting environmental resources.",
-    "communityPosture": "Neutral",
-    "communityIntensity": "Moderate",
-    "communityActionDetails": "In response to potential data center growth, Tioga County has enacted an ordinance establishing zoning restrictions to limit development near residential areas and scenic landscapes.",
-    "developerAction": "N/A",
-    "monthRecorded": "2026-02-01",
-    "lat": 41.7691415727586,
-    "lng": -77.2443751321176,
-    "sources": {
-      "projectProposal": "https://www.tiogacountypa.us/getmedia/8f770a00-d107-488f-8a49-6a15b03a141a/Tioga-County-Data-Centers-Ordinance-Final-12-15-25.pdf",
-      "govtRecords": [],
-      "other": []
-    },
-    "stub": false,
-    "coordsPrecision": null,
-    "timeline": [
-      {
-        "date": "2026-02-10",
-        "label": "Tioga County passes data center ordinance",
-        "isProposal": true,
-        "source": "https://www.tiogacountypa.us/getmedia/8f770a00-d107-488f-8a49-6a15b03a141a/Tioga-County-Data-Centers-Ordinance-Final-12-15-25.pdf"
-      }
-    ]
-  },
-  {
     "id": "kingsboro-data-center-campus",
     "name": "Kingsboro Data Center Campus",
     "company": "Energy Storage Solutions, LLC",
@@ -869,7 +828,7 @@ const PROJECTS = [
     "acreage": 2200,
     "timelineStart": null,
     "timelineEnd": null,
-    "status": "Cancelled - Withdrawn",
+    "status": "Canceled / Withdrawn",
     "resourceClaims": "On-site gas powerplant included in construction",
     "energySources": null,
     "developerPromises": "390 jobs between dc and plant, +$50-184m in annual taxes",
