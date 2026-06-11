@@ -20,9 +20,15 @@ Run: python3 extract-projects.py
 import json
 import re
 import datetime
+import urllib.request
 from pathlib import Path
 
 import openpyxl
+try:
+    from shapely.geometry import shape, Point
+    HAS_SHAPELY = True
+except ImportError:
+    HAS_SHAPELY = False
 
 ROOT = Path(__file__).parent
 XLSX = ROOT / "DATABASE-DataCenter_Backlash.xlsx"
@@ -64,6 +70,56 @@ SOURCE_MAP = {
     "govtRecords": ["Govt Records"],
     "other": ["Source 3", "Source 4", "Source 5"],
 }
+
+
+# ── drought lookup ───────────────────────────────────────────────────
+
+def _latest_usdm_date():
+    """Return the most recent published USDM Tuesday date string (YYYYMMDD)."""
+    today = datetime.date.today()
+    # USDM releases every Tuesday (weekday 1); find last Tuesday
+    days_back = (today.weekday() - 1) % 7
+    candidate = today - datetime.timedelta(days=days_back)
+    # Walk back up to 4 weeks if today's release isn't up yet
+    for _ in range(4):
+        url = f"https://droughtmonitor.unl.edu/data/json/usdm_{candidate.strftime('%Y%m%d')}.json"
+        try:
+            with urllib.request.urlopen(url, timeout=10) as r:
+                if r.status == 200:
+                    return candidate.strftime('%Y%m%d'), json.loads(r.read())
+        except Exception:
+            pass
+        candidate -= datetime.timedelta(weeks=1)
+    return None, None
+
+
+def build_drought_lookup():
+    """Return a function drought_at(lat, lng) → 'D0'..'D4' or None."""
+    if not HAS_SHAPELY:
+        print("  ⚠ shapely not installed — skipping drought lookup (pip install shapely)")
+        return None, None
+
+    print("  Fetching USDM drought polygons…", end=" ", flush=True)
+    date_str, geojson = _latest_usdm_date()
+    if geojson is None:
+        print("failed (no data found)")
+        return None, None
+    print(f"using {date_str[:4]}-{date_str[4:6]}-{date_str[6:]}")
+
+    # Pre-build shapely geometries sorted by DM level (0→4)
+    features = sorted(geojson["features"], key=lambda f: f["properties"]["DM"])
+    polygons = [(f["properties"]["DM"], shape(f["geometry"])) for f in features]
+    DM_LABELS = {0: "D0", 1: "D1", 2: "D2", 3: "D3", 4: "D4"}
+
+    def drought_at(lat, lng):
+        pt = Point(lng, lat)
+        result = None
+        for dm, geom in polygons:
+            if geom.contains(pt):
+                result = dm  # higher DM wins; list is sorted ascending
+        return DM_LABELS.get(result) if result is not None else "None"
+
+    return drought_at, date_str
 
 
 # ── helpers ──────────────────────────────────────────────────────────
@@ -274,6 +330,8 @@ def attach_timelines(ws, projects):
 # ── main ─────────────────────────────────────────────────────────────
 
 def main():
+    drought_at, drought_date = build_drought_lookup()
+
     wb = openpyxl.load_workbook(XLSX, data_only=True)
     sheets = wb.worksheets
     if len(sheets) < 2:
@@ -300,6 +358,19 @@ def main():
     before = len(all_projects)
     all_projects = [p for p in all_projects if p.get("lat") is not None and p.get("lng") is not None]
     dropped = before - len(all_projects)
+
+    # Inject drought level right after coords
+    for p in all_projects:
+        dl = drought_at(p["lat"], p["lng"]) if drought_at else None
+        # Insert droughtLevel immediately after lng in the dict
+        items = list(p.items())
+        lng_idx = next((i for i, (k, _) in enumerate(items) if k == "lng"), None)
+        if lng_idx is not None:
+            items.insert(lng_idx + 1, ("droughtLevel", dl))
+            p.clear()
+            p.update(items)
+        else:
+            p["droughtLevel"] = dl
     if dropped:
         print(f"  ⚠ Dropped {dropped} project(s) without coordinates")
 
@@ -316,6 +387,7 @@ def main():
         "sourceFile": XLSX.name,
         "sheetsRead": pair_stats,
         "droppedNoCoords": dropped,
+        "droughtDate": drought_date,
     }
 
     js = (

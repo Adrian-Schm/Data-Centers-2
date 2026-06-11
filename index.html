@@ -368,6 +368,29 @@
   .verdict { display: inline-block; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; margin-bottom: 8px; }
   .verdict.denied { background: #fcebeb; color: #a32d2d; }
   .verdict.cancelled { background: #fbe2e2; color: #d11f1f; }
+  .verdict.built { background: #e1f5ee; color: #0f6e56; }
+  .verdict.stub { background: #f1efe8; color: #5f5e5a; }
+  /* Pair switcher */
+  .cs-pair-switch { display: inline-flex; gap: 4px; padding: 4px; background: var(--surface2); border-radius: var(--radius-lg); margin: 0 0 22px; flex-wrap: wrap; }
+  .cs-pair-btn { padding: 8px 16px; border: none; background: transparent; border-radius: var(--radius); font-size: 13px; color: var(--text2); cursor: pointer; font-family: inherit; }
+  .cs-pair-btn .cs-pair-sub { opacity: 0.6; }
+  .cs-pair-btn.active { font-weight: 600; background: var(--surface); color: var(--text); border: 1px solid var(--border2); box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+  .cs-pair-pane { display: none; }
+  .cs-pair-pane.active { display: block; }
+  .cs-header.built { background: #e1f5ee; border: 1px solid #9fe1cb; border-bottom: none; }
+  .cs-header.built h3 { color: #0f6e56; }
+  .cs-header.built p { color: #0f6e56; opacity: 0.8; }
+  .cs-header.stub { background: #f1efe8; border: 1px solid #d3d1c7; border-bottom: none; }
+  .cs-header.stub h3 { color: #5f5e5a; }
+  .cs-header.stub p { color: #5f5e5a; opacity: 0.85; }
+  .cs-stub-note { font-size: 12px; color: var(--text3); font-style: italic; line-height: 1.6; }
+  .cs-db-link { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent-mid); background: none; border: none; padding: 0; margin-bottom: 14px; cursor: pointer; font-family: inherit; text-decoration: none; }
+  .cs-db-link:hover { text-decoration: underline; }
+  .cs-map { width: 100%; height: 180px; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 6px; }
+  .cs-map iframe { width: 100%; height: 100%; border: 0; display: block; }
+  .cs-map-cap { font-size: 11px; color: var(--text3); margin: 0 0 16px; }
+  .cs-map-cap a { color: var(--accent-mid); text-decoration: none; }
+  .cs-map-cap a:hover { text-decoration: underline; }
   .compare-table-section { margin: 2rem 0; }
   .compare-table-section h2 { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 14px; }
   .ct2 { width: 100%; border-collapse: collapse; font-size: 13px; }
@@ -396,7 +419,7 @@
       <button class="tab-btn tab-interactive" onclick="switchTab('database', this)">Project Database</button>
       <button class="tab-btn" onclick="switchTab('casestudy', this)">Case Studies</button>
       <button class="tab-btn tab-interactive" onclick="switchTab('decision', this)">Decision Framework</button>
-      <button class="tab-btn" onclick="switchTab('pathforward', this)">A Path Forward</button>
+      <button class="tab-btn" onclick="switchTab('duke', this)">Duke Research</button>
     </nav>
     <button class="hamburger" onclick="toggleMenu()" aria-label="Menu" aria-expanded="false">
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -493,9 +516,9 @@
           <div class="hnb-title">Case Studies</div>
           <div class="hnb-desc">Read the stories behind two specific projects that faced pushback</div>
         </div>
-        <div class="home-nav-box" onclick="switchTabById('pathforward')">
+        <div class="home-nav-box" onclick="switchTabById('context'); setTimeout(function(){scrollToSec('part-2');}, 80)">
           <div class="hnb-title">A Path Forward</div>
-          <div class="hnb-desc">Discussing specific policy reforms</div>
+          <div class="hnb-desc">Specific policy reforms — now in Background &amp; Policy, Part II</div>
         </div>
       </div>
 
@@ -526,11 +549,54 @@
   <div class="page-inner">
     <div class="page-intro">
       <h1>Data Center Expansion: National Priorities, Local Concerns</h1>
+      <p>From the national stakes and community concerns through energy constraints, the current policy landscape, and a proposed path forward.</p>
     </div>
+
+    <style>
+      .toc { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px 22px; margin: 0 0 30px; }
+      .toc-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 28px; }
+      @media (max-width: 700px) { .toc-cols { grid-template-columns: 1fr; } }
+      .toc-group-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text3); margin: 4px 0 8px; }
+      .toc-link { display: block; background: none; border: none; padding: 4px 0; font-family: inherit; font-size: 14px; color: var(--accent-mid); text-align: left; cursor: pointer; line-height: 1.4; }
+      .toc-link:hover { text-decoration: underline; }
+      .toc-num { color: var(--text3); font-weight: 600; margin-right: 7px; }
+      .part-divider { margin: 38px 0 24px; padding-top: 22px; border-top: 2px solid var(--accent); }
+      .part-divider:first-child { margin-top: 0; }
+      .part-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-mid); }
+      .part-title { font-size: 22px; font-weight: 700; color: var(--text); margin: 4px 0 0; }
+      .part-lede { font-size: 15px; color: var(--text2); line-height: 1.65; margin: 10px 0 0; max-width: 720px; }
+      .prose-section h2[id], .part-divider[id] { scroll-margin-top: 90px; }
+    </style>
+
+    <nav class="toc" aria-label="Section contents">
+      <div class="toc-cols">
+        <div>
+          <div class="toc-group-label">Part I · Background &amp; Policy</div>
+          <button class="toc-link" onclick="scrollToSec('sec-1')"><span class="toc-num">1</span>Introduction</button>
+          <button class="toc-link" onclick="scrollToSec('sec-2')"><span class="toc-num">2</span>The Macro View: National Security &amp; AI Competitiveness</button>
+          <button class="toc-link" onclick="scrollToSec('sec-3')"><span class="toc-num">3</span>The Micro View: Community Concerns</button>
+          <button class="toc-link" onclick="scrollToSec('sec-4')"><span class="toc-num">4</span>Energy Constraints and Utility Costs</button>
+          <button class="toc-link" onclick="scrollToSec('sec-5')"><span class="toc-num">5</span>Current Policy Landscape</button>
+        </div>
+        <div>
+          <div class="toc-group-label">Part II · A Path Forward</div>
+          <button class="toc-link" onclick="scrollToSec('sec-6')"><span class="toc-num">6</span>Three Policy Reforms</button>
+          <button class="toc-link" onclick="scrollToSec('sec-7')"><span class="toc-num">7</span>Addressing the Counterargument</button>
+          <button class="toc-link" onclick="scrollToSec('sec-8')"><span class="toc-num">8</span>Connection to the Decision Framework</button>
+          <button class="toc-link" onclick="scrollToSec('sec-9')"><span class="toc-num">9</span>Why This Matters Now</button>
+          <button class="toc-link" onclick="scrollToSec('sec-10')"><span class="toc-num">10</span>Conclusion</button>
+        </div>
+      </div>
+    </nav>
 
     <div class="prose-section">
 
-      <h2>1. Introduction</h2>
+      <div class="part-divider">
+        <div class="part-eyebrow">Part I</div>
+        <div class="part-title">Background &amp; Policy</div>
+      </div>
+
+      <h2 id="sec-1">1. Introduction</h2>
       <p>Data centers are the physical infrastructure that stores, processes, and transmits the data underlying everything from cloud storage to artificial intelligence. Technology companies have poured record investment into new construction: U.S. data center construction spending reached approximately $40 billion at a seasonally adjusted annual rate in June 2025, a 30% increase from the previous year, following a 50% surge in 2024.<sup class="fn" title="See footnote 1">[1]</sup></p>
       <p>The primary driver is <strong>artificial intelligence</strong>. Training and operating large language models requires extraordinary concentrations of computing power, which must be physically housed in data centers. As AI models grow in size and complexity, computing demand increases exponentially rather than linearly, placing pressure on U.S. energy systems and host communities.</p>
       <p>In 2023, U.S. data centers consumed approximately 176 TWh of electricity, equivalent to the annual usage of 16.3 million households.<sup class="fn" title="See footnote 2">[2]</sup> Their share of national electricity consumption is projected to grow from 4.4% in 2023 to between 6.7% and 12% by 2028. At the same time, nearly 3,000 new data centers are planned or under construction, roughly doubling existing capacity.<sup class="fn" title="See footnote 3">[3]</sup></p>
@@ -542,12 +608,12 @@
         <div class="stat-card"><div class="stat-num">$40B</div><div class="stat-num" style="font-size:13px;color:var(--text2);font-weight:400">annual construction rate</div><div class="stat-label">Record U.S. data center construction spending as of mid-2025</div><div class="source-note">Bank of America Institute / Reuters, 2025</div></div>
       </div>
 
-      <h2>2. The Macro View: National Security and AI Competitiveness</h2>
+      <h2 id="sec-2">2. The Macro View: National Security and AI Competitiveness</h2>
       <p>From a federal perspective, data centers are strategic infrastructure. Any bottleneck in this chain (regulatory delays, energy shortages, or local opposition) could be detrimental to U.S. national security. This framing is heavily influenced by competition with China. If the U.S. does not build enough data centers and the energy systems to power them, it could fall behind in the AI race. In 2024, China added approximately 429 GW of new power generation capacity, compared to just 51 GW added in the United States.<sup class="fn" title="See footnote 4">[4]</sup> OpenAI has warned that energy constraints directly threaten U.S. leadership in AI, calling for rapid expansion of domestic energy capacity.</p>
       <p>The 2025 executive order “Accelerating Federal Permitting of Data Center Infrastructure” directs agencies to expedite permitting and environmental review for projects deemed critical to national security.<sup class="fn" title="See footnote 5">[5]</sup> The Department of Energy has also proposed expanding the Federal Energy Regulatory Commission's authority to streamline interstate grid access for large data center loads.<sup class="fn" title="See footnote 12">[12]</sup></p>
       <div class="callout"><p>By 2028, individual AI training runs could require up to 1 GW of power in a single location, roughly equivalent to the output of a large nuclear reactor. Global AI data center power demand could reach 327 GW by 2030, compared to total global data center capacity of just 88 GW in 2022.<sup class="fn" title="See footnote 6">[6]</sup> <span class="source-note"> RAND Corporation, 2025</span></p></div>
 
-      <h2>3. The Micro View: Community Concerns</h2>
+      <h2 id="sec-3">3. The Micro View: Community Concerns</h2>
       <p>At the local level, data centers are not seen as strategic infrastructure but as large industrial projects with significant resource demands. As development spreads beyond established hubs in Northern Virginia and Texas, communities have raised concerns about electricity costs, water usage, noise, land use, and environmental impacts.</p>
       <p>By mid-2025, approximately two-thirds of tracked data center projects valued at $98 billion across 11 states had been delayed or stalled due to community and state-level opposition.<sup class="fn" title="See footnote 7">[7]</sup> Several counties in North Carolina have enacted temporary moratoriums on new data center development.<sup class="fn" title="See footnote 8">[8]</sup></p>
       <p>This creates a direct conflict between national priorities for rapid expansion and local resistance driven by infrastructure constraints and perceived unequal distribution of costs and benefits. The intensity of opposition varies by context: established data center hubs often have more experience, institutional capacity, and negotiating leverage, while emerging markets face greater uncertainty and pushback.</p>
@@ -586,7 +652,7 @@
     </div>
 
 
-      <h2>4. Energy Constraints and Utility Costs</h2>
+      <h2 id="sec-4">4. Energy Constraints and Utility Costs</h2>
       <p>The U.S. electrical grid cannot absorb projected data center growth without significant expansion. Current data center capacity is approximately 51 GW, while an additional 44 GW will be required by 2028. However, only about 25 GW is expected to come online within that timeframe, leaving a gap of roughly 19 GW.<sup class="fn" title="See footnote 9">[9]</sup></p>
       <p>The interconnection process is a major bottleneck. In PJM, the largest U.S. grid operator, interconnection timelines now exceed eight years, with similar delays of four to seven years common in Virginia. These delays reflect both the scale of demand and the limitations of aging infrastructure.<sup class="fn" title="See footnote 9">[9]</sup></p>
       <div class="callout"><p>Research suggests that relatively small operational adjustments could significantly increase grid capacity. Reducing data center load during peak periods by just 0.25% of the time could allow approximately 76 GW of additional demand to be accommodated without equivalent new generation.<sup class="fn" title="See footnote 9">[9]</sup> <span class="source-note"> Financial Times / Duke University, 2025</span></p></div>
@@ -605,7 +671,7 @@
   <div class="source-note">Carnegie Mellon University, 2025</div>
 </div>
 
-      <h2>5. Current Policy Landscape</h2>
+      <h2 id="sec-5">5. Current Policy Landscape</h2>
       <p class="policy-intro">Federal, state, and local policy currently pulls in different directions on data center development. Federal action has broadly accelerated permitting and grid interconnection to match the pace of AI investment, while North Carolina and Virginia communities are increasingly conditioning, limiting, or rejecting projects through moratoriums, zoning denials, and rate-allocation challenges. The table below summarizes the major policies shaping this landscape and the direction each one pushes.</p>
 
       <table class="policy-table">
@@ -716,6 +782,76 @@
 
         </tbody>
       </table>
+
+
+      <div class="part-divider" id="part-2">
+        <div class="part-eyebrow">Part II</div>
+        <div class="part-title">A Path Forward: Reconciling Speed and Community Stability</div>
+        <p class="part-lede">Local legitimacy has increasingly become the bottleneck for data center construction. A sustainable path forward requires the federal government to condition grid access, standardize operational practices, and coordinate across levels of government.</p>
+      </div>
+
+      <h2 id="sec-6">6. Three Policy Reforms</h2>
+      <p>Three coordinated reforms would shift the bottleneck from federal approval to community acceptance: a state authority to standardize siting, federal operational and grid-flexibility standards, and multilevel coordination to build local capacity.</p>
+
+      <div class="policy-boxes">
+        <div class="policy-box">
+          <div class="pb-number">1</div>
+          <div class="pb-title">State Data Center Authority</div>
+          <div class="pb-content">
+            <p><strong>The Policy:</strong> Each state establishes a permanent Data Center Authority (DCA) to manage siting, environmental review, and community standards for large facilities. The authority integrates staff from energy, water, land use, and community development. It develops binding standards for siting distances from residential areas, water usage, operational hours, and local benefit agreements. Federal permits are contingent on state-level approval from the DCA.</p>
+            <p><strong>The Problem It Solves:</strong> Currently, data center siting decisions are fragmented across county and local planning boards with inconsistent standards and expertise. Tarboro was denied on residential adjacency; Kingsboro (same developer, same county) was approved with no opposition. This inconsistency creates unpredictability for developers and fear for communities. Rural communities like Pittsylvania lack institutional capacity to evaluate hyperscale projects, leading to blanket opposition rather than negotiated approval.</p>
+            <p><strong>Why It Works:</strong> A state authority centralizes expertise, standardizes evaluation, and creates predictable rules. It prevents race-to-the-bottom competition where counties undercut each other for data center tax revenue by waiving environmental protections. It also prevents not-in-my-backyard (NIMBY) blocking where one locality's denial simply pushes the project to a less-organized neighbor. With clear siting standards (minimum distances from homes, water availability, grid proximity, environmental constraints), communities know what is acceptable and what is not. The authority becomes a convening body that negotiates Community Benefits Agreements (CBAs), ensures equitable impact distribution, and enforces operational standards post-approval.</p>
+            <p><strong>For communities:</strong> A state authority means your community is not alone in evaluating hyperscale development. You benefit from state-level expertise, standardized environmental review, and guaranteed enforcement of conditions. You have more leverage, since developers cannot shop around for the most permissive county.</p>
+          </div>
+        </div>
+
+        <div class="policy-box">
+          <div class="pb-number">2</div>
+          <div class="pb-title">Operational Efficiency &amp; Grid Flexibility Standards</div>
+          <div class="pb-content">
+            <p><strong>The Policy:</strong> The Department of Energy establishes federal standards for (1) water usage effectiveness (WUE), power usage effectiveness (PUE), and cooling methods; (2) demand-response capability requiring data centers to curtail non-critical loads during peak demand or grid emergencies. Projects meeting these standards receive priority grid interconnection and federal approval. FERC and state Public Utility Commissions enforce curtailment requirements and penalize non-compliance.</p>
+            <p><strong>The Problem It Solves:</strong> Two interrelated crises: (1) Resource unpredictability: a single large data center consumes 60,000+ liters of water daily and 69 GWh of electricity annually, with no enforceable limits. Communities fear infrastructure overwhelm, driving moratoriums. (2) Grid inflexibility: interconnection timelines reach 4-7 years because utilities cannot accommodate always-on loads. An additional 44 GW of data center demand is needed by 2028, but only 25 GW is projected to come online, leaving a 19 GW shortfall. Inflexible loads worsen this bottleneck.</p>
+            <p><strong>Why It Works:</strong> Clear standards address both problems simultaneously. For water/energy: measured efficiency expectations and predictable limits give communities concrete information to evaluate impacts. For grid: most computing is not time-critical. AI training and bulk processing can shift to off-peak hours with minimal operational cost. Research shows curtailing load just 0.25% of the time could allow the grid to accommodate an additional 76 GW of demand without new generation capacity. Data centers become grid resources rather than grid liabilities.</p>
+            <p><strong>For communities:</strong> Standardized limits protect local infrastructure. Demand-response capability means more stable electricity prices (data centers help balance peak load rather than worsen it). Flexible data centers reduce pressure for emergency grid upgrades that would otherwise be socialized across all ratepayers. Communities approve projects knowing they have predictable, enforceable operational boundaries.</p>
+          </div>
+        </div>
+
+        <div class="policy-box">
+          <div class="pb-number">3</div>
+          <div class="pb-title">Multilevel Coordination</div>
+          <div class="pb-content">
+            <p><strong>The Policy:</strong> The federal government provides state and local jurisdictions with technical assistance, impact modeling tools, and historical data on data center effects. Communities use this to model electricity price effects, water stress, and grid reliability risks for proposed projects.</p>
+            <p><strong>The Problem It Solves:</strong> Federal expedited permitting (issued July 2025) has not accelerated projects because it ignores the real bottleneck: local legitimacy. Communities block projects even when federally approved because they lack the technical capacity to evaluate impacts.</p>
+            <p><strong>Why It Works:</strong> Communities are not philosophically opposed to data centers; they are opposed to being blindsided by unpredictable costs and impacts. Federal technical support transforms local decision-making from reactive (opposing what they don't understand) to proactive (negotiating from a position of knowledge). When state and local officials can model impacts, they can set terms. When they set terms, projects move forward because communities feel heard and protected.</p>
+            <p><strong>For communities:</strong> Federal-provided data and modeling tools enable informed decisions, shift power dynamics toward communities, and create accountability mechanisms that build trust.</p>
+          </div>
+        </div>
+      </div>
+
+      <h2 id="sec-7">7. Addressing the Counterargument</h2>
+      <p>Federal officials and industry partners present a compelling case: “Slower, more community-responsive permitting will delay AI infrastructure and compromise U.S. competitiveness. China added 429 GW of new generation capacity in 2024 while the U.S. added only 51 GW, and every month of delay costs the U.S. leadership in AI.”</p>
+      <p>This concern is legitimate. The U.S. is in a genuine competition for AI dominance, and energy constraints are real bottlenecks. These policies address why fast-track permitting is failing in the first place.</p>
+      <p>Federal expedited permitting has existed since July 2025, yet two-thirds of data center projects remain stalled. The problem is not approval speed but <strong>community legitimacy</strong>: federal agencies can issue permits, but communities continue to block projects or threaten appeals, moratoriums, and legislative action even when permits are granted, because they do not trust the cost-benefit calculation. Forcing faster permitting without addressing this trust deficit will not accelerate deployment; it will trigger more community opposition, appeals, and backlash.</p>
+      <p><strong>These three reforms reverse that dynamic.</strong> By conditioning grid access on flexibility, standardizing efficiency, and supporting local planning, they give communities the tools to evaluate and negotiate projects while giving developers clearer rules to follow. Projects that meet these standards face less opposition because they arrive with guardrails communities helped define. The U.S. gets the infrastructure it needs while communities gain stability, and deployment actually accelerates because the bottleneck shifts from federal approval to community acceptance, which happens faster when communities feel heard.</p>
+
+      <h2 id="sec-8">8. Connection to the Decision Framework</h2>
+      <p>The Decision Framework helps communities <strong>evaluate</strong> specific projects. These policy reforms create the <strong>environment</strong> in which good decisions can be made. With a State Data Center Authority, Operational Efficiency &amp; Grid Flexibility Standards, and Multilevel Coordination in place, a community evaluating a data center proposal will have:</p>
+      <ul style="margin: 12px 0 0 1.2rem; color: var(--text2);">
+        <li style="margin-bottom: 6px;">State-level siting standards that prevent race-to-the-bottom competition and ensure consistent evaluation</li>
+        <li style="margin-bottom: 6px;">Measurable efficiency standards for water, electricity, and grid demand-response</li>
+        <li style="margin-bottom: 6px;">Federal technical data on impacts and state coordination mechanisms</li>
+        <li>Leverage to negotiate binding Community Benefits Agreements with state enforcement</li>
+      </ul>
+      <p style="margin-top: 12px;">When communities use the Decision Framework with these guardrails in place, they can figure out what works best for them with state and regulatory backing. Explore it on the <button style="background:none;border:none;padding:0;color:#185fa5;font-size:inherit;cursor:pointer;font-family:inherit;text-decoration:underline;" onclick="switchTabById('decision')">Decision Framework</button> tab.</p>
+
+      <h2 id="sec-9">9. Why This Matters Now</h2>
+      <p>The cases in this tool show what happens when these structures are missing. Tarboro was a technically sound project with real economic benefits, but it failed because the community experienced the process as imposition rather than partnership. The developer lost the deal, federal agencies lost a project they considered strategic, and the grid lost 300 MW of planned capacity along with it.</p>
+      <p>Conversely, Northern Virginia's established data center hubs approve projects at higher rates, not because they love data centers but because they have institutional capacity, historical experience, and negotiated agreements.</p>
+
+      <h2 id="sec-10">10. Conclusion</h2>
+      <p>The United States cannot sacrifice AI competitiveness for local opposition. It also cannot sacrifice local stability and trust for federal speed. Data center deployment is not a federal-versus-local question. It is a federal-and-local question.</p>
+      <p>A State Data Center Authority, Operational Efficiency &amp; Grid Flexibility Standards, and Multilevel Coordination bridge that gap. They enable federal policy to move at the speed of AI growth while enabling communities to move at the pace of informed decision-making. Together, they transform the current bottleneck into a pipeline, and in doing so, they protect both national interests and community stability.</p>
+      <p>The path forward is not faster federal permitting. It is smarter governance: state-level siting authority that coordinates with federal requirements, operational standards that are clear and enforceable, and multilevel coordination that shares information and builds capacity. The path forward starts with policymaking that includes all stakeholders from the start.</p>
 
 
 
@@ -984,10 +1120,22 @@
       .db-intensity-moderate { background:#bfdbfe; color:#1e3a8a; border-color:#93c5fd; }
       .db-intensity-high     { background:#93c5fd; color:#1e3a8a; border-color:#60a5fa; }
       .db-metric.db-full { grid-column: span 3; }
+      .db-metric.db-two-thirds { grid-column: span 2; }
       .db-ml { font-size: 11px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; }
       .db-mv { font-size: 17px; font-weight: 500; }
       .db-mv.text { font-size: 13px; font-weight: 400; line-height: 1.5; color: var(--text2); }
       .db-mv.empty { color: var(--text3); font-weight: 400; font-style: italic; font-size: 12px; }
+      .drought-inline { font-size: 13px; }
+      .info-tip { position: relative; display: inline-flex; cursor: default; margin-left: 4px; vertical-align: -2px; user-select: none; opacity: 0.5; transition: opacity .1s; }
+      .info-tip:hover, .info-tip:focus { opacity: 1; outline: none; }
+      .info-tip.active { opacity: 1; }
+      .info-tip-text { display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); width: 220px; background: var(--text); color: var(--surface); font-size: 11px; font-weight: 400; line-height: 1.5; padding: 8px 10px; border-radius: var(--radius); text-transform: none; letter-spacing: 0; z-index: 50; pointer-events: none; }
+      .info-tip-text a { color: #93c5fd; }
+      .info-tip:hover .info-tip-text,
+      .info-tip:focus .info-tip-text,
+      .info-tip.active .info-tip-text { display: block; pointer-events: auto; }
+      .drought-bar-track { display: flex; gap: 2px; width: 100%; }
+      .drought-seg { flex: 1; height: 4px; border-radius: 1px; box-shadow: 0 0 0 0.5px var(--border2); }
 
       .db-map-col { display: flex; flex-direction: column; gap: 8px; height: 100%; }
       .db-loc-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
@@ -1030,18 +1178,18 @@
       .db-ext-icon { display: inline-block; width: 13px; height: 13px; vertical-align: middle; margin-right: 4px; opacity: 0.6; }
       .db-field-empty { font-size: 13px; color: var(--text3); font-style: italic; }
       .db-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
-      .db-chip { font-size: 12px; padding: 4px 10px; border-radius: 4px; font-weight: 600; }
-      .db-chip-air      { background: #dbeafe; color: #1e40af; }
-      .db-chip-noise    { background: #fef3c7; color: #92400e; }
-      .db-chip-light    { background: #ede9fe; color: #5b21b6; }
-      .db-chip-water    { background: #cffafe; color: #0e7490; }
-      .db-chip-land     { background: #d6efdd; color: #166534; }
-      .db-chip-env      { background: #dcfce7; color: #15803d; }
-      .db-chip-climate  { background: #d1fae5; color: #065f46; }
-      .db-chip-econ     { background: #fef9c3; color: #854d0e; }
-      .db-chip-qol      { background: #fce7f3; color: #9d174d; }
-      .db-chip-culture  { background: #ffedd5; color: #9a3412; }
-      .db-chip-default  { background: #f1f0ed; color: #4b4a47; }
+      .db-chip { font-size: 12px; padding: 4px 10px; border-radius: 4px; font-weight: 600; border: 1px solid transparent; }
+      .db-chip-air      { background: #dbeafe; color: #1e40af; border-color: #bfdbfe; }
+      .db-chip-noise    { background: #fef3c7; color: #92400e; border-color: #fde68a; }
+      .db-chip-light    { background: #ede9fe; color: #5b21b6; border-color: #ddd6fe; }
+      .db-chip-water    { background: #cffafe; color: #0e7490; border-color: #a5f3fc; }
+      .db-chip-land     { background: #d6efdd; color: #166534; border-color: #bbddc7; }
+      .db-chip-env      { background: #dcfce7; color: #15803d; border-color: #bbf7d0; }
+      .db-chip-climate  { background: #d1fae5; color: #065f46; border-color: #a7f3d0; }
+      .db-chip-econ     { background: #fef9c3; color: #854d0e; border-color: #fef08a; }
+      .db-chip-qol      { background: #fce7f3; color: #9d174d; border-color: #fbcfe8; }
+      .db-chip-culture  { background: #ffedd5; color: #9a3412; border-color: #fed7aa; }
+      .db-chip-default  { background: #f1f0ed; color: #4b4a47; border-color: #dddbd2; }
 
       .db-source-list { display: flex; flex-direction: column; gap: 6px; }
       .db-source-list a { color: var(--accent-mid); text-decoration: none; font-size: 12px; display: inline-flex; align-items: center; gap: 6px; word-break: break-all; }
@@ -1085,8 +1233,15 @@
   <div class="page-inner">
     <div class="page-intro">
       <h1>Comparative Case Studies</h1>
-      <p>Two data center proposals, one in North Carolina, one in Virginia. Both were denied or withdrawn following community opposition, making them the clearest illustrations of what drives backlash and what communities can do about it.</p>
+      <p>Pick a pair to compare. Each pair groups two projects that illuminate the same dynamic — from organized denials to quiet, low-opposition builds.</p>
     </div>
+
+    <div class="cs-pair-switch" role="tablist">
+      <button class="cs-pair-btn active" onclick="switchPair('pair1', this)">Pair 1 · Organized denials <span class="cs-pair-sub">(NC vs VA)</span></button>
+      <button class="cs-pair-btn" onclick="switchPair('pair2', this)">Pair 2 · Quiet builds <span class="cs-pair-sub">(Cumulus vs Windstream)</span></button>
+    </div>
+
+    <div id="cs-pair1" class="cs-pair-pane active">
 
     <div class="cs-layout">
       <!-- NC COLUMN -->
@@ -1096,6 +1251,8 @@
           <p>Energy Storage Solutions, LLC · Edgecombe County, NC · Permit denied September 2025</p>
         </div>
         <div class="cs-body">
+          <button class="cs-db-link" onclick="dbOpenProject('tarboro-data-center-campus')">View full record in database →</button>
+          <div class="cs-map"><iframe loading="lazy" title="Location of Tarboro Data Center Campus" src="https://www.openstreetmap.org/export/embed.html?bbox=-77.6387%2C35.8652%2C-77.5187%2C35.9452&layer=mapnik&marker=35.9052%2C-77.5787"></iframe></div>
 
           <div class="cs-section">
             <div class="cs-section-label">Project Profile</div>
@@ -1151,6 +1308,8 @@
           <p>Balico · Pittsylvania County, VA · Proposal withdrawn April 2025</p>
         </div>
         <div class="cs-body">
+          <button class="cs-db-link" onclick="dbOpenProject('balico-data-center-megacampus')">View full record in database →</button>
+          <div class="cs-map"><iframe loading="lazy" title="Location of Balico Data Center Megacampus" src="https://www.openstreetmap.org/export/embed.html?bbox=-79.4500%2C36.7640%2C-79.3300%2C36.8440&layer=mapnik&marker=36.8040%2C-79.3900"></iframe></div>
 
           <div class="cs-section">
             <div class="cs-section-label">Project Profile</div>
@@ -1399,6 +1558,117 @@
         <p style="font-size:13px;color:var(--text);line-height:1.65;margin:0;">A 20-point gap separates Tarboro (63) from Balico (83). Tarboro was recoverable — a different site, better buffering, or earlier binding commitments could have shifted the outcome. Balico was not: the scale mismatch and on-site fossil plant created pressure that no set of conditions could fully absorb. The framework predicts both denials, but for different reasons and with different implications for what a developer could have done differently. Try the <button style="background:none;border:none;padding:0;color:#185fa5;font-size:13px;cursor:pointer;font-family:inherit;text-decoration:underline;" onclick="switchTabById('decision')">Decision Framework</button> to test your own scenario.</p>
       </div>
     </div>
+    </div><!-- /#cs-pair1 -->
+
+    <div id="cs-pair2" class="cs-pair-pane">
+      <div class="cs-layout">
+        <!-- CUMULUS COLUMN -->
+        <div class="cs-col">
+          <div class="cs-header built">
+            <h3>Cumulus Hyperscale Data Center Campus</h3>
+            <p>Talen Energy / AWS · Luzerne County, PA · Built 2021, expanding 2026</p>
+          </div>
+          <div class="cs-body">
+            <button class="cs-db-link" onclick="dbOpenProject('cumulus-hyperscale-data-center-campus')">View full record in database →</button>
+            <div class="cs-map"><iframe loading="lazy" title="Location of Cumulus Hyperscale Data Center Campus" src="https://www.openstreetmap.org/export/embed.html?bbox=-76.2035%2C41.0440%2C-76.0835%2C41.1240&layer=mapnik&marker=41.0840%2C-76.1435"></iframe></div>
+
+            <div class="cs-section">
+              <div class="cs-section-label">Project Profile</div>
+              <div class="cs-metrics">
+                <div class="cs-metric"><div class="cs-metric-label">Investment</div><div class="cs-metric-value">$650M</div></div>
+                <div class="cs-metric"><div class="cs-metric-label">Capacity</div><div class="cs-metric-value">960 MW</div></div>
+                <div class="cs-metric"><div class="cs-metric-label">Acreage</div><div class="cs-metric-value">1,200 + 1,700</div></div>
+                <div class="cs-metric"><div class="cs-metric-label">Status</div><div class="cs-metric-value">Built / Expanding</div></div>
+              </div>
+              <p>In 2021, Cumulus Data, a subsidiary of Talen Energy, developed a hyperscale data center campus adjacent to the Susquehanna nuclear power plant in Pennsylvania. Amazon Web Services (AWS) acquired the facility in 2024 for $650 million. Building on the project's success, Blackstone-owned QTS purchased approximately 1,700 acres on behalf of AWS in 2026 to support a major campus expansion that will continue to leverage power from Talen's adjacent nuclear facility.</p>
+              <p>The project is notable for its direct connection to a nuclear power plant through a dedicated interconnection arrangement, making it one of the most prominent examples of data center development paired with carbon-free baseload generation.</p>
+            </div>
+
+            <div class="cs-section">
+              <div class="cs-section-label">Local Context</div>
+              <p>The AWS campus is located along the Susquehanna River in Luzerne County, approximately seven miles east of Berwick, Pennsylvania. Its rural setting, relatively low population density, and proximity to an existing nuclear generation facility have limited community concerns related to quality of life and environmental impacts compared with similar projects in more densely populated areas.</p>
+              <p>In March 2026, Times Leader reported that Blackstone QTS had acquired 96 properties totaling approximately 1,700 acres adjacent to the Susquehanna power station and existing AWS campus. The purchases were part of one of the largest land acquisition efforts for data center development in the United States and is expected to support construction of a campus containing 12 to 17 data center buildings.</p>
+              <p>The Salem Township Planning Commission has approved rezoning, lot consolidation, and road modification plans to facilitate development. QTS has cited the success of existing facilities, access to reliable nuclear power, and Pennsylvania's data center-friendly policy environment as key factors driving the expansion.</p>
+            </div>
+
+            <div class="cs-section">
+              <div class="cs-section-label">Developer Promises vs. Community Concerns</div>
+              <p><strong>Promises:</strong> When the original Cumulus data center was announced in 2021, Talen Energy promoted the project as a way to diversify revenue streams and create new growth opportunities beyond traditional power generation. During the current expansion effort, Blackstone-owned QTS has emphasized its commitment to working closely with local officials and residents throughout the planning and development process.</p>
+              <p><strong>Community concerns:</strong> Residents have expressed frustration with the public engagement process surrounding the 2026 expansion. Critics argue that opportunities for public comment have been limited, particularly during Salem Township Planning Commission meetings that approved the consolidation of QTS-owned land. Concerns have focused less on the project's direct impacts and more on transparency and public participation in decision-making.</p>
+            </div>
+
+            <div class="cs-section">
+              <div class="cs-section-label">What happened/developments</div>
+              <p>In 2024, American Electric Power (AEP) and Exelon filed a complaint with the Federal Energy Regulatory Commission (FERC), arguing that an expanded interconnection agreement between AWS and Talen would burden customers with an additional $140 million in costs. FERC rejected the arrangement, requiring AWS to rely on the regional transmission grid rather than receive power through the expanded direct connection to the Susquehanna nuclear plant.</p>
+              <p>The Salem Township Planning Commission continues to review and approve plans for the 2026 data center development, including the May 2026 approval of road modifications.</p>
+            </div>
+
+            <div class="cs-section">
+              <div class="cs-section-label">Outcome and Current Status</div>
+              <span class="verdict built">Built · Expanding</span>
+              <p>Permits for the 2026 project continue to be approved by the Salem Township Planning Commission. A comprehensive project timeline has not yet been made publicly available.</p>
+            </div>
+
+            <div class="cs-section">
+              <div class="cs-section-label">Key Takeaways</div>
+              <p>The Cumulus project illustrates a distinctive approach to data center development. As one of the few major facilities originally developed by an energy company subsidiary, it demonstrates how strategic location, access to dedicated power generation, and large-scale land acquisition can reduce local opposition and support continued campus expansion. Once completed, the AWS campus is expected to be among the largest data center developments in the United States. The project also raises important questions about the extent to which data centers should be permitted to draw from adjacent power sources and how their economic and energy impacts may extend beyond the communities that directly host them.</p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- WINDSTREAM COLUMN (placeholder) -->
+        <div class="cs-col">
+          <div class="cs-header stub">
+            <h3>Windstream Ephrata Data Center</h3>
+            <p>Windstream / Uniti · Lancaster County, PA · Acquired 2009</p>
+          </div>
+          <div class="cs-body">
+            <button class="cs-db-link" onclick="dbOpenProject('windstream-ephrata-data-center')">View full record in database →</button>
+            <div class="cs-map"><iframe loading="lazy" title="Location of Windstream Ephrata Data Center" src="https://www.openstreetmap.org/export/embed.html?bbox=-76.2379%2C40.1299%2C-76.1179%2C40.2099&layer=mapnik&marker=40.1699%2C-76.1779"></iframe></div>
+
+            <div class="cs-section">
+              <div class="cs-section-label">Project Profile</div>
+              <div class="cs-metrics">
+                <div class="cs-metric"><div class="cs-metric-label">Investment</div><div class="cs-metric-value">Not Public</div></div>
+                <div class="cs-metric"><div class="cs-metric-label">Capacity</div><div class="cs-metric-value">725 kW</div></div>
+                <div class="cs-metric"><div class="cs-metric-label">Size</div><div class="cs-metric-value">5,000 sq ft</div></div>
+                <div class="cs-metric"><div class="cs-metric-label">Status</div><div class="cs-metric-value">Completed</div></div>
+              </div>
+              <p>The Windstream Ephrata data center sits at 140 Akron Road in Ephrata, PA. It is a colocation facility, where companies rent half or full cabinets to store data off-site. It was built with a raised-floor design and engineered to safeguard systems and data against tornadoes, hurricanes, earthquakes, fires, floods, and other disasters. Cloud and Colocation lists it at roughly 2,500 square feet, while Uniti put the figure at about 5,000 square feet with an average load of 725 kW and three backup generators in 2026. Investment, acreage, and MW capacity for the facility itself are not publicly disclosed.</p>
+            </div>
+
+            <div class="cs-section">
+              <div class="cs-section-label">Local Context</div>
+              <p>Ephrata is a borough in Lancaster County, PA. The facility is one of at least three small, long-established colocation centers operating quietly in the county, alongside a Lumen site in East Lampeter Township and one run by Lancaster-Lebanon Intermediate Unit 13, all predating the current AI-driven build-out. These centers were built not for AI but for businesses in fields like healthcare, insurance, and e-commerce to securely store data off-site, with the operator handling electricity and backup power.</p>
+            </div>
+
+            <div class="cs-section">
+              <div class="cs-section-label">Developer Promises vs. Community Concerns</div>
+              <p><strong>Promises:</strong> The facility came to Windstream through corporate acquisition rather than a local development proposal, so there was no public campaign promising jobs or tax revenue of the kind that accompanies new builds.</p>
+              <p><strong>Community concerns:</strong> There are no articulated community concerns on record. The facility's small footprint, modest power draw, minimal water use, and decades of unobtrusive operation have kept it out of the local data center debate now centered on proposed AI-scale projects in Lancaster city and Columbia Borough.</p>
+            </div>
+
+            <div class="cs-section">
+              <div class="cs-section-label">What happened/developments</div>
+              <p>The Ephrata facility traces to D&amp;E Communications, founded in 1911 as the Denver &amp; Ephrata Telephone &amp; Telegraph Co., whose data center provided colocation and hosting services. In May 2009, Arkansas-based Windstream announced a deal to acquire the Ephrata-based telecom, and closed the $330 million transaction in November 2009. It was one of a string of Windstream acquisitions that year, alongside Iowa Telecom, NuVox, and Lexcom. Windstream later combined with Uniti Group in a merger that closed in 2025, and the data center is now operated under the merged entity.</p>
+            </div>
+
+            <div class="cs-section">
+              <div class="cs-section-label">Outcome and Current Status</div>
+              <span class="verdict built">Completed</span>
+              <p>The facility is completed and operating as a colocation data center under Uniti/Windstream. No expansion or controversy has been reported.</p>
+            </div>
+
+            <div class="cs-section">
+              <div class="cs-section-label">Key Takeaways</div>
+              <p>Windstream Ephrata shows what most data center capacity looked like before the AI boom: a small, acquired, grid-powered colocation facility that changed hands through telecom mergers rather than local approval, and generated no organized community response. It offers a useful baseline against the contested, hyperscale-era projects elsewhere in the database, a reminder that "data center" covers a wide range of footprints and that backlash tracks scale, siting, and process far more than the presence of a facility itself.</p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div><!-- /#cs-pair2 -->
 
     <div class="footnotes-section">
       <h4>Sources</h4>
@@ -1816,80 +2086,139 @@
   }
 </style>
 
-<!-- ════════════════════════════ A PATH FORWARD TAB ════════════════════════════ -->
-<div id="tab-pathforward" class="tab-content">
+<!-- ════════════════════════════ DUKE RESEARCH TAB ════════════════════════════ -->
+<style>
+  #tab-duke .duke-section-head h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.015em; }
+  #tab-duke .duke-section-head p { color: var(--text2); font-size: 15px; margin-top: 6px; max-width: 720px; line-height: 1.65; }
+  #tab-duke .duke-divider { height: 1px; background: var(--border); margin: 18px 0 30px; }
+  #tab-duke .school { margin-bottom: 40px; }
+  #tab-duke .school:last-child { margin-bottom: 0; }
+  #tab-duke .school-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 20px; }
+  #tab-duke .school-title h3 { font-size: 21px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.2; }
+  #tab-duke .school-subtitle { font-size: 16px; font-weight: 600; margin-top: 4px; }
+  #tab-duke .school-subtitle a { color: var(--accent-mid); text-decoration: none; }
+  #tab-duke .school-subtitle a:hover { text-decoration: underline; }
+  #tab-duke .research-grid { display: flex; flex-direction: column; gap: 14px; }
+  #tab-duke .research-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 24px; transition: border-color .15s ease, box-shadow .15s ease; }
+  #tab-duke .research-card:hover { border-color: var(--border2); box-shadow: 0 2px 14px rgba(0,0,0,0.06); }
+  #tab-duke .card-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+  #tab-duke .tag { display: inline-flex; align-items: center; padding: 4px 11px; border-radius: 100px; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+  #tab-duke .tag.project { background: var(--accent-light); color: var(--accent-mid); }
+  #tab-duke .tag.report { background: #eaf3de; color: #3b6d11; }
+  #tab-duke .tag.policy { background: #f3edda; color: #8a5a0b; }
+  #tab-duke .card-date { font-size: 13px; font-weight: 600; color: var(--text2); letter-spacing: 0.01em; }
+  #tab-duke .card-title { font-size: 19px; font-weight: 700; line-height: 1.3; letter-spacing: -0.01em; }
+  #tab-duke .card-title a { color: var(--accent-mid); text-decoration: none; }
+  #tab-duke .card-title a:hover { text-decoration: underline; }
+  #tab-duke .card-title a::after { content: " ↗"; font-size: 14px; color: var(--accent-mid); font-weight: 600; }
+  #tab-duke .card-note { font-size: 12px; color: var(--text3); margin-top: 6px; }
+  #tab-duke .card-date.placeholder { color: var(--text3); font-style: italic; }
+  @media (max-width: 600px) { #tab-duke .research-card { padding: 18px; } #tab-duke .card-title { font-size: 17px; } }
+</style>
+<div id="tab-duke" class="tab-content">
   <div class="page-inner">
-    <div class="page-intro">
-      <h1>A Path Forward: Reconciling Speed and Community Stability</h1>
-      <p>Local legitimacy has increasingly become the bottleneck for data center construction. A sustainable path forward requires the federal government to condition grid access, standardize operational practices, and coordinate across levels of government.</p>
+    <div class="duke-section-head">
+      <h1>Duke University Research</h1>
+      <p>Recent work from Duke University researchers on data center development, the AI infrastructure stack, grid strain, and water-resource conflicts.</p>
     </div>
- 
-    <div class="policy-boxes">
-      <div class="policy-box">
-        <div class="pb-number">1</div>
-        <div class="pb-title">State Data Center Authority</div>
-        <div class="pb-content">
-          <p><strong>The Policy:</strong> Each state establishes a permanent Data Center Authority (DCA) to manage siting, environmental review, and community standards for large facilities. The authority integrates staff from energy, water, land use, and community development. It develops binding standards for siting distances from residential areas, water usage, operational hours, and local benefit agreements. Federal permits are contingent on state-level approval from the DCA.</p>
-          <p><strong>The Problem It Solves:</strong> Currently, data center siting decisions are fragmented across county and local planning boards with inconsistent standards and expertise. Tarboro was denied on residential adjacency; Kingsboro (same developer, same county) was approved with no opposition. This inconsistency creates unpredictability for developers and fear for communities. Rural communities like Pittsylvania lack institutional capacity to evaluate hyperscale projects, leading to blanket opposition rather than negotiated approval.</p>
-          <p><strong>Why It Works:</strong> A state authority centralizes expertise, standardizes evaluation, and creates predictable rules. It prevents race-to-the-bottom competition where counties undercut each other for data center tax revenue by waiving environmental protections. It also prevents not-in-my-backyard (NIMBY) blocking where one locality's denial simply pushes the project to a less-organized neighbor. With clear siting standards (minimum distances from homes, water availability, grid proximity, environmental constraints), communities know what is acceptable and what is not. The authority becomes a convening body that negotiates Community Benefits Agreements (CBAs), ensures equitable impact distribution, and enforces operational standards post-approval.</p>
-          <p><strong>For communities:</strong> A state authority means your community is not alone in evaluating hyperscale development. You benefit from state-level expertise, standardized environmental review, and guaranteed enforcement of conditions. You have more leverage, since developers cannot shop around for the most permissive county.</p>
-        </div>
-      </div>
- 
-      <div class="policy-box">
-        <div class="pb-number">2</div>
-        <div class="pb-title">Operational Efficiency &amp; Grid Flexibility Standards</div>
-        <div class="pb-content">
-          <p><strong>The Policy:</strong> The Department of Energy establishes federal standards for (1) water usage effectiveness (WUE), power usage effectiveness (PUE), and cooling methods; (2) demand-response capability requiring data centers to curtail non-critical loads during peak demand or grid emergencies. Projects meeting these standards receive priority grid interconnection and federal approval. FERC and state Public Utility Commissions enforce curtailment requirements and penalize non-compliance.</p>
-          <p><strong>The Problem It Solves:</strong> Two interrelated crises: (1) Resource unpredictability: a single large data center consumes 60,000+ liters of water daily and 69 GWh of electricity annually, with no enforceable limits. Communities fear infrastructure overwhelm, driving moratoriums. (2) Grid inflexibility: interconnection timelines reach 4-7 years because utilities cannot accommodate always-on loads. An additional 44 GW of data center demand is needed by 2028, but only 25 GW is projected to come online, leaving a 19 GW shortfall. Inflexible loads worsen this bottleneck.</p>
-          <p><strong>Why It Works:</strong> Clear standards address both problems simultaneously. For water/energy: measured efficiency expectations and predictable limits give communities concrete information to evaluate impacts. For grid: most computing is not time-critical. AI training and bulk processing can shift to off-peak hours with minimal operational cost. Research shows curtailing load just 0.25% of the time could allow the grid to accommodate an additional 76 GW of demand without new generation capacity. Data centers become grid resources rather than grid liabilities.</p>
-          <p><strong>For communities:</strong> Standardized limits protect local infrastructure. Demand-response capability means more stable electricity prices (data centers help balance peak load rather than worsen it). Flexible data centers reduce pressure for emergency grid upgrades that would otherwise be socialized across all ratepayers. Communities approve projects knowing they have predictable, enforceable operational boundaries.</p>
-        </div>
-      </div>
- 
-      <div class="policy-box">
-        <div class="pb-number">3</div>
-        <div class="pb-title">Multilevel Coordination</div>
-        <div class="pb-content">
-          <p><strong>The Policy:</strong> The federal government provides state and local jurisdictions with technical assistance, impact modeling tools, and historical data on data center effects. Communities use this to model electricity price effects, water stress, and grid reliability risks for proposed projects.</p>
-          <p><strong>The Problem It Solves:</strong> Federal expedited permitting (issued July 2025) has not accelerated projects because it ignores the real bottleneck: local legitimacy. Communities block projects even when federally approved because they lack the technical capacity to evaluate impacts.</p>
-          <p><strong>Why It Works:</strong> Communities are not philosophically opposed to data centers; they are opposed to being blindsided by unpredictable costs and impacts. Federal technical support transforms local decision-making from reactive (opposing what they don't understand) to proactive (negotiating from a position of knowledge). When state and local officials can model impacts, they can set terms. When they set terms, projects move forward because communities feel heard and protected.</p>
-          <p><strong>For communities:</strong> Federal-provided data and modeling tools enable informed decisions, shift power dynamics toward communities, and create accountability mechanisms that build trust.</p>
-        </div>
-      </div>
-    </div>
- 
-    <div class="prose-section" style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border);">
-      <h2>Addressing the Counterargument</h2>
-      <p>Federal officials and industry partners present a compelling case: “Slower, more community-responsive permitting will delay AI infrastructure and compromise U.S. competitiveness. China added 429 GW of new generation capacity in 2024 while the U.S. added only 51 GW, and every month of delay costs the U.S. leadership in AI.”</p>
-      <p>This concern is legitimate. The U.S. is in a genuine competition for AI dominance, and energy constraints are real bottlenecks. These policies address why fast-track permitting is failing in the first place.</p>
-      <p>Federal expedited permitting has existed since July 2025, yet two-thirds of data center projects remain stalled. The problem is not approval speed but <strong>community legitimacy</strong>: federal agencies can issue permits, but communities continue to block projects or threaten appeals, moratoriums, and legislative action even when permits are granted, because they do not trust the cost-benefit calculation. Forcing faster permitting without addressing this trust deficit will not accelerate deployment; it will trigger more community opposition, appeals, and backlash.</p>
-      <p><strong>These three reforms reverse that dynamic.</strong> By conditioning grid access on flexibility, standardizing efficiency, and supporting local planning, they give communities the tools to evaluate and negotiate projects while giving developers clearer rules to follow. Projects that meet these standards face less opposition because they arrive with guardrails communities helped define. The U.S. gets the infrastructure it needs while communities gain stability, and deployment actually accelerates because the bottleneck shifts from federal approval to community acceptance, which happens faster when communities feel heard.</p>
- 
-      <h2>Connection to the Decision Framework</h2>
-      <p>The Decision Framework you explored earlier helps communities <strong>evaluate</strong> specific projects. These policy reforms create the <strong>environment</strong> in which good decisions can be made. With a State Data Center Authority, Operational Efficiency &amp; Grid Flexibility Standards, and Multilevel Coordination in place, a community evaluating a data center proposal will have:</p>
-    <ul style="margin: 12px 0 0 1.2rem; color: var(--text2);">
-    <li style="margin-bottom: 6px;">State-level siting standards that prevent race-to-the-bottom competition and ensure consistent evaluation</li>
-    <li style="margin-bottom: 6px;">Measurable efficiency standards for water, electricity, and grid demand-response</li>
-    <li style="margin-bottom: 6px;">Federal technical data on impacts and state coordination mechanisms</li>
-    <li>Leverage to negotiate binding Community Benefits Agreements with state enforcement</li>
-    </ul>
-      <p style="margin-top: 12px;">When communities use the Decision Framework with these guardrails in place, they can figure out what works best for them with state and regulatory backing.</p>
- 
-      <h2>Why This Matters Now</h2>
-      <p>The cases in this tool show what happens when these structures are missing. Tarboro was a technically sound project with real economic benefits, but it failed because the community experienced the process as imposition rather than partnership. The developer lost the deal, federal agencies lost a project they considered strategic, and the grid lost 300 MW of planned capacity along with it.</p>
-      <p>Conversely, Northern Virginia's established data center hubs approve projects at higher rates, not because they love data centers but because they have institutional capacity, historical experience, and negotiated agreements.</p>
+    <div class="duke-divider"></div>
 
-      <h2>Conclusion</h2>
-      <p>The United States cannot sacrifice AI competitiveness for local opposition. It also cannot sacrifice local stability and trust for federal speed. Data center deployment is not a federal-versus-local question. It is a federal-and-local question.</p>
-      <p>A State Data Center Authority, Operational Efficiency &amp; Grid Flexibility Standards, and Multilevel Coordination bridge that gap. They enable federal policy to move at the speed of AI growth while enabling communities to move at the pace of informed decision-making. Together, they transform the current bottleneck into a pipeline, and in doing so, they protect both national interests and community stability.</p>
-      <p>The path forward is not faster federal permitting. It is smarter governance: state-level siting authority that coordinates with federal requirements, operational standards that are clear and enforceable, and multilevel coordination that shares information and builds capacity. The path forward starts with policymaking that includes all stakeholders from the start.</p>
+    <div class="school">
+      <div class="school-head">
+        <div class="school-title">
+          <h3>Sanford School of Public Policy</h3>
+          <div class="school-subtitle"><a href="https://deeptech.duke.edu/" target="_blank" rel="noopener">Deep Tech Initiative</a></div>
+        </div>
+      </div>
+      <div class="research-grid">
+        <div class="research-card" data-date="2026-04">
+          <div class="card-meta"><span class="tag project">Research project</span></div>
+          <div class="card-title"><a href="https://deeptech.duke.edu/project/data-center-development-and-local-governance-guidelines-community-centered-outcomes/" target="_blank" rel="noopener">Data Center Development and Local Governance: Guidelines for Community-Centered Outcomes</a></div>
+          <div class="card-date placeholder">Date TBD</div>
+        </div>
+        <div class="research-card" data-date="2026-04">
+          <div class="card-meta"><span class="tag project">Research project</span></div>
+          <div class="card-title"><a href="https://deeptech.duke.edu/project/water-use-and-community-trust-key-components-data-centers-social-license-operate/" target="_blank" rel="noopener">Water Use and Community Trust: Key Components of Data Centers' Social License to Operate</a></div>
+          <div class="card-date placeholder">Date TBD</div>
+        </div>
+        <div class="research-card" data-date="2025-06">
+          <div class="card-meta"><span class="tag report">Report</span></div>
+          <div class="card-title"><a href="https://deeptech.duke.edu/project/ai-tech-stack/" target="_blank" rel="noopener">The AI Tech Stack: A Primer for Tech and Cyber Policy</a></div>
+          <div class="card-date placeholder">Date TBD</div>
+        </div>
+        <div class="research-card" data-date="2025-08">
+          <div class="card-meta"><span class="tag report">Report</span></div>
+          <div class="card-title"><a href="https://deeptech.duke.edu/project/hyperscaler-data-center-buildout-sustainability-bane-boon-or-both/" target="_blank" rel="noopener">Hyperscaler Data Center Buildout: A Sustainability Bane, Boon, or Both</a></div>
+          <div class="card-date placeholder">Date TBD</div>
+          <div class="card-note">In partnership with the Nicholas Institute</div>
+        </div>
+      </div>
     </div>
- 
+
+    <div class="school">
+      <div class="school-head">
+        <div class="school-title">
+          <h3>Nicholas Institute for Energy, Environment &amp; Sustainability</h3>
+        </div>
+      </div>
+      <div class="research-grid">
+        <div class="research-card" data-date="2025-02">
+          <div class="card-meta"><span class="tag report">Report</span></div>
+          <div class="card-title"><a href="https://nicholasinstitute.duke.edu/publications/rethinking-load-growth" target="_blank" rel="noopener">Rethinking Load Growth: Assessing the Potential for Integration of Large Flexible Loads in U.S. Power Systems</a></div>
+          <div class="card-date placeholder">Date TBD</div>
+        </div>
+        <div class="research-card" data-date="2026-02">
+          <div class="card-meta"><span class="tag report">Report</span></div>
+          <div class="card-title"><a href="https://nicholasinstitute.duke.edu/publications/data-centers-and-generation-capacity-over-next-decade" target="_blank" rel="noopener">Data Centers and Generation Capacity Over the Next Decade</a></div>
+          <div class="card-date placeholder">Date TBD</div>
+        </div>
+        <div class="research-card" data-date="2026-03">
+          <div class="card-meta"><span class="tag report">Report</span></div>
+          <div class="card-title"><a href="https://nicholasinstitute.duke.edu/publications/leveraging-large-load-flexibility-facilitate-access-power-while-protecting-customers" target="_blank" rel="noopener">Leveraging Large Load Flexibility to Facilitate Access to Power While Protecting Customers</a></div>
+          <div class="card-date placeholder">Date TBD</div>
+        </div>
+        <div class="research-card" data-date="2026-05">
+          <div class="card-meta"><span class="tag policy">Policy paper</span></div>
+          <div class="card-title"><a href="https://nicholasinstitute.duke.edu/publications/case-data-centered-convening-new-pathway-interstate-water-governance" target="_blank" rel="noopener">The Case for a Data-Centered Convening: A New Pathway for Interstate Water Governance</a></div>
+          <div class="card-date placeholder">Date TBD</div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
+<script>
+  (function () {
+    var root = document.getElementById('tab-duke');
+    if (!root) return;
+    var fmt = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long' });
+    root.querySelectorAll('.school').forEach(function (school) {
+      var grid = school.querySelector('.research-grid');
+      var cards = Array.prototype.slice.call(grid.querySelectorAll('.research-card'));
+      cards.forEach(function (card) {
+        var raw = (card.getAttribute('data-date') || '').trim();
+        var dateEl = card.querySelector('.card-date');
+        var meta = card.querySelector('.card-meta');
+        if (dateEl && meta) meta.appendChild(dateEl);
+        if (raw && dateEl) {
+          var d = new Date(raw.length === 7 ? raw + '-01' : raw);
+          if (!isNaN(d)) { dateEl.textContent = fmt.format(d); dateEl.classList.remove('placeholder'); }
+        }
+      });
+      cards.sort(function (a, b) {
+        var da = Date.parse((a.getAttribute('data-date') || '').trim());
+        var db = Date.parse((b.getAttribute('data-date') || '').trim());
+        if (isNaN(da) && isNaN(db)) return 0;
+        if (isNaN(da)) return 1;
+        if (isNaN(db)) return -1;
+        return db - da;
+      });
+      cards.forEach(function (c) { grid.appendChild(c); });
+    });
+  })();
+</script>
 
-<footer>Duke Data Center Policy Project &nbsp;·&nbsp; Duke University Tech Policy Lab &nbsp;·&nbsp; Last updated June 2026 &nbsp;·&nbsp; <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener" style="color:inherit;">CC BY 4.0</a></footer>
+<footer>Duke Data Center Policy Project &nbsp;·&nbsp; Duke University Tech Policy Lab &nbsp;·&nbsp; Last updated June 2026 &nbsp;·&nbsp; <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener" style="color:inherit;">CC BY 4.0</a> &nbsp;·&nbsp; Drought data: <a href="https://droughtmonitor.unl.edu" target="_blank" rel="noopener" style="color:inherit;">U.S. Drought Monitor</a> (NDMC, USDA, NOAA)</footer>
 
 <!-- ════════════════ SCRIPTS ════════════════ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
@@ -1902,7 +2231,7 @@
 <script>
 
 /* ─── TAB SWITCHING ─── */
-var VALID_TABS = ['home','context','map','database','casestudy','decision','pathforward'];
+var VALID_TABS = ['home','context','map','database','casestudy','decision','duke'];
 
 // Visually activate a tab (no hash changes here)
 function applyTab(id, sub) {
@@ -1942,6 +2271,19 @@ function switchTab(id, btn) {
 function switchTabById(id) {
   switchTab(id);
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function scrollToSec(id) {
+  var el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function switchPair(pair, btn) {
+  document.querySelectorAll('.cs-pair-pane').forEach(function(p){ p.classList.remove('active'); });
+  var pane = document.getElementById('cs-' + pair);
+  if (pane) pane.classList.add('active');
+  document.querySelectorAll('.cs-pair-btn').forEach(function(b){ b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
 }
 
 // React to hash changes (clicks, back/forward, pasted links)
@@ -1993,6 +2335,17 @@ document.addEventListener('click', (e) => {
     hi.classList.remove('menu-open');
     const hb = document.querySelector('.hamburger');
     if (hb) hb.setAttribute('aria-expanded', 'false');
+  }
+});
+
+document.addEventListener('click', (e) => {
+  const tip = e.target.closest('.info-tip');
+  if (tip) {
+    const wasActive = tip.classList.contains('active');
+    document.querySelectorAll('.info-tip.active').forEach(t => t.classList.remove('active'));
+    if (!wasActive) tip.classList.add('active');
+  } else {
+    document.querySelectorAll('.info-tip.active').forEach(t => t.classList.remove('active'));
   }
 });
 

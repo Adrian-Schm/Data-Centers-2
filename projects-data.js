@@ -3,7 +3,7 @@
 // Do not edit by hand.
 
 const PROJECTS_META = {
-  "generatedAt": "2026-06-08T16:40:55Z",
+  "generatedAt": "2026-06-09T12:57:43Z",
   "sourceFile": "DATABASE-DataCenter_Backlash.xlsx",
   "sheetsRead": [
     {
@@ -19,7 +19,8 @@ const PROJECTS_META = {
       "fullCount": 9
     }
   ],
-  "droppedNoCoords": 5
+  "droppedNoCoords": 5,
+  "droughtDate": "20260602"
 };
 
 const PROJECTS = [
@@ -48,6 +49,7 @@ const PROJECTS = [
     "monthRecorded": "2026-05-01",
     "lat": 41.0839630042558,
     "lng": -76.1435100426483,
+    "droughtLevel": "None",
     "sources": {
       "projectProposal": "https://www.datacenterdynamics.com/en/news/talen-energy-to-build-300mw-nuclear-powered-cryptomining-facility-and-data-center-in-us/",
       "govtRecords": [
@@ -119,6 +121,7 @@ const PROJECTS = [
     "monthRecorded": "2026-05-01",
     "lat": 39.4277541654666,
     "lng": -75.0166986453401,
+    "droughtLevel": "D2",
     "sources": {
       "projectProposal": "https://whyy.org/articles/data-center-artificial-intelligence-vineland-new-jersey/",
       "govtRecords": [
@@ -190,6 +193,7 @@ const PROJECTS = [
     "monthRecorded": "2026-06-01",
     "lat": 40.1699008501249,
     "lng": -76.1779137390098,
+    "droughtLevel": "D2",
     "sources": {
       "projectProposal": "https://www.datacenterdynamics.com/en/news/windstream-announces-fourth-telecom-acquisition-this-year/",
       "govtRecords": [
@@ -233,6 +237,7 @@ const PROJECTS = [
     "monthRecorded": "2026-06-01",
     "lat": 40.509833556025,
     "lng": -79.2045564741278,
+    "droughtLevel": "None",
     "sources": {
       "projectProposal": "https://www.homercityredevelopment.com/project-overview",
       "govtRecords": [],
@@ -286,6 +291,7 @@ const PROJECTS = [
     "monthRecorded": "2026-06-01",
     "lat": 40.2560781344692,
     "lng": -77.118686893443,
+    "droughtLevel": "D1",
     "sources": {
       "projectProposal": "https://pax1campus.com/",
       "govtRecords": [],
@@ -339,6 +345,7 @@ const PROJECTS = [
     "monthRecorded": "2026-06-01",
     "lat": 40.0595567106763,
     "lng": -76.3299567894937,
+    "droughtLevel": "D2",
     "sources": {
       "projectProposal": "https://www.cityoflancasterpa.gov/data-center/",
       "govtRecords": [],
@@ -386,6 +393,7 @@ const PROJECTS = [
     "monthRecorded": "2026-06-01",
     "lat": 40.9573187814357,
     "lng": -76.0348230780108,
+    "droughtLevel": "D0",
     "sources": {
       "projectProposal": "https://www.luzernecounty.org/AgendaCenter/ViewFile/Agenda/_01212025-4075",
       "govtRecords": [],
@@ -451,6 +459,7 @@ const PROJECTS = [
     "monthRecorded": "2026-06-01",
     "lat": 41.6542555106668,
     "lng": -76.2332393906146,
+    "droughtLevel": "None",
     "sources": {
       "projectProposal": "https://files.dep.state.pa.us/RegionalResources/NCRO/NCROPortalFiles/CommunityInformation/Wyalusing%20Energy%20Center%20PAA%2012-26-2024%20(Rev.%202-12-2025).pdf",
       "govtRecords": [],
@@ -504,6 +513,7 @@ const PROJECTS = [
     "monthRecorded": "2026-06-01",
     "lat": 39.8010866724944,
     "lng": -75.1993622580656,
+    "droughtLevel": "D2",
     "sources": {
       "projectProposal": "https://protectegnj.web.app/files/ATC-Major_Site_Plan-10Feb2026.pdf",
       "govtRecords": [],
@@ -563,6 +573,7 @@ const PROJECTS = [
     "monthRecorded": "2026-06-01",
     "lat": 39.527994229682,
     "lng": -75.6474439876628,
+    "droughtLevel": "D1",
     "sources": {
       "projectProposal": "https://www3.newcastlede.gov/PDFDocument/default.aspx?DocumentID=80:FC40FF5826FBF7107D10260598B6C0724428DD1196872F86C5E68CE881F951C2D2BD769594D78C69354C344D0EE0A185&x=temp.pdf",
       "govtRecords": [],
@@ -610,6 +621,7 @@ const PROJECTS = [
     "monthRecorded": "2026-06-01",
     "lat": 39.6826257357234,
     "lng": -75.7232983691438,
+    "droughtLevel": "D1",
     "sources": {
       "projectProposal": "https://assets.delawarebusinesstimes.com/wp-content/uploads/2025/12/White-Clay-Corporate-Center-Letter-November.pdf",
       "govtRecords": [],
@@ -663,6 +675,7 @@ const PROJECTS = [
     "monthRecorded": "2026-04-01",
     "lat": 35.9243546164901,
     "lng": -77.6583439892765,
+    "droughtLevel": "D3",
     "sources": {
       "projectProposal": "https://www.newsobserver.com/news/business/article313027720.html",
       "govtRecords": [
@@ -699,6 +712,7 @@ const PROJECTS = [
     "monthRecorded": "2026-04-01",
     "lat": 35.9052413354529,
     "lng": -77.5787098240266,
+    "droughtLevel": "D3",
     "sources": {
       "projectProposal": "https://www.datacenterdynamics.com/en/news/developers-to-appeal-data-center-rejection-in-tarboro-north-carolina/",
       "govtRecords": [
@@ -739,6 +753,7 @@ const PROJECTS = [
     "monthRecorded": "2026-04-01",
     "lat": 35.619096,
     "lng": -81.31578,
+    "droughtLevel": "D2",
     "sources": {
       "projectProposal": "https://saw-reg.usace.army.mil/PN/2023/SAW-2022-02515-PN.pdf",
       "govtRecords": [],
@@ -773,6 +788,7 @@ const PROJECTS = [
     "monthRecorded": "2026-04-01",
     "lat": 35.731135,
     "lng": -81.205389,
+    "droughtLevel": "D2",
     "sources": {
       "projectProposal": "https://saw-reg.usace.army.mil/PN/2023/SAW-2023-00898-PN.pdf",
       "govtRecords": [],
@@ -807,6 +823,7 @@ const PROJECTS = [
     "monthRecorded": "2026-04-01",
     "lat": 35.589794,
     "lng": -81.235323,
+    "droughtLevel": "D2",
     "sources": {
       "projectProposal": "https://saw-reg.usace.army.mil/PN/2023/SAW-2023-00665-PN.pdf",
       "govtRecords": [],
@@ -828,7 +845,7 @@ const PROJECTS = [
     "acreage": 2200,
     "timelineStart": null,
     "timelineEnd": null,
-    "status": "Canceled / Withdrawn",
+    "status": "Cancelled - Withdrawn",
     "resourceClaims": "On-site gas powerplant included in construction",
     "energySources": null,
     "developerPromises": "390 jobs between dc and plant, +$50-184m in annual taxes",
@@ -841,6 +858,7 @@ const PROJECTS = [
     "monthRecorded": "2026-04-01",
     "lat": 36.804,
     "lng": -79.39,
+    "droughtLevel": "D3",
     "sources": {
       "projectProposal": "https://cardinalnews.org/2025/04/14/balico-withdraws-data-center-proposal-for-pittsylvania-after-months-of-resident-pushback-and-vote-postponements/",
       "govtRecords": [],
@@ -875,6 +893,7 @@ const PROJECTS = [
     "monthRecorded": "2026-04-01",
     "lat": 37.989718,
     "lng": -77.491225,
+    "droughtLevel": "D3",
     "sources": {
       "projectProposal": "https://www.vedp.org/press-release/2025-11/cleanarc-caroline",
       "govtRecords": [

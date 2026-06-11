@@ -14,6 +14,25 @@
     detailId: null,
   };
 
+  // ── drought helpers ────────────────────────────────────────────────
+  const DROUGHT_TEXT   = { D0: '#a08500', D1: '#b35900', D2: '#b35900', D3: '#c00000', D4: '#5a0000' };
+  const DROUGHT_LABEL  = { D0: 'D0 — Abnormally Dry', D1: 'D1 — Moderate', D2: 'D2 — Severe', D3: 'D3 — Extreme', D4: 'D4 — Exceptional' };
+  const DROUGHT_LEVELS = ['D0','D1','D2','D3','D4'];
+  const DROUGHT_SEG_COLOR = { D0: '#FFE600', D1: '#FFB300', D2: '#E07000', D3: '#C00000', D4: '#6B0000' };
+
+  function droughtInline(level) {
+    if (!level) return '';
+    if (level === 'None') return `<span class="drought-inline" style="color:var(--text2)">No drought</span>`;
+    if (!DROUGHT_TEXT[level]) return '';
+    const activeIdx = DROUGHT_LEVELS.indexOf(level);
+    const segs = DROUGHT_LEVELS.map((l, i) => {
+      const fill = i <= activeIdx ? `background:${DROUGHT_SEG_COLOR[l]}` : `background:var(--border)`;
+      return `<span class="drought-seg" style="${fill}"></span>`;
+    }).join('');
+    const bar = `<span class="drought-bar-track">${segs}</span>`;
+    return `${bar}<span class="drought-inline" style="color:${DROUGHT_TEXT[level]};font-weight:500">${DROUGHT_LABEL[level]}</span>`;
+  }
+
   // ── formatters ─────────────────────────────────────────────────────
   function fmtMoney(b) {
     if (b == null) return '—';
@@ -428,7 +447,8 @@
       <div class="db-metric"><div class="db-ml">Acreage</div><div class="db-mv">${fmtAcres(p.acreage)}</div></div>
       <div class="db-metric"><div class="db-ml">Timeline</div><div class="db-mv ${fmtRange(p.timelineStart,p.timelineEnd)?'text':'empty'}">${esc(fmtRange(p.timelineStart,p.timelineEnd)) || 'Not yet set'}</div></div>
       ${p.status ? `<div class="db-metric db-metric-status ${statusBadgeClass(p.status)}"><div class="db-ml">Status</div><div class="db-mv">${esc(p.status)}</div></div>` : ''}
-      ${p.energySources ? `<div class="db-metric db-full"><div class="db-ml">Energy sources</div><div class="db-mv text">${esc(p.energySources)}</div></div>` : ''}
+      ${p.droughtLevel ? `<div class="db-metric"><div class="db-ml">Drought level <span class="info-tip" tabindex="0"><svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="6.5" cy="6.5" r="6" stroke="currentColor" stroke-width="1.2"/><circle cx="6.5" cy="4" r="0.9" fill="currentColor"/><line x1="6.5" y1="6" x2="6.5" y2="10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg><span class="info-tip-text">From <a href="https://droughtmonitor.unl.edu" target="_blank" rel="noopener">U.S. Drought Monitor</a>, as of ${(typeof PROJECTS_META !== 'undefined' && PROJECTS_META.droughtDate) ? PROJECTS_META.droughtDate.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3') : 'latest release'}.</span></span></div><div class="db-mv" style="display:flex;flex-direction:column;gap:5px;font-size:13px;font-weight:400">${droughtInline(p.droughtLevel)}</div></div>` : ''}
+      ${p.energySources ? `<div class="db-metric ${p.droughtLevel ? 'db-two-thirds' : 'db-full'}"><div class="db-ml">Energy sources</div><div class="db-mv text">${esc(p.energySources)}</div></div>` : ''}
     `;
 
     const hasCoords = p.lat != null && p.lng != null;
@@ -617,27 +637,56 @@
   }
 
   // ── CSV download ───────────────────────────────────────────────────
-  const CSV_FIELDS = [
-    { key: 'name',                  label: 'Project Name',         default: true  },
-    { key: 'company',               label: 'Company',              default: true  },
-    { key: 'state',                 label: 'State',                default: true  },
-    { key: 'county',                label: 'County',               default: true  },
-    { key: 'status',                label: 'Status',               default: true  },
-    { key: 'capacityMw',            label: 'Capacity (MW)',        default: true  },
-    { key: 'investmentB',           label: 'Investment ($B)',      default: true  },
-    { key: 'acreage',               label: 'Acreage',              default: false },
-    { key: 'communityPosture',      label: 'Community Posture',    default: true  },
-    { key: 'communityIntensity',    label: 'Community Intensity',  default: false },
-    { key: 'energySources',         label: 'Energy Sources',       default: false },
-    { key: 'communities',           label: 'Nearby Communities',   default: false },
-    { key: 'timelineStart',         label: 'Timeline Start',       default: false },
-    { key: 'timelineEnd',           label: 'Timeline End',         default: false },
-    { key: 'articulatedConcerns',   label: 'Articulated Concerns', default: false },
-    { key: 'developerPromises',     label: 'Developer Promises',   default: false },
-    { key: 'resourceClaims',        label: 'Resource Claims',      default: false },
-    { key: 'communityActionDetails',label: 'Community Action',     default: false },
-    { key: 'developerAction',       label: 'Developer Action',     default: false },
-  ];
+  // Fields are derived automatically from project keys.
+  // FIELD_CONFIG overrides label/default for known keys; anything not listed
+  // gets a auto-generated label and default:false.
+  // Keys in FIELD_SKIP are excluded entirely; 'sources' is handled as a
+  // single combined column instead.
+  const FIELD_SKIP    = new Set(['id', 'stub', 'coordsPrecision', 'timeline', 'sources']);
+  const FIELD_CONFIG  = {
+    name:                  { label: 'Project Name',         default: true  },
+    company:               { label: 'Company',              default: true  },
+    state:                 { label: 'State',                default: true  },
+    county:                { label: 'County',               default: true  },
+    status:                { label: 'Status',               default: true  },
+    capacityMw:            { label: 'Capacity (MW)',        default: true  },
+    investmentB:           { label: 'Investment ($B)',      default: true  },
+    communityPosture:      { label: 'Community Posture',    default: true  },
+    acreage:               { label: 'Acreage',              default: false },
+    communityIntensity:    { label: 'Community Intensity',  default: false },
+    energySources:         { label: 'Energy Sources',       default: false },
+    droughtLevel:          { label: 'Drought Level',        default: false },
+    communities:           { label: 'Nearby Communities',   default: false },
+    timelineStart:         { label: 'Timeline Start',       default: false },
+    timelineEnd:           { label: 'Timeline End',         default: false },
+    articulatedConcerns:   { label: 'Articulated Concerns', default: false },
+    developerPromises:     { label: 'Developer Promises',   default: false },
+    resourceClaims:        { label: 'Resource Claims',      default: false },
+    communityActionDetails:{ label: 'Community Action',     default: false },
+    developerAction:       { label: 'Developer Action',     default: false },
+  };
+
+  // Auto-label: camelCase → Title Case words
+  function autoLabel(key) {
+    return key.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase()).trim();
+  }
+
+  function buildCsvFields() {
+    if (!PROJECTS.length) return [];
+    // Derive ordered field list from actual project keys
+    const fields = Object.keys(PROJECTS[0])
+      .filter(k => !FIELD_SKIP.has(k))
+      .map(k => ({
+        key:     k,
+        label:   (FIELD_CONFIG[k] || {}).label   || autoLabel(k),
+        default: (FIELD_CONFIG[k] || {}).default || false,
+      }));
+    // Append sources as a single combined column at the end
+    fields.push({ key: '__sources__', label: 'Sources', default: false });
+    return fields;
+  }
+
+  const CSV_FIELDS = buildCsvFields();
 
   function buildFilename() {
     const parts = ['projects'];
@@ -654,14 +703,25 @@
     return s.includes(',') || s.includes('"') || s.includes('\n') ? '"' + s.replace(/"/g, '""') + '"' : s;
   }
 
+  function projectValue(p, key) {
+    if (key !== '__sources__') return p[key];
+    const s = p.sources || {};
+    const urls = [
+      s.projectProposal,
+      ...(s.govtRecords  || []),
+      ...(s.other        || []),
+    ].filter(Boolean);
+    return urls.join('; ');
+  }
+
   function exportCsv(rows, selectedKeys) {
     const headers = CSV_FIELDS.filter(f => selectedKeys.includes(f.key)).map(f => f.label);
     const lines = [
-      '# Duke Data Center Policy Project · CC BY 4.0 · Please credit if reused or republished.',
+      '# Duke Data Center Policy Project · CC BY 4.0 · Please credit if reused or republished. · Drought data: U.S. Drought Monitor (NDMC / USDA / NOAA) · droughtmonitor.unl.edu',
       headers.map(csvEscape).join(','),
     ];
     rows.forEach(p => {
-      lines.push(selectedKeys.map(k => csvEscape(p[k])).join(','));
+      lines.push(selectedKeys.map(k => csvEscape(projectValue(p, k))).join(','));
     });
     const blob = new Blob([lines.join('\n')], { type: 'text/csv' });
     const a = document.createElement('a');
@@ -700,7 +760,7 @@
           <button class="db-modal-dl" type="button">Download</button>
         </div>
         <div class="db-modal-footer">
-          Data shared under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>. Please credit Duke Data Center Policy Project if reused or republished.
+          Data shared under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>. Please credit Duke Data Center Policy Project if reused or republished. Drought data: <a href="https://droughtmonitor.unl.edu" target="_blank" rel="noopener">U.S. Drought Monitor</a> (NDMC, USDA, NOAA).
         </div>
       </div>`;
 
