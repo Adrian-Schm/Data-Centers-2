@@ -346,7 +346,7 @@
   .cs-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 1.5rem 0; }
   @media (max-width: 720px) { .cs-layout { grid-template-columns: 1fr; } }
   .cs-col { }
-  .cs-header { padding: 14px 16px; border-radius: var(--radius-lg) var(--radius-lg) 0 0; margin-bottom: 0; }
+  .cs-header { padding: 14px 16px; border-radius: var(--radius-lg) var(--radius-lg) 0 0; margin-bottom: 0; min-height: 72px; display: flex; flex-direction: column; justify-content: center; }
   .cs-header.nc { background: #e6f1fb; border: 1px solid #b5d4f4; border-bottom: none; }
   .cs-header.va { background: #fbeaf0; border: 1px solid #f4c0d1; border-bottom: none; }
   .cs-header h3 { font-size: 15px; font-weight: 700; margin: 0 0 2px; }
@@ -386,8 +386,8 @@
   .cs-stub-note { font-size: 12px; color: var(--text3); font-style: italic; line-height: 1.6; }
   .cs-db-link { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent-mid); background: none; border: none; padding: 0; margin-bottom: 14px; cursor: pointer; font-family: inherit; text-decoration: none; }
   .cs-db-link:hover { text-decoration: underline; }
-  .cs-map { width: 100%; height: 180px; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 6px; }
-  .cs-map iframe { width: 100%; height: 100%; border: 0; display: block; }
+  .cs-map { width: 100%; height: 180px; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 16px; position: relative; background: #e3eaee; }
+  .cs-map .maplibregl-ctrl-attrib { font-size: 9px; background: rgba(255,255,255,0.7); }
   .cs-map-cap { font-size: 11px; color: var(--text3); margin: 0 0 16px; }
   .cs-map-cap a { color: var(--accent-mid); text-decoration: none; }
   .cs-map-cap a:hover { text-decoration: underline; }
@@ -1252,7 +1252,7 @@
         </div>
         <div class="cs-body">
           <button class="cs-db-link" onclick="dbOpenProject('tarboro-data-center-campus')">View full record in database →</button>
-          <div class="cs-map"><iframe loading="lazy" title="Location of Tarboro Data Center Campus" src="https://www.openstreetmap.org/export/embed.html?bbox=-77.6387%2C35.8652%2C-77.5187%2C35.9452&layer=mapnik&marker=35.9052%2C-77.5787"></iframe></div>
+          <div class="cs-map" id="csmap-tarboro" data-lat="35.9052" data-lng="-77.5787"></div>
 
           <div class="cs-section">
             <div class="cs-section-label">Project Profile</div>
@@ -1282,7 +1282,7 @@
             <div class="primary-source">
               <div class="primary-source-label">From the official record of Special Use Permit 25-02</div>
               <p>The Council voted 7-1 that the application was not compliant with findings of fact on four grounds: that the development would be detrimental to adjacent properties; that it would endanger public health or safety; that it would injure the value of adjoining property; and that it would not be in harmony with the area in which it is located. The permit was subsequently denied 7-1.</p>
-              <div class="quote-attr">Town of Tarboro Council Minutes, September 8, 2025<sup class="fn" title="See footnote 13">[13]</sup> · Councilman Anderson cast the sole dissenting vote on both motions</div>
+              <div class="quote-attr">Town of Tarboro Council Minutes, September 8, 2025 · Councilman Anderson cast the sole dissenting vote on both motions</div>
             </div>
             <p>The procedural record is also notable. The Mayor recused himself from the hearing, and nine adjacent landowners established legal standing as parties, an unusually robust participation structure for a local zoning proceeding, suggesting the community was organized and legally prepared well before the hearing date.</p>
           </div>
@@ -1290,7 +1290,7 @@
           <div class="cs-section">
             <div class="cs-section-label">Outcome & Current Status</div>
             <span class="verdict denied">Permit Denied - 7 to 1</span>
-            <p>The Town of Tarboro denied the Special Use Permit in September 2025. Energy Storage Solutions appealed the decision to the Edgecombe County Superior Court.<sup class="fn" title="See footnote 15">[15]</sup> The appeal is pending as of April 2026. The developer has not publicly withdrawn the project, distinguishing this outcome from Balico in Virginia.</p>
+            <p>The Town of Tarboro denied the Special Use Permit in September 2025. Energy Storage Solutions appealed the decision to the Edgecombe County Superior Court. The appeal is pending as of April 2026. The developer has not publicly withdrawn the project, distinguishing this outcome from Balico in Virginia.</p>
           </div>
 
           <div class="cs-section">
@@ -1309,7 +1309,7 @@
         </div>
         <div class="cs-body">
           <button class="cs-db-link" onclick="dbOpenProject('balico-data-center-megacampus')">View full record in database →</button>
-          <div class="cs-map"><iframe loading="lazy" title="Location of Balico Data Center Megacampus" src="https://www.openstreetmap.org/export/embed.html?bbox=-79.4500%2C36.7640%2C-79.3300%2C36.8440&layer=mapnik&marker=36.8040%2C-79.3900"></iframe></div>
+          <div class="cs-map" id="csmap-balico" data-lat="36.8040" data-lng="-79.3900"></div>
 
           <div class="cs-section">
             <div class="cs-section-label">Project Profile</div>
@@ -1343,7 +1343,7 @@
           <div class="cs-section">
             <div class="cs-section-label">Outcome & Current Status</div>
             <span class="verdict cancelled">Withdrawn - Project Cancelled</span>
-            <p>Balico formally withdrew the proposal in April 2025 after the County Board denied the revised application. No appeal was filed. The project is cancelled. The site remains undeveloped agricultural land.<sup class="fn" title="See footnote 14">[14]</sup></p>
+            <p>Balico formally withdrew the proposal in April 2025 after the County Board denied the revised application. No appeal was filed. The project is cancelled. The site remains undeveloped agricultural land.</p>
           </div>
 
           <div class="cs-section">
@@ -1570,7 +1570,7 @@
           </div>
           <div class="cs-body">
             <button class="cs-db-link" onclick="dbOpenProject('cumulus-hyperscale-data-center-campus')">View full record in database →</button>
-            <div class="cs-map"><iframe loading="lazy" title="Location of Cumulus Hyperscale Data Center Campus" src="https://www.openstreetmap.org/export/embed.html?bbox=-76.2035%2C41.0440%2C-76.0835%2C41.1240&layer=mapnik&marker=41.0840%2C-76.1435"></iframe></div>
+            <div class="cs-map" id="csmap-cumulus" data-lat="41.0840" data-lng="-76.1435"></div>
 
             <div class="cs-section">
               <div class="cs-section-label">Project Profile</div>
@@ -1625,7 +1625,7 @@
           </div>
           <div class="cs-body">
             <button class="cs-db-link" onclick="dbOpenProject('windstream-ephrata-data-center')">View full record in database →</button>
-            <div class="cs-map"><iframe loading="lazy" title="Location of Windstream Ephrata Data Center" src="https://www.openstreetmap.org/export/embed.html?bbox=-76.2379%2C40.1299%2C-76.1179%2C40.2099&layer=mapnik&marker=40.1699%2C-76.1779"></iframe></div>
+            <div class="cs-map" id="csmap-windstream" data-lat="40.1699" data-lng="-76.1779"></div>
 
             <div class="cs-section">
               <div class="cs-section-label">Project Profile</div>
@@ -1672,15 +1672,7 @@
 
     <div class="footnotes-section">
       <h4>Sources</h4>
-      <ol class="footnotes-list">
-        <li><span class="fn-num">[2]</span> Lawrence Berkeley National Laboratory, 2024 United States Data Center Energy Usage Report. <a href="https://eta-publications.lbl.gov/sites/default/files/2024-12/lbnl-2024-united-states-data-center-energy-usage-report_1.pdf" target="_blank">https://eta-publications.lbl.gov/sites/default/files/2024-12/lbnl-2024-united-states-data-center-energy-usage-report_1.pdf</a></li>
-<li><span class="fn-num">[7]</span> AP News, Data centers face growing opposition across 11 states (2025). <a href="https://apnews.com/article/data-centers-artificial-intelligence-nimby-tech-21fa7b957664d5dca6788e35ab43b88e" target="_blank">https://apnews.com/article/data-centers-artificial-intelligence-nimby-tech-21fa7b957664d5dca6788e35ab43b88e</a></li>
-<li><span class="fn-num">[8]</span> Axios Raleigh, Data center opposition grows across North Carolina (2026). <a href="https://www.axios.com/local/raleigh/2026/02/23/data-center-opposition-grows-across-north-carolina" target="_blank">https://www.axios.com/local/raleigh/2026/02/23/data-center-opposition-grows-across-north-carolina</a></li>
-<li><span class="fn-num">[13]</span> Town of Tarboro, Council Minutes, Special Use Permit 25-02 (September 8, 2025). <a href="https://cms5.revize.com/revize/tarboronc/Document%20Center/Agenda%20&%20Minutes/2025/Minutes/9-8-25m.pdf" target="_blank">https://cms5.revize.com/revize/tarboronc/Document%20Center/Agenda%20&%20Minutes/2025/Minutes/9-8-25m.pdf</a></li>
-<li><span class="fn-num">[14]</span> Cardinal News, Balico withdraws data center proposal for Pittsylvania (April 2025). <a href="https://cardinalnews.org/2025/04/14/balico-withdraws-data-center-proposal-for-pittsylvania-after-months-of-resident-pushback-and-vote-postponements/" target="_blank">https://cardinalnews.org/2025/04/14/balico-withdraws-data-center-proposal-for-pittsylvania-after-months-of-resident-pushback-and-vote-postponements/</a></li>
-<li><span class="fn-num">[15]</span> Data Center Dynamics, Developers to appeal data center rejection in Tarboro, NC. <a href="https://www.datacenterdynamics.com/en/news/developers-to-appeal-data-center-rejection-in-tarboro-north-carolina/" target="_blank">https://www.datacenterdynamics.com/en/news/developers-to-appeal-data-center-rejection-in-tarboro-north-carolina/</a></li>
-
-      </ol>
+      <p style="font-size:13px;color:var(--text2);line-height:1.6;margin:0;">Full sources and primary documents for each project are listed in its database record. Use the “View full record in database” link at the top of any case study, or open the <button style="background:none;border:none;padding:0;color:var(--accent-mid);font-size:13px;cursor:pointer;font-family:inherit;text-decoration:underline;" onclick="switchTabById('database')">Project Database</button>.</p>
     </div>
   </div>
 </div>
@@ -2255,6 +2247,7 @@ function applyTab(id, sub) {
     if (projId && typeof dbApplySubHash === 'function') dbApplySubHash(projId, query);
     else if (typeof dbGoHome === 'function') dbGoHome(query);
   }
+  if (id === 'casestudy') setTimeout(initCaseStudyMaps, 60);
   localStorage.setItem('activeTab', id);
 }
 
@@ -2278,12 +2271,40 @@ function scrollToSec(id) {
   if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+var _csMaps = {};
+function initCaseStudyMaps() {
+  if (typeof maplibregl === 'undefined') return;
+  document.querySelectorAll('.cs-map[data-lat]').forEach(function (el) {
+    if (_csMaps[el.id]) { try { _csMaps[el.id].resize(); } catch (e) {} return; }
+    var lat = parseFloat(el.dataset.lat), lng = parseFloat(el.dataset.lng);
+    var map = new maplibregl.Map({
+      container: el,
+      style: 'https://tiles.openfreemap.org/styles/bright',
+      center: [lng, lat],
+      zoom: 10,
+      scrollZoom: false,
+      attributionControl: false,
+    });
+    map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right');
+    map.on('load', function () {
+      map.addSource('pin-' + el.id, { type: 'geojson', data: { type: 'Feature', geometry: { type: 'Point', coordinates: [lng, lat] }, properties: {} } });
+      map.addLayer({ id: 'pin-' + el.id, type: 'circle', source: 'pin-' + el.id, paint: { 'circle-radius': 9, 'circle-color': '#a32d2d', 'circle-stroke-color': '#fff', 'circle-stroke-width': 2 } });
+      map.resize();
+    });
+    _csMaps[el.id] = map;
+  });
+}
+function resizeCaseStudyMaps() {
+  Object.keys(_csMaps).forEach(function (k) { try { _csMaps[k].resize(); } catch (e) {} });
+}
+
 function switchPair(pair, btn) {
   document.querySelectorAll('.cs-pair-pane').forEach(function(p){ p.classList.remove('active'); });
   var pane = document.getElementById('cs-' + pair);
   if (pane) pane.classList.add('active');
   document.querySelectorAll('.cs-pair-btn').forEach(function(b){ b.classList.remove('active'); });
   if (btn) btn.classList.add('active');
+  setTimeout(resizeCaseStudyMaps, 60);
 }
 
 // React to hash changes (clicks, back/forward, pasted links)
