@@ -390,18 +390,30 @@
   .verdict.stub { background: #f1efe8; color: #5f5e5a; }
   /* Single-page layout with sticky side TOC */
   .cs-shell { display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 36px; align-items: start; }
-  .cs-toc { position: sticky; top: 66px; align-self: start; max-height: calc(100vh - 88px); overflow-y: auto; padding-right: 6px; }
-  .cs-toc-title { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); margin: 0 0 12px; }
-  .cs-toc-group { margin-bottom: 16px; }
-  .cs-toc-grouplabel { display: block; font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 6px; line-height: 1.3; }
-  .cs-toc-grouplabel .cs-toc-sub { display: block; font-size: 11px; font-weight: 400; color: var(--text3); margin-top: 1px; }
-  .cs-toc a { display: block; font-size: 12.5px; color: var(--text2); text-decoration: none; padding: 4px 0 4px 12px; border-left: 2px solid var(--border); line-height: 1.35; transition: color .12s, border-color .12s; }
+  .cs-toc { position: sticky; top: 66px; align-self: start; display: flex; flex-direction: column; padding-right: 6px; }
+  .cs-toc-title { font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); margin: 0 0 14px; }
+  .cs-toc-group { margin-bottom: 18px; }
+  .cs-toc-grouplabel { display: block; font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 8px; line-height: 1.3; }
+  .cs-toc-grouplabel .cs-toc-sub { display: block; font-size: 12px; font-weight: 500; color: var(--text3); margin-top: 1px; }
+  .cs-toc a { display: block; font-size: 14.5px; font-weight: 600; color: var(--text2); text-decoration: none; padding: 5px 0 5px 12px; border-left: 2px solid var(--border); line-height: 1.4; transition: color .12s, border-color .12s; }
   .cs-toc a:hover { color: var(--text); border-left-color: var(--border2); }
-  .cs-toc a.active { color: #2d7a3e; border-left-color: #2d7a3e; font-weight: 600; }
+  .cs-toc a.active { color: #2d7a3e; border-left-color: #2d7a3e; font-weight: 800; }
   .cs-main { min-width: 0; }
   .cs-anchor { scroll-margin-top: 72px; }
   .cs-group-head { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent-mid); margin: 8px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
   .cs-group-head .cs-group-sub { color: var(--text3); font-weight: 600; text-transform: none; letter-spacing: 0; }
+  /* TOC sub-section links + per-pair panes */
+  .cs-toc a.cs-toc-suba { padding-left: 22px; font-size: 13px; font-weight: 500; color: var(--text2); }
+  .cs-toc a.cs-toc-suba.active { color: #2d7a3e; border-left-color: #2d7a3e; font-weight: 800; }
+  .cs-toc-pane { display: none; }
+  .cs-toc-pane.active { display: block; }
+  /* Pair switcher */
+  .cs-pair-switch { display: inline-flex; gap: 4px; padding: 4px; background: var(--surface2); border-radius: var(--radius-lg); margin: 0 0 22px; flex-wrap: wrap; }
+  .cs-pair-btn { padding: 8px 16px; border: none; background: transparent; border-radius: var(--radius); font-size: 13px; color: var(--text2); cursor: pointer; font-family: inherit; }
+  .cs-pair-btn .cs-pair-sub { opacity: 0.6; }
+  .cs-pair-btn.active { font-weight: 600; background: var(--surface); color: var(--text); border: 1px solid var(--border2); box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+  .cs-pair-pane { display: none; }
+  .cs-pair-pane.active { display: block; }
   @media (max-width: 900px) {
     .cs-shell { grid-template-columns: 1fr; gap: 0; }
     .cs-toc { position: static; max-height: none; overflow: visible; margin-bottom: 24px; padding: 16px 18px; background: var(--surface2); border-radius: var(--radius-lg); }
@@ -510,8 +522,8 @@
         <div class="home-hero-left">
           <div class="home-stat-card-small">
             <div class="hsc-num">~3,000</div>
-            <div class="hsc-label">New data centers</div>
-            <div class="hsc-desc">Planned or under construction, doubling U.S. capacity (Axios, 2025)</div>
+            <div class="hsc-label">New U.S. data centers</div>
+            <div class="hsc-desc">Planned or under construction nationwide, set to double U.S. capacity (Axios, 2025)</div>
           </div>
           <div class="home-stat-card-small">
             <div class="hsc-num">$500B+</div>
@@ -524,6 +536,19 @@
             <div class="hsc-num-large">2/3</div>
             <div class="hsc-label">of projects stalled</div>
             <div class="hsc-desc">$98B in data center investments delayed by community opposition (AP News, 2025)</div>
+          </div>
+          <div class="home-stat-card-small">
+            <div class="hsc-split">
+              <div>
+                <div class="hsc-num" id="hsc-projects-tracked">—</div>
+                <div class="hsc-label">Projects</div>
+              </div>
+              <div>
+                <div class="hsc-num" id="hsc-states-tracked">—</div>
+                <div class="hsc-label">States</div>
+              </div>
+            </div>
+            <div class="hsc-desc">Proposals tracked across the U.S.</div>
           </div>
         </div>
       </div>
@@ -1274,29 +1299,46 @@
       <p>Two pairs of projects, each illuminating the same dynamic — from organized denials to quiet, low-opposition builds. Use the contents to jump between sections; the side-by-side columns let you compare cases directly.</p>
     </div>
 
+    <div class="cs-pair-switch" role="tablist">
+      <button class="cs-pair-btn active" onclick="switchPair('pair1', this)">Pair 1 · Organized denials <span class="cs-pair-sub">(NC vs VA)</span></button>
+      <button class="cs-pair-btn" onclick="switchPair('pair2', this)">Pair 2 · Quiet builds <span class="cs-pair-sub">(Cumulus vs Windstream)</span></button>
+    </div>
+
     <div class="cs-shell">
       <!-- ════════ STICKY TABLE OF CONTENTS ════════ -->
       <nav class="cs-toc" aria-label="Case study contents">
         <div class="cs-toc-title">Contents</div>
-        <div class="cs-toc-group">
-          <span class="cs-toc-grouplabel">Pair 1 · Organized denials<span class="cs-toc-sub">NC vs VA</span></span>
-          <a href="#cs-sec-denials" onclick="csScrollTo(event,'cs-sec-denials')">Tarboro vs Balico</a>
-          <a href="#cs-sec-counter" onclick="csScrollTo(event,'cs-sec-counter')">Developer counterarguments</a>
-          <a href="#cs-sec-compare" onclick="csScrollTo(event,'cs-sec-compare')">Comparative analysis</a>
-          <a href="#cs-sec-framework" onclick="csScrollTo(event,'cs-sec-framework')">Framework scores</a>
+        <div id="cs-toc-pair1" class="cs-toc-pane active">
+          <div class="cs-toc-group">
+            <span class="cs-toc-grouplabel">Pair 1 · Organized denials<span class="cs-toc-sub">NC vs VA</span></span>
+            <a href="#cs-sec-denials" onclick="csScrollTo(event,'cs-sec-denials')">Tarboro vs Balico</a>
+            <a class="cs-toc-suba" href="#cs-p1-profile" onclick="csScrollTo(event,'cs-p1-profile')">Project profile</a>
+            <a class="cs-toc-suba" href="#cs-p1-context" onclick="csScrollTo(event,'cs-p1-context')">Local context</a>
+            <a class="cs-toc-suba" href="#cs-p1-promises" onclick="csScrollTo(event,'cs-p1-promises')">Promises vs concerns</a>
+            <a class="cs-toc-suba" href="#cs-p1-outcome" onclick="csScrollTo(event,'cs-p1-outcome')">Outcome</a>
+            <a class="cs-toc-suba" href="#cs-p1-takeaways" onclick="csScrollTo(event,'cs-p1-takeaways')">Key takeaways</a>
+            <a href="#cs-sec-counter" onclick="csScrollTo(event,'cs-sec-counter')">Developer counterarguments</a>
+            <a href="#cs-sec-compare" onclick="csScrollTo(event,'cs-sec-compare')">Comparative analysis</a>
+            <a href="#cs-sec-framework" onclick="csScrollTo(event,'cs-sec-framework')">Framework scores</a>
+          </div>
         </div>
-        <div class="cs-toc-group">
-          <span class="cs-toc-grouplabel">Pair 2 · Quiet builds<span class="cs-toc-sub">Cumulus vs Windstream</span></span>
-          <a href="#cs-sec-quiet" onclick="csScrollTo(event,'cs-sec-quiet')">Cumulus vs Windstream</a>
-        </div>
-        <div class="cs-toc-group">
-          <a href="#cs-sec-sources" onclick="csScrollTo(event,'cs-sec-sources')">Sources</a>
+        <div id="cs-toc-pair2" class="cs-toc-pane">
+          <div class="cs-toc-group">
+            <span class="cs-toc-grouplabel">Pair 2 · Quiet builds<span class="cs-toc-sub">Cumulus vs Windstream</span></span>
+            <a href="#cs-sec-quiet" onclick="csScrollTo(event,'cs-sec-quiet')">Cumulus vs Windstream</a>
+            <a class="cs-toc-suba" href="#cs-p2-profile" onclick="csScrollTo(event,'cs-p2-profile')">Project profile</a>
+            <a class="cs-toc-suba" href="#cs-p2-context" onclick="csScrollTo(event,'cs-p2-context')">Local context</a>
+            <a class="cs-toc-suba" href="#cs-p2-promises" onclick="csScrollTo(event,'cs-p2-promises')">Promises vs concerns</a>
+            <a class="cs-toc-suba" href="#cs-p2-outcome" onclick="csScrollTo(event,'cs-p2-outcome')">Outcome</a>
+            <a class="cs-toc-suba" href="#cs-p2-takeaways" onclick="csScrollTo(event,'cs-p2-takeaways')">Key takeaways</a>
+          </div>
         </div>
       </nav>
 
       <!-- ════════ MAIN CONTENT ════════ -->
       <div class="cs-main">
 
+      <div id="cs-pair1" class="cs-pair-pane active">
       <div class="cs-group-head">Pair 1 · Organized denials <span class="cs-group-sub">— Tarboro, NC vs Balico, VA</span></div>
 
     <div id="cs-sec-denials" class="cs-anchor cs-layout">
@@ -1615,7 +1657,10 @@
       </div>
     </div>
 
-      <div class="cs-group-head" style="margin-top:2.5rem;">Pair 2 · Quiet builds <span class="cs-group-sub">— Cumulus, PA vs Windstream Ephrata, PA</span></div>
+      </div><!-- /#cs-pair1 -->
+
+      <div id="cs-pair2" class="cs-pair-pane">
+      <div class="cs-group-head">Pair 2 · Quiet builds <span class="cs-group-sub">— Cumulus, PA vs Windstream Ephrata, PA</span></div>
 
       <div id="cs-sec-quiet" class="cs-anchor cs-layout">
         <!-- CUMULUS COLUMN -->
@@ -1724,6 +1769,7 @@
           </div>
         </div>
       </div>
+      </div><!-- /#cs-pair2 -->
 
     <div id="cs-sec-sources" class="cs-anchor footnotes-section" style="margin-top:2.5rem;">
       <h4>Sources</h4>
@@ -1888,6 +1934,9 @@
   }
   .home-hero-right {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
   }
   .home-stat-card-small {
     background: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)), rgba(255, 255, 255, 0.55);
@@ -1904,6 +1953,27 @@
     padding: 68px 56px;
     text-align: center;
     backdrop-filter: blur(20px);
+  }
+  .hsc-split {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 16px;
+  }
+  .hsc-split > div {
+    flex: 1;
+    text-align: center;
+    padding: 0 8px;
+  }
+  .hsc-split > div + div {
+    border-left: 1px solid rgba(255, 255, 255, 0.4);
+  }
+  .hsc-split .hsc-num {
+    font-size: 76px;
+    margin-bottom: 6px;
+  }
+  .hsc-split .hsc-label {
+    font-size: 18px;
+    margin-bottom: 0;
   }
   .hsc-num {
     font-size: 72px;
@@ -2318,6 +2388,45 @@
 <script src="decision-framework.js"></script>
 <script>
 
+/* ─── HOME STATS: live counts from the project database, with count-up ─── */
+(function () {
+  if (typeof PROJECTS === 'undefined' || !Array.isArray(PROJECTS)) return;
+  var n = PROJECTS.length;
+  var states = new Set();
+  PROJECTS.forEach(function (p) { if (p && p.state) states.add(p.state); });
+  var nEl = document.getElementById('hsc-projects-tracked');
+  var sEl = document.getElementById('hsc-states-tracked');
+
+  function countUp(el, target, duration) {
+    if (!el) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      el.textContent = target; return;
+    }
+    var start = null;
+    function frame(ts) {
+      if (start === null) start = ts;
+      var p = Math.min((ts - start) / duration, 1);
+      var eased = 1 - Math.pow(1 - p, 3); // easeOutCubic
+      el.textContent = Math.round(eased * target);
+      if (p < 1) requestAnimationFrame(frame);
+      else el.textContent = target;
+    }
+    el.textContent = '0';
+    requestAnimationFrame(frame);
+  }
+
+  // Run once the hero scrolls into view (it's visible on load, so fire promptly).
+  function run() { countUp(nEl, n, 1400); countUp(sEl, states.size, 1400); }
+  if ('IntersectionObserver' in window && nEl) {
+    var obs = new IntersectionObserver(function (entries, o) {
+      entries.forEach(function (e) { if (e.isIntersecting) { run(); o.disconnect(); } });
+    }, { threshold: 0.4 });
+    obs.observe(nEl);
+  } else {
+    run();
+  }
+})();
+
 /* ─── TAB SWITCHING ─── */
 var VALID_TABS = ['home','context','map','database','casestudy','decision','duke'];
 
@@ -2410,19 +2519,73 @@ function csSetActiveTocLink(id) {
   });
 }
 
-// Scrollspy: highlight the TOC entry for whichever section is in view.
-var _csSpyStarted = false;
-function initCaseStudySpy() {
-  if (_csSpyStarted) return;
-  var sections = document.querySelectorAll('#tab-casestudy .cs-anchor');
-  if (!sections.length || !('IntersectionObserver' in window)) return;
-  _csSpyStarted = true;
-  var obs = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (entry.isIntersecting) csSetActiveTocLink(entry.target.id);
+// Assign ids to each case study's sub-sections (left column of each pair)
+// so the TOC sub-links can scroll to them and the scrollspy can track them.
+function csAssignSubAnchors() {
+  var defs = [
+    ['#cs-sec-denials', ['cs-p1-profile','cs-p1-context','cs-p1-promises',null,'cs-p1-outcome','cs-p1-takeaways']],
+    ['#cs-sec-quiet',   ['cs-p2-profile','cs-p2-context','cs-p2-promises',null,'cs-p2-outcome','cs-p2-takeaways']]
+  ];
+  defs.forEach(function (d) {
+    var col = document.querySelector(d[0] + ' .cs-col');
+    if (!col) return;
+    var secs = col.querySelectorAll('.cs-section');
+    d[1].forEach(function (id, i) {
+      if (id && secs[i] && !secs[i].id) { secs[i].id = id; secs[i].classList.add('cs-anchor'); }
     });
-  }, { rootMargin: '-80px 0px -65% 0px', threshold: 0 });
-  sections.forEach(function (s) { obs.observe(s); });
+  });
+}
+
+// Scrollspy: highlight the TOC entry for the section currently at the top,
+// scoped to the active pair pane (plus the always-visible Sources).
+var _csSpyStarted = false;
+var _csSpyEls = [];
+
+function csRefreshSpy() {
+  csAssignSubAnchors();
+  var pane = document.querySelector('#tab-casestudy .cs-pair-pane.active');
+  _csSpyEls = pane ? Array.prototype.slice.call(pane.querySelectorAll('.cs-anchor')) : [];
+  csUpdateActiveFromScroll();
+}
+
+function csUpdateActiveFromScroll() {
+  var tab = document.getElementById('tab-casestudy');
+  if (!tab || !tab.classList.contains('active') || !_csSpyEls.length) return;
+  var offset = 110, current = _csSpyEls[0].id;
+  for (var i = 0; i < _csSpyEls.length; i++) {
+    if (_csSpyEls[i].getBoundingClientRect().top - offset <= 0) current = _csSpyEls[i].id;
+    else break;
+  }
+  csSetActiveTocLink(current);
+}
+
+var _csRaf = null;
+function csOnScroll() {
+  if (_csRaf) return;
+  _csRaf = requestAnimationFrame(function () { _csRaf = null; csUpdateActiveFromScroll(); });
+}
+
+function initCaseStudySpy() {
+  csRefreshSpy();
+  if (_csSpyStarted) return;
+  _csSpyStarted = true;
+  window.addEventListener('scroll', csOnScroll, { passive: true });
+  window.addEventListener('resize', csOnScroll);
+}
+
+// Switch between the two pairs (content pane + TOC pane).
+function switchPair(pair, btn) {
+  document.querySelectorAll('#tab-casestudy .cs-pair-pane').forEach(function (p) { p.classList.remove('active'); });
+  var pane = document.getElementById('cs-' + pair);
+  if (pane) pane.classList.add('active');
+  document.querySelectorAll('.cs-toc-pane').forEach(function (p) { p.classList.remove('active'); });
+  var tpane = document.getElementById('cs-toc-' + pair);
+  if (tpane) tpane.classList.add('active');
+  document.querySelectorAll('.cs-pair-btn').forEach(function (b) { b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+  window.scrollTo(0, 0);
+  setTimeout(resizeCaseStudyMaps, 60);
+  csRefreshSpy();
 }
 
 // React to hash changes (clicks, back/forward, pasted links)
