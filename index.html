@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Duke Data Center Policy Project</title>
+<title>Data Center Policy Hub</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌩️</text></svg>">
 <link href="https://cdn.jsdelivr.net/npm/maplibre-gl@4/dist/maplibre-gl.css" rel="stylesheet" />
 <style>
@@ -52,22 +52,38 @@
   .header-inner {
     max-width: 1100px;
     margin: 0 auto;
+    min-height: 53px;
     display: flex;
     align-items: stretch;
     gap: 0;
   }
   .site-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    padding: 18px 24px 18px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1px;
+    padding: 0 22px 0 0;
     border-right: 1px solid var(--border);
     margin-right: 8px;
     white-space: nowrap;
   }
-  .site-title span { color: var(--text3); font-weight: 400; }
+  /* Eyebrow above the title — the green accent picks up the active-tab color */
+  .site-title-tag {
+    order: -1;
+    font-size: 9.5px;
+    font-weight: 700;
+    color: #2d7a3e;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    line-height: 1.3;
+  }
+  .site-title-name {
+    font-size: 15.5px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
   nav { display: flex; align-items: stretch; gap: 2px; }
   .tab-btn {
     background: none;
@@ -111,7 +127,9 @@
   /* Header responsive: scale down at medium widths, hamburger at narrow widths */
   @media (max-width: 1050px) {
     header { padding: 0 16px; }
-    .site-title { padding: 16px 14px 16px 0; font-size: 12px; }
+    .site-title { padding: 0 12px 0 0; }
+    .site-title-name { font-size: 13.5px; }
+    .site-title-tag { font-size: 9px; }
     .tab-btn { padding: 0 12px; font-size: 12px; }
   }
   @media (max-width: 820px) {
@@ -152,7 +170,7 @@
       background: var(--surface2);
       color: #2d7a3e;
     }
-    .site-title { padding: 14px 12px 14px 0; }
+    .site-title { padding: 0 12px 0 0; }
   }
 
   /* ── Layout ── */
@@ -370,13 +388,25 @@
   .verdict.cancelled { background: #fbe2e2; color: #d11f1f; }
   .verdict.built { background: #e1f5ee; color: #0f6e56; }
   .verdict.stub { background: #f1efe8; color: #5f5e5a; }
-  /* Pair switcher */
-  .cs-pair-switch { display: inline-flex; gap: 4px; padding: 4px; background: var(--surface2); border-radius: var(--radius-lg); margin: 0 0 22px; flex-wrap: wrap; }
-  .cs-pair-btn { padding: 8px 16px; border: none; background: transparent; border-radius: var(--radius); font-size: 13px; color: var(--text2); cursor: pointer; font-family: inherit; }
-  .cs-pair-btn .cs-pair-sub { opacity: 0.6; }
-  .cs-pair-btn.active { font-weight: 600; background: var(--surface); color: var(--text); border: 1px solid var(--border2); box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
-  .cs-pair-pane { display: none; }
-  .cs-pair-pane.active { display: block; }
+  /* Single-page layout with sticky side TOC */
+  .cs-shell { display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 36px; align-items: start; }
+  .cs-toc { position: sticky; top: 66px; align-self: start; max-height: calc(100vh - 88px); overflow-y: auto; padding-right: 6px; }
+  .cs-toc-title { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); margin: 0 0 12px; }
+  .cs-toc-group { margin-bottom: 16px; }
+  .cs-toc-grouplabel { display: block; font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 6px; line-height: 1.3; }
+  .cs-toc-grouplabel .cs-toc-sub { display: block; font-size: 11px; font-weight: 400; color: var(--text3); margin-top: 1px; }
+  .cs-toc a { display: block; font-size: 12.5px; color: var(--text2); text-decoration: none; padding: 4px 0 4px 12px; border-left: 2px solid var(--border); line-height: 1.35; transition: color .12s, border-color .12s; }
+  .cs-toc a:hover { color: var(--text); border-left-color: var(--border2); }
+  .cs-toc a.active { color: #2d7a3e; border-left-color: #2d7a3e; font-weight: 600; }
+  .cs-main { min-width: 0; }
+  .cs-anchor { scroll-margin-top: 72px; }
+  .cs-group-head { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent-mid); margin: 8px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .cs-group-head .cs-group-sub { color: var(--text3); font-weight: 600; text-transform: none; letter-spacing: 0; }
+  @media (max-width: 900px) {
+    .cs-shell { grid-template-columns: 1fr; gap: 0; }
+    .cs-toc { position: static; max-height: none; overflow: visible; margin-bottom: 24px; padding: 16px 18px; background: var(--surface2); border-radius: var(--radius-lg); }
+    .cs-toc a { padding-left: 10px; }
+  }
   .cs-header.built { background: #e1f5ee; border: 1px solid #9fe1cb; border-bottom: none; }
   .cs-header.built h3 { color: #0f6e56; }
   .cs-header.built p { color: #0f6e56; opacity: 0.8; }
@@ -404,14 +434,17 @@
   .primary-source p { font-size: 13px; color: var(--text2); line-height: 1.65; margin: 0; font-style: italic; }
   .quote-attr { font-size: 11px; color: var(--text3); margin-top: 6px; font-style: normal; }
   footer { text-align:center; padding:24px; font-size:12px; color:var(--text3); border-top:1px solid var(--border); background:var(--surface); margin-top:0; }
-  body { padding-top: 53px; }
+  body { padding-top: 54px; }
 </style>
 </head>
 <body>
 
 <header>
   <div class="header-inner">
-    <div class="site-title">Duke Data Center Policy Project</div>
+    <div class="site-title">
+      <span class="site-title-name">Data Center Policy Hub</span>
+      <span class="site-title-tag">Duke Cyber Policy Program</span>
+    </div>
     <nav>
       <button class="tab-btn active" onclick="switchTab('home', this)">Home</button>
       <button class="tab-btn" onclick="switchTab('context', this)">Background &amp; Policy</button>
@@ -469,6 +502,10 @@
 <div id="tab-home" class="tab-content active">
   <div class="home-hero-bg" style="background-image: url('images/Data-Center-Render-1.avif'); background-size: cover; background-position: center; background-attachment: fixed;">
     <div class="page-inner">
+      <div class="home-hero-welcome">
+        <div class="hhw-eyebrow">Welcome to the</div>
+        <h1>Data Center Policy Hub</h1>
+      </div>
       <div class="home-hero-stats">
         <div class="home-hero-left">
           <div class="home-stat-card-small">
@@ -501,6 +538,7 @@
   <div class="page-inner">
     <div class="home-section">
       <h2>What This Website Is</h2>
+      <p>The Data Center Policy Hub was created by the Duke Cyber Policy Program, part of the Sanford School of Public Policy.</p>
       <p>Data center expansion is critical for U.S. AI competitiveness. But in 2025, two-thirds of proposed projects faced delays or cancellations due to local opposition over electricity costs, water use, and grid reliability (AP News, 2025). This website explores that tension and proposes policy solutions.</p>
       <p>It is designed for policymakers, community leaders, and stakeholders trying to understand how to balance accelerating data center deployment with the needs of local communities.</p>
     </div>
@@ -516,9 +554,9 @@
           <div class="hnb-title">Case Studies</div>
           <div class="hnb-desc">Read the stories behind two specific projects that faced pushback</div>
         </div>
-        <div class="home-nav-box" onclick="switchTabById('context'); setTimeout(function(){scrollToSec('part-2');}, 80)">
-          <div class="hnb-title">A Path Forward</div>
-          <div class="hnb-desc">Specific policy reforms — now in Background &amp; Policy, Part II</div>
+        <div class="home-nav-box" onclick="switchTabById('duke')">
+          <div class="hnb-title">Duke Research</div>
+          <div class="hnb-desc">Recent Duke University research on AI infrastructure, grid strain, and water conflicts</div>
         </div>
       </div>
 
@@ -1233,17 +1271,35 @@
   <div class="page-inner">
     <div class="page-intro">
       <h1>Comparative Case Studies</h1>
-      <p>Pick a pair to compare. Each pair groups two projects that illuminate the same dynamic — from organized denials to quiet, low-opposition builds.</p>
+      <p>Two pairs of projects, each illuminating the same dynamic — from organized denials to quiet, low-opposition builds. Use the contents to jump between sections; the side-by-side columns let you compare cases directly.</p>
     </div>
 
-    <div class="cs-pair-switch" role="tablist">
-      <button class="cs-pair-btn active" onclick="switchPair('pair1', this)">Pair 1 · Organized denials <span class="cs-pair-sub">(NC vs VA)</span></button>
-      <button class="cs-pair-btn" onclick="switchPair('pair2', this)">Pair 2 · Quiet builds <span class="cs-pair-sub">(Cumulus vs Windstream)</span></button>
-    </div>
+    <div class="cs-shell">
+      <!-- ════════ STICKY TABLE OF CONTENTS ════════ -->
+      <nav class="cs-toc" aria-label="Case study contents">
+        <div class="cs-toc-title">Contents</div>
+        <div class="cs-toc-group">
+          <span class="cs-toc-grouplabel">Pair 1 · Organized denials<span class="cs-toc-sub">NC vs VA</span></span>
+          <a href="#cs-sec-denials" onclick="csScrollTo(event,'cs-sec-denials')">Tarboro vs Balico</a>
+          <a href="#cs-sec-counter" onclick="csScrollTo(event,'cs-sec-counter')">Developer counterarguments</a>
+          <a href="#cs-sec-compare" onclick="csScrollTo(event,'cs-sec-compare')">Comparative analysis</a>
+          <a href="#cs-sec-framework" onclick="csScrollTo(event,'cs-sec-framework')">Framework scores</a>
+        </div>
+        <div class="cs-toc-group">
+          <span class="cs-toc-grouplabel">Pair 2 · Quiet builds<span class="cs-toc-sub">Cumulus vs Windstream</span></span>
+          <a href="#cs-sec-quiet" onclick="csScrollTo(event,'cs-sec-quiet')">Cumulus vs Windstream</a>
+        </div>
+        <div class="cs-toc-group">
+          <a href="#cs-sec-sources" onclick="csScrollTo(event,'cs-sec-sources')">Sources</a>
+        </div>
+      </nav>
 
-    <div id="cs-pair1" class="cs-pair-pane active">
+      <!-- ════════ MAIN CONTENT ════════ -->
+      <div class="cs-main">
 
-    <div class="cs-layout">
+      <div class="cs-group-head">Pair 1 · Organized denials <span class="cs-group-sub">— Tarboro, NC vs Balico, VA</span></div>
+
+    <div id="cs-sec-denials" class="cs-anchor cs-layout">
       <!-- NC COLUMN -->
       <div class="cs-col">
         <div class="cs-header nc">
@@ -1357,7 +1413,7 @@
 
 
     <!-- DEVELOPER PERSPECTIVE / COUNTERARGUMENTS -->
-    <div class="prose-section" style="margin-top:2rem;">
+    <div id="cs-sec-counter" class="cs-anchor prose-section" style="margin-top:2rem;">
       <h2>The Developer Perspective: Counterarguments</h2>
       <p>A complete analysis requires engaging the strongest case for data center expansion, not just the community opposition. Developers and federal advocates advance several arguments that deserve serious consideration.</p>
 
@@ -1399,7 +1455,7 @@
     </div>
 
     <!-- COMPARATIVE ANALYSIS -->
-    <div class="compare-table-section">
+    <div id="cs-sec-compare" class="cs-anchor compare-table-section">
       <h2>Comparative Analysis</h2>
       <div style="overflow-x:auto;">
       <table class="ct2">
@@ -1427,7 +1483,7 @@
 
 
     <!-- DECISION FRAMEWORK RETROSPECTIVE -->
-    <div class="compare-table-section" style="margin-top:2rem;">
+    <div id="cs-sec-framework" class="cs-anchor compare-table-section" style="margin-top:2rem;">
       <h2>Decision Framework: Retrospective Scores</h2>
       <p style="font-size:14px;color:var(--text2);margin-bottom:20px;">Using the five-factor framework from the Decision Framework tab, how each case scores in hindsight, based on documented conditions at the time of the hearing. Higher scores mean more pressure against approval.</p>
 
@@ -1558,10 +1614,10 @@
         <p style="font-size:13px;color:var(--text);line-height:1.65;margin:0;">A 20-point gap separates Tarboro (63) from Balico (83). Tarboro was recoverable — a different site, better buffering, or earlier binding commitments could have shifted the outcome. Balico was not: the scale mismatch and on-site fossil plant created pressure that no set of conditions could fully absorb. The framework predicts both denials, but for different reasons and with different implications for what a developer could have done differently. Try the <button style="background:none;border:none;padding:0;color:#185fa5;font-size:13px;cursor:pointer;font-family:inherit;text-decoration:underline;" onclick="switchTabById('decision')">Decision Framework</button> to test your own scenario.</p>
       </div>
     </div>
-    </div><!-- /#cs-pair1 -->
 
-    <div id="cs-pair2" class="cs-pair-pane">
-      <div class="cs-layout">
+      <div class="cs-group-head" style="margin-top:2.5rem;">Pair 2 · Quiet builds <span class="cs-group-sub">— Cumulus, PA vs Windstream Ephrata, PA</span></div>
+
+      <div id="cs-sec-quiet" class="cs-anchor cs-layout">
         <!-- CUMULUS COLUMN -->
         <div class="cs-col">
           <div class="cs-header built">
@@ -1668,12 +1724,14 @@
           </div>
         </div>
       </div>
-    </div><!-- /#cs-pair2 -->
 
-    <div class="footnotes-section">
+    <div id="cs-sec-sources" class="cs-anchor footnotes-section" style="margin-top:2.5rem;">
       <h4>Sources</h4>
       <p style="font-size:13px;color:var(--text2);line-height:1.6;margin:0;">Full sources and primary documents for each project are listed in its database record. Use the “View full record in database” link at the top of any case study, or open the <button style="background:none;border:none;padding:0;color:var(--accent-mid);font-size:13px;cursor:pointer;font-family:inherit;text-decoration:underline;" onclick="switchTabById('database')">Project Database</button>.</p>
     </div>
+
+      </div><!-- /.cs-main -->
+    </div><!-- /.cs-shell -->
   </div>
 </div>
 
@@ -1773,6 +1831,44 @@
     display: flex;
     align-items: center;
     position: relative;
+  }
+  .home-hero-welcome {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto 40px;
+  }
+  .home-hero-welcome .hhw-eyebrow {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 18px;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7), 0 1px 2px rgba(0, 0, 0, 0.6);
+  }
+  .home-hero-welcome h1 {
+    font-size: 68px;
+    font-weight: 800;
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    color: #fff;
+    margin: 0 0 18px;
+    text-shadow: 0 4px 16px rgba(0, 0, 0, 0.75), 0 2px 4px rgba(0, 0, 0, 0.6);
+  }
+  .home-hero-welcome p {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    line-height: 1.6;
+    color: #fff;
+    margin: 0;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7), 0 1px 3px rgba(0, 0, 0, 0.6);
+  }
+  @media (max-width: 680px) {
+    .home-hero-welcome h1 { font-size: 42px; }
+    .home-hero-welcome p { font-size: 16px; }
+    .home-hero-welcome .hhw-eyebrow { font-size: 12px; }
   }
   .home-hero-stats {
     display: flex;
@@ -2210,7 +2306,7 @@
   })();
 </script>
 
-<footer>Duke Data Center Policy Project &nbsp;·&nbsp; Duke University Tech Policy Lab &nbsp;·&nbsp; Last updated June 2026 &nbsp;·&nbsp; <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener" style="color:inherit;">CC BY 4.0</a> &nbsp;·&nbsp; Drought data: <a href="https://droughtmonitor.unl.edu" target="_blank" rel="noopener" style="color:inherit;">U.S. Drought Monitor</a> (NDMC, USDA, NOAA)</footer>
+<footer>Data Center Policy Hub &nbsp;·&nbsp; Duke Sanford School of Public Policy, Cyber Policy Program &nbsp;·&nbsp; Last updated June 2026 &nbsp;·&nbsp; <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener" style="color:inherit;">CC BY 4.0</a></footer>
 
 <!-- ════════════════ SCRIPTS ════════════════ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
@@ -2247,7 +2343,7 @@ function applyTab(id, sub) {
     if (projId && typeof dbApplySubHash === 'function') dbApplySubHash(projId, query);
     else if (typeof dbGoHome === 'function') dbGoHome(query);
   }
-  if (id === 'casestudy') setTimeout(initCaseStudyMaps, 60);
+  if (id === 'casestudy') { setTimeout(initCaseStudyMaps, 60); setTimeout(initCaseStudySpy, 60); }
   localStorage.setItem('activeTab', id);
 }
 
@@ -2298,13 +2394,35 @@ function resizeCaseStudyMaps() {
   Object.keys(_csMaps).forEach(function (k) { try { _csMaps[k].resize(); } catch (e) {} });
 }
 
-function switchPair(pair, btn) {
-  document.querySelectorAll('.cs-pair-pane').forEach(function(p){ p.classList.remove('active'); });
-  var pane = document.getElementById('cs-' + pair);
-  if (pane) pane.classList.add('active');
-  document.querySelectorAll('.cs-pair-btn').forEach(function(b){ b.classList.remove('active'); });
-  if (btn) btn.classList.add('active');
-  setTimeout(resizeCaseStudyMaps, 60);
+// Case-study TOC: smooth-scroll to a section. preventDefault keeps the URL
+// hash on #casestudy so the tab router isn't triggered.
+function csScrollTo(e, id) {
+  if (e) e.preventDefault();
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  csSetActiveTocLink(id);
+}
+
+function csSetActiveTocLink(id) {
+  document.querySelectorAll('.cs-toc a').forEach(function (a) {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+  });
+}
+
+// Scrollspy: highlight the TOC entry for whichever section is in view.
+var _csSpyStarted = false;
+function initCaseStudySpy() {
+  if (_csSpyStarted) return;
+  var sections = document.querySelectorAll('#tab-casestudy .cs-anchor');
+  if (!sections.length || !('IntersectionObserver' in window)) return;
+  _csSpyStarted = true;
+  var obs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) csSetActiveTocLink(entry.target.id);
+    });
+  }, { rootMargin: '-80px 0px -65% 0px', threshold: 0 });
+  sections.forEach(function (s) { obs.observe(s); });
 }
 
 // React to hash changes (clicks, back/forward, pasted links)

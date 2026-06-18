@@ -1,8 +1,8 @@
-# Data Center Policy
+# Data Center Policy Hub
 
 Interactive web resource on data center expansion and community opposition in the Mid-Atlantic and Southeast U.S.
 
-Duke University Tech Policy Lab, 2026.
+A project of the Duke University Sanford School of Public Policy, Cyber Policy Program, 2026.
 
 ## Usage
 
@@ -19,6 +19,7 @@ AI tools (primarily Claude) were used to help code the interactive tools and des
 - [OpenFreeMap](https://openfreemap.org/) — map tiles
 - [us-atlas](https://github.com/topojson/us-atlas) — ISC License
 - Map data © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright) — ODbL License
+- Drought data: [U.S. Drought Monitor](https://droughtmonitor.unl.edu) (NDMC, USDA, NOAA)
 
 ## License
 
