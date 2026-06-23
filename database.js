@@ -434,6 +434,10 @@
             'circle-stroke-width': 2,
           },
         });
+        // Container can finish sizing after the map initializes (e.g. when the
+        // detail view lays out or the tab becomes visible); resize so tiles
+        // fill the box instead of rendering as a gray panel.
+        map.resize();
       });
       _activeDetailMap = map;
     });

@@ -1271,9 +1271,13 @@
 
       @media (max-width: 600px) {
         #tab-database .page-inner { padding: 14px 12px 24px; }
+        /* Single horizontal scroll container so the header and body move
+           together and stay column-aligned. The inner scroller is disabled
+           here (its own overflow-x scrolled the body independently of the
+           header); the page handles vertical scroll. Desktop is unaffected. */
         .db-table-wrap { overflow-x: auto; }
         .db-table-header, .db-table-body { min-width: 560px; }
-        .db-table-scroll { overflow-x: auto; }
+        .db-table-scroll { overflow: visible; max-height: none; }
         .db-nav-arrows { display: none; }
         .db-detail-card { padding: 14px; }
         .db-metrics-grid { grid-template-columns: 1fr 1fr; }
@@ -2376,7 +2380,7 @@
   })();
 </script>
 
-<footer>Data Center Policy Hub &nbsp;·&nbsp; Duke Sanford School of Public Policy, Cyber Policy Program &nbsp;·&nbsp; Last updated June 2026 &nbsp;·&nbsp; <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener" style="color:inherit;">CC BY 4.0</a></footer>
+<footer>Data Center Policy Hub &nbsp;·&nbsp; Duke Sanford School of Public Policy, Cyber Policy Program &nbsp;·&nbsp; Last updated June 2026 &nbsp;·&nbsp; <a href="mailto:rogerson@duke.edu" style="color:inherit;">Contact</a> &nbsp;·&nbsp; <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener" style="color:inherit;">CC BY 4.0</a></footer>
 
 <!-- ════════════════ SCRIPTS ════════════════ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
