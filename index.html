@@ -660,29 +660,37 @@
       </div>
     </div>
 
-    <!--
     <div class="home-section home-contact">
       <h2>Project Team</h2>
       <p>This hub is a project of the <a href="https://techpolicy.sanford.duke.edu/" target="_blank" rel="noopener">Duke Cyber Policy Program</a> at the Sanford School of Public Policy. We'd love to hear your feedback and thoughts!</p>
       <div class="home-contact-grid">
-        <a class="home-contact-card" href="mailto:rogerson@duke.edu">
-          <div class="hcc-role">Faculty Sponsor</div>
-          <div class="hcc-name">Prof. Rogerson</div>
-          <div class="hcc-email">rogerson@duke.edu</div>
-        </a>
-        <a class="home-contact-card" href="mailto:adrian.schmeichler@duke.edu">
-          <div class="hcc-role">Student Lead</div>
+        <div class="home-contact-card no-link">
+          <div class="hcc-role">Faculty Lead</div>
+          <div class="hcc-name">Professor Ken Rogerson</div>
+          <div class="hcc-email">
+            <a href="mailto:rogerson@duke.edu" style="color:inherit;">Email</a> &nbsp;·&nbsp;
+            <a href="https://www.linkedin.com/in/kennethrogerson/" target="_blank" rel="noopener" style="color:inherit;">LinkedIn</a> &nbsp;·&nbsp;
+            <a href="https://sanford.duke.edu/profile/kenneth-s-rogerson/" target="_blank" rel="noopener" style="color:inherit;">Bio</a>
+          </div>
+        </div>
+        <div class="home-contact-card no-link">
+          <div class="hcc-role">Student Lead &middot; Research Assistant</div>
           <div class="hcc-name">Adrian Schmeichler</div>
-          <div class="hcc-email">adrian.schmeichler@duke.edu</div>
-        </a>
-        <a class="home-contact-card" href="mailto:jordan.phillips@duke.edu">
+          <div class="hcc-email">
+            <a href="mailto:adrian.schmeichler@duke.edu" style="color:inherit;">Email</a> &nbsp;·&nbsp;
+            <a href="https://www.linkedin.com/in/schmeichler/" target="_blank" rel="noopener" style="color:inherit;">LinkedIn</a>
+          </div>
+        </div>
+        <div class="home-contact-card no-link">
           <div class="hcc-role">Research Assistant</div>
           <div class="hcc-name">Jordan Phillips</div>
-          <div class="hcc-email">jordan.phillips@duke.edu</div>
-        </a>
+          <div class="hcc-email">
+            <a href="mailto:jordan.phillips@duke.edu" style="color:inherit;">Email</a> &nbsp;·&nbsp;
+            <a href="https://www.linkedin.com/in/phillips-jordan/" target="_blank" rel="noopener" style="color:inherit;">LinkedIn</a>
+          </div>
+        </div>
       </div>
     </div>
-    -->
   </div>
 </div>
 
@@ -2246,15 +2254,19 @@
   .home-contact-card {
     display: block;
     text-decoration: none;
-    background: var(--surface2);
+    background: #fff;
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     padding: 16px 18px;
-    transition: border-color .12s, background .12s;
+    transition: all 0.3s ease;
   }
-  .home-contact-card:hover { border-color: var(--accent-mid); background: var(--accent-light); }
+  .home-contact-card:hover {
+    border-color: #d0d0d0;
+    background: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
   .home-contact-card.no-link { cursor: default; }
-  .home-contact-card.no-link:hover { border-color: var(--border); background: var(--surface2); }
   .home-contact-card.no-link .hcc-email { color: var(--text2); }
   .hcc-role { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text3); margin-bottom: 4px; }
   .hcc-name { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
